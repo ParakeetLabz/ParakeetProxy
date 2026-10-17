@@ -9169,19 +9169,22 @@ document.body.dataset.skin=localStorage.getItem('skin')||'default';
 if(token){ $('#tok').value=token; start(); }
 <\/script>
 
+
+
+
 <script>
-// ===== Parakeet Tab Cloaking =====
+// ===== Parakeet Tab Cloaking (Settings) =====
 (function() {
   const CLOAK_KEY = 'parakeet:cloak';
   const cloaks = {
-    'none': { title: 'Parakeet', icon: null },
-    'classroom': { title: 'Google Classroom', icon: 'https://ssl.gstatic.com/classroom/favicon.png' },
-    'drive': { title: 'My Drive - Google Drive', icon: 'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png' },
-    'gmail': { title: 'Gmail', icon: 'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico' },
-    'docs': { title: 'Google Docs', icon: 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico' },
-    'calc': { title: 'Calculator', icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🧮</text></svg>' },
-    'classlink': { title: 'ClassLink', icon: 'https://www.classlink.com/favicon.ico' },
-    'canvas': { title: 'Dashboard', icon: 'https://canvas.instructure.com/favicon.ico' },
+    'none': { label: 'Off', title: 'Parakeet', icon: null },
+    'classroom': { label: 'Google Classroom', title: 'Google Classroom', icon: 'https://ssl.gstatic.com/classroom/favicon.png' },
+    'drive': { label: 'Google Drive', title: 'My Drive - Google Drive', icon: 'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png' },
+    'gmail': { label: 'Gmail', title: 'Gmail', icon: 'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico' },
+    'docs': { label: 'Google Docs', title: 'Google Docs', icon: 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico' },
+    'calc': { label: 'Calculator', title: 'Calculator', icon: null },
+    'classlink': { label: 'ClassLink', title: 'ClassLink', icon: null },
+    'canvas': { label: 'Canvas', title: 'Dashboard', icon: null },
   };
 
   function setFavicon(url) {
@@ -9191,77 +9194,102 @@ if(token){ $('#tok').value=token; start(); }
       link.rel = 'icon';
       document.head.appendChild(link);
     }
-    link.href = url;
+    if (url) link.href = url;
   }
 
   function applyCloak(name) {
     const c = cloaks[name] || cloaks['none'];
-    if (name === 'none') {
-      document.title = 'Parakeet';
-      // Restore original favicon
-      setFavicon('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%2300d4ff"/></svg>');
-    } else {
-      document.title = c.title;
-      if (c.icon) setFavicon(c.icon);
-    }
+    document.title = c.title;
+    if (c.icon) setFavicon(c.icon);
     try { localStorage.setItem(CLOAK_KEY, name); } catch(e) {}
+    // Update dropdown if it exists
+    const sel = document.getElementById('parakeet-cloak-select');
+    if (sel) sel.value = name;
   }
 
   // Restore on load
   try {
     const saved = localStorage.getItem(CLOAK_KEY);
     if (saved && saved !== 'none' && cloaks[saved]) {
-      // Delay to override any title set by app
-      setTimeout(() => applyCloak(saved), 1000);
-      setTimeout(() => applyCloak(saved), 3000);
+      setTimeout(() => applyCloak(saved), 1500);
     }
   } catch(e) {}
 
-  // Expose globally
-  window.ParakeetCloak = { apply: applyCloak, list: Object.keys(cloaks) };
+  window.ParakeetCloak = { apply: applyCloak, list: cloaks };
 
-  // Add UI to settings (simple select in Appearance)
-  // Wait for settings to exist, then inject
-  const injectUI = () => {
-    // Try to find Appearance section
-    const sections = document.querySelectorAll('[data-section], .settings-section, section');
-    // Fallback: add a floating cloak button
-    if (!document.getElementById('parakeet-cloak-btn')) {
-      const btn = document.createElement('button');
-      btn.id = 'parakeet-cloak-btn';
-      btn.innerHTML = '🎭';
-      btn.title = 'Tab Cloak (Alt+C to cycle)';
-      btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:2147483647;width:56px;height:56px;border-radius:50%;border:2px solid #fff;background:#00d4ff;color:#0a1628;font-size:26px;cursor:pointer;box-shadow:0 4px 20px rgba(0,212,255,0.5);display:flex;align-items:center;justify-content:center;';
-      btn.onclick = () => {
-        const names = Object.keys(cloaks);
-        const cur = localStorage.getItem(CLOAK_KEY) || 'none';
-        const idx = names.indexOf(cur);
-        const next = names[(idx + 1) % names.length];
-        applyCloak(next);
-        btn.title = 'Cloak: ' + next + ' (Alt+C to cycle)';
-      };
-      document.body.appendChild(btn);
+  // Inject into Appearance settings section
+  function injectIntoSettings() {
+    // Find the appearance section content
+    const apSection = document.querySelector('[data-section="appearance"]');
+    if (!apSection || document.getElementById('parakeet-cloak-row')) return;
+
+    // Create cloak row
+    const row = document.createElement('div');
+    row.id = 'parakeet-cloak-row';
+    row.className = 'settings-row';
+    row.style.cssText = 'padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;';
+
+    const label = document.createElement('div');
+    label.innerHTML = '<div style="font-weight:600;">Tab Cloaking</div><div style="font-size:12px;opacity:0.7;">Disguise the tab as another site</div>';
+
+    const sel = document.createElement('select');
+    sel.id = 'parakeet-cloak-select';
+    sel.style.cssText = 'padding:6px 10px;border-radius:6px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);';
+    for (const [key, val] of Object.entries(cloaks)) {
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = val.label;
+      sel.appendChild(opt);
     }
-  };
+    try { sel.value = localStorage.getItem(CLOAK_KEY) || 'none'; } catch(e) {}
+    sel.onchange = () => applyCloak(sel.value);
 
-  // Keyboard shortcut Alt+C
+    row.appendChild(label);
+    row.appendChild(sel);
+
+    // Try to find where to insert - look for the section content container
+    // The data-section="appearance" might be the nav item, not the content
+    // Let's try to find the actual settings panel
+    const panel = apSection.closest('.settings-panel') || apSection.parentElement;
+    if (panel) {
+      // Find the content area within the panel
+      const content = panel.querySelector('.settings-content, .panel-content') || panel;
+      content.appendChild(row);
+      console.log('Cloak injected into Appearance');
+    } else {
+      // Fallback: append to the section element itself
+      apSection.appendChild(row);
+    }
+  }
+
+  // Watch for settings being opened
+  const observer = new MutationObserver(() => {
+    const apSection = document.querySelector('[data-section="appearance"]');
+    if (apSection && !document.getElementById('parakeet-cloak-row')) {
+      // Check if appearance panel is visible
+      setTimeout(injectIntoSettings, 300);
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // Also try on settings open (listen for clicks on appearance nav)
+  document.addEventListener('click', (e) => {
+    const nav = e.target.closest('[data-section="appearance"]');
+    if (nav) {
+      setTimeout(injectIntoSettings, 500);
+    }
+  });
+
+  // Keyboard shortcut
   document.addEventListener('keydown', (e) => {
     if (e.altKey && e.key.toLowerCase() === 'c') {
       e.preventDefault();
       const names = Object.keys(cloaks);
       const cur = localStorage.getItem(CLOAK_KEY) || 'none';
-      const idx = names.indexOf(cur);
-      const next = names[(idx + 1) % names.length];
+      const next = names[(names.indexOf(cur) + 1) % names.length];
       applyCloak(next);
     }
   });
-
-  // Inject immediately (no delay)
-  try {
-    injectUI();
-  } catch(e) { console.log('Cloak inject failed:', e); }
-  // Also try after a short delay as backup
-  setTimeout(() => { try { injectUI(); } catch(e) {} }, 500);
 })();
 </script>
 
