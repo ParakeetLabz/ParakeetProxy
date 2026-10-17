@@ -6985,10 +6985,51 @@ body[data-skin="sky"] .nt-search input::placeholder { color: #6a8aa8 !important;
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            
+<div class="settings-card">
+                                    <div class="settings-card-head"><i class="fas fa-theater-masks"></i> Tab Cloaking
+                                    </div>
+                                    <div class="settings-card-body">
+                                        <div class="settings-switch-row">
+                                            <div>
+                                                <div class="settings-switch-label">Disguise this tab</div>
+                                                <div class="settings-hint">Change the tab title and icon to look like another site. Press Alt+C to cycle quickly.</div>
+                                            </div>
+                                            <select id="parakeet-cloak-select" style="padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;min-width:160px;">
+                                                <option value="none">Off</option>
+                                                <option value="classroom">Google Classroom</option>
+                                                <option value="drive">Google Drive</option>
+                                                <option value="gmail">Gmail</option>
+                                                <option value="docs">Google Docs</option>
+                                                <option value="calc">Calculator</option>
+                                                <option value="classlink">ClassLink</option>
+                                                <option value="canvas">Canvas</option>
+                                                <option value="khan">Khan Academy</option>
+                                                <option value="desmos">Desmos</option>
+                                                <option value="slides">Google Slides</option>
+                                                <option value="schoology">Schoology</option>
+                                                <option value="custom">Custom...</option>
+                                            </select>
+                                        </div>
+                                        <div id="parakeet-cloak-custom" style="display:none;margin-top:12px;gap:8px;flex-wrap:wrap;">
+                                            <input id="parakeet-cloak-title" placeholder="Tab title" style="flex:1;min-width:140px;padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;" />
+                                            <input id="parakeet-cloak-icon" placeholder="Icon URL (optional)" style="flex:2;min-width:180px;padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;" />
+                                            <button id="parakeet-cloak-apply" class="btn" style="padding:8px 16px;">Apply</button>
+                                        </div>
+                                        <div class="settings-switch-row" style="margin-top:12px;">
+                                            <div>
+                                                <div class="settings-switch-label">Panic key</div>
+                                                <div class="settings-hint">Press <b>Ctrl+Shift+P</b> anywhere to instantly disguise this tab as Google Classroom.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+</div>
 
                             
-                            <div class="settings-section" data-section="skins" style="display:none;">
+                            <div class="
+
+settings-section" data-section="skins" style="display:none;">
                                 <div class="settings-card">
                                     <div class="settings-card-head"><i class="fas fa-mask"></i> Browser Skin</div>
                                     <div class="settings-card-body">
@@ -29339,42 +29380,5 @@ _VIEWER_DL_JS +
 
 </body>
 
-</html><div class="settings-card">
-                                    <div class="settings-card-head"><i class="fas fa-theater-masks"></i> Tab Cloaking
-                                    </div>
-                                    <div class="settings-card-body">
-                                        <div class="settings-switch-row">
-                                            <div>
-                                                <div class="settings-switch-label">Disguise this tab</div>
-                                                <div class="settings-hint">Change the tab title and icon to look like another site. Press Alt+C to cycle quickly.</div>
-                                            </div>
-                                            <select id="parakeet-cloak-select" style="padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;min-width:160px;">
-                                                <option value="none">Off</option>
-                                                <option value="classroom">Google Classroom</option>
-                                                <option value="drive">Google Drive</option>
-                                                <option value="gmail">Gmail</option>
-                                                <option value="docs">Google Docs</option>
-                                                <option value="calc">Calculator</option>
-                                                <option value="classlink">ClassLink</option>
-                                                <option value="canvas">Canvas</option>
-                                                <option value="khan">Khan Academy</option>
-                                                <option value="desmos">Desmos</option>
-                                                <option value="slides">Google Slides</option>
-                                                <option value="schoology">Schoology</option>
-                                                <option value="custom">Custom...</option>
-                                            </select>
-                                        </div>
-                                        <div id="parakeet-cloak-custom" style="display:none;margin-top:12px;gap:8px;flex-wrap:wrap;">
-                                            <input id="parakeet-cloak-title" placeholder="Tab title" style="flex:1;min-width:140px;padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;" />
-                                            <input id="parakeet-cloak-icon" placeholder="Icon URL (optional)" style="flex:2;min-width:180px;padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;" />
-                                            <button id="parakeet-cloak-apply" class="btn" style="padding:8px 16px;">Apply</button>
-                                        </div>
-                                        <div class="settings-switch-row" style="margin-top:12px;">
-                                            <div>
-                                                <div class="settings-switch-label">Panic key</div>
-                                                <div class="settings-hint">Press <b>Ctrl+Shift+P</b> anywhere to instantly disguise this tab as Google Classroom.</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+</html>
                                 
