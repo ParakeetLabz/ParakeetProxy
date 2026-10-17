@@ -9334,6 +9334,251 @@ if(token){ $('#tok').value=token; start(); }
  */
 !function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t(((e="undefined"!=typeof globalThis?globalThis:e||self).acorn=e.acorn||{},e.acorn.walk={}))}(this,(function(e){"use strict";function t(e){return"string"==typeof e?function(t){return t===e}:e||function(){return!0}}var n=function(e,t){this.node=e,this.state=t};function r(e,t){var n=Object.create(t||a);for(var r in e)n[r]=e[r];return n}function o(e,t,n){n(e,t)}function i(e,t,n){}var a={};a.Program=a.BlockStatement=a.StaticBlock=function(e,t,n){for(var r=0,o=e.body;r<o.length;r+=1){n(o[r],t,"Statement")}},a.Statement=o,a.EmptyStatement=i,a.ExpressionStatement=a.ParenthesizedExpression=a.ChainExpression=function(e,t,n){return n(e.expression,t,"Expression")},a.IfStatement=function(e,t,n){n(e.test,t,"Expression"),n(e.consequent,t,"Statement"),e.alternate&&n(e.alternate,t,"Statement")},a.LabeledStatement=function(e,t,n){return n(e.body,t,"Statement")},a.BreakStatement=a.ContinueStatement=i,a.WithStatement=function(e,t,n){n(e.object,t,"Expression"),n(e.body,t,"Statement")},a.SwitchStatement=function(e,t,n){n(e.discriminant,t,"Expression");for(var r=0,o=e.cases;r<o.length;r+=1){n(o[r],t)}},a.SwitchCase=function(e,t,n){e.test&&n(e.test,t,"Expression");for(var r=0,o=e.consequent;r<o.length;r+=1){n(o[r],t,"Statement")}},a.ReturnStatement=a.YieldExpression=a.AwaitExpression=function(e,t,n){e.argument&&n(e.argument,t,"Expression")},a.ThrowStatement=a.SpreadElement=function(e,t,n){return n(e.argument,t,"Expression")},a.TryStatement=function(e,t,n){n(e.block,t,"Statement"),e.handler&&n(e.handler,t),e.finalizer&&n(e.finalizer,t,"Statement")},a.CatchClause=function(e,t,n){e.param&&n(e.param,t,"Pattern"),n(e.body,t,"Statement")},a.WhileStatement=a.DoWhileStatement=function(e,t,n){n(e.test,t,"Expression"),n(e.body,t,"Statement")},a.ForStatement=function(e,t,n){e.init&&n(e.init,t,"ForInit"),e.test&&n(e.test,t,"Expression"),e.update&&n(e.update,t,"Expression"),n(e.body,t,"Statement")},a.ForInStatement=a.ForOfStatement=function(e,t,n){n(e.left,t,"ForInit"),n(e.right,t,"Expression"),n(e.body,t,"Statement")},a.ForInit=function(e,t,n){"VariableDeclaration"===e.type?n(e,t):n(e,t,"Expression")},a.DebuggerStatement=i,a.FunctionDeclaration=function(e,t,n){return n(e,t,"Function")},a.VariableDeclaration=function(e,t,n){for(var r=0,o=e.declarations;r<o.length;r+=1){n(o[r],t)}},a.VariableDeclarator=function(e,t,n){n(e.id,t,"Pattern"),e.init&&n(e.init,t,"Expression")},a.Function=function(e,t,n){e.id&&n(e.id,t,"Pattern");for(var r=0,o=e.params;r<o.length;r+=1){n(o[r],t,"Pattern")}n(e.body,t,e.expression?"Expression":"Statement")},a.Pattern=function(e,t,n){"Identifier"===e.type?n(e,t,"VariablePattern"):"MemberExpression"===e.type?n(e,t,"MemberPattern"):n(e,t)},a.VariablePattern=i,a.MemberPattern=o,a.RestElement=function(e,t,n){return n(e.argument,t,"Pattern")},a.ArrayPattern=function(e,t,n){for(var r=0,o=e.elements;r<o.length;r+=1){var i=o[r];i&&n(i,t,"Pattern")}},a.ObjectPattern=function(e,t,n){for(var r=0,o=e.properties;r<o.length;r+=1){var i=o[r];"Property"===i.type?(i.computed&&n(i.key,t,"Expression"),n(i.value,t,"Pattern")):"RestElement"===i.type&&n(i.argument,t,"Pattern")}},a.Expression=o,a.ThisExpression=a.Super=a.MetaProperty=i,a.ArrayExpression=function(e,t,n){for(var r=0,o=e.elements;r<o.length;r+=1){var i=o[r];i&&n(i,t,"Expression")}},a.ObjectExpression=function(e,t,n){for(var r=0,o=e.properties;r<o.length;r+=1){n(o[r],t)}},a.FunctionExpression=a.ArrowFunctionExpression=a.FunctionDeclaration,a.SequenceExpression=function(e,t,n){for(var r=0,o=e.expressions;r<o.length;r+=1){n(o[r],t,"Expression")}},a.TemplateLiteral=function(e,t,n){for(var r=0,o=e.quasis;r<o.length;r+=1){n(o[r],t)}for(var i=0,a=e.expressions;i<a.length;i+=1){n(a[i],t,"Expression")}},a.TemplateElement=i,a.UnaryExpression=a.UpdateExpression=function(e,t,n){n(e.argument,t,"Expression")},a.BinaryExpression=a.LogicalExpression=function(e,t,n){n(e.left,t,"Expression"),n(e.right,t,"Expression")},a.AssignmentExpression=a.AssignmentPattern=function(e,t,n){n(e.left,t,"Pattern"),n(e.right,t,"Expression")},a.ConditionalExpression=function(e,t,n){n(e.test,t,"Expression"),n(e.consequent,t,"Expression"),n(e.alternate,t,"Expression")},a.NewExpression=a.CallExpression=function(e,t,n){if(n(e.callee,t,"Expression"),e.arguments)for(var r=0,o=e.arguments;r<o.length;r+=1){n(o[r],t,"Expression")}},a.MemberExpression=function(e,t,n){n(e.object,t,"Expression"),e.computed&&n(e.property,t,"Expression")},a.ExportNamedDeclaration=a.ExportDefaultDeclaration=function(e,t,n){e.declaration&&n(e.declaration,t,"ExportNamedDeclaration"===e.type||e.declaration.id?"Statement":"Expression"),e.source&&n(e.source,t,"Expression")},a.ExportAllDeclaration=function(e,t,n){e.exported&&n(e.exported,t),n(e.source,t,"Expression")},a.ImportDeclaration=function(e,t,n){for(var r=0,o=e.specifiers;r<o.length;r+=1){n(o[r],t)}n(e.source,t,"Expression")},a.ImportExpression=function(e,t,n){n(e.source,t,"Expression")},a.ImportSpecifier=a.ImportDefaultSpecifier=a.ImportNamespaceSpecifier=a.Identifier=a.PrivateIdentifier=a.Literal=i,a.TaggedTemplateExpression=function(e,t,n){n(e.tag,t,"Expression"),n(e.quasi,t,"Expression")},a.ClassDeclaration=a.ClassExpression=function(e,t,n){return n(e,t,"Class")},a.Class=function(e,t,n){e.id&&n(e.id,t,"Pattern"),e.superClass&&n(e.superClass,t,"Expression"),n(e.body,t)},a.ClassBody=function(e,t,n){for(var r=0,o=e.body;r<o.length;r+=1){n(o[r],t)}},a.MethodDefinition=a.PropertyDefinition=a.Property=function(e,t,n){e.computed&&n(e.key,t,"Expression"),e.value&&n(e.value,t,"Expression")},e.ancestor=function(e,t,n,r,o){var i=[];n||(n=a),function e(r,o,a){var s=a||r.type,c=r!==i[i.length-1];c&&i.push(r),n[s](r,o,e),t[s]&&t[s](r,o||i,i),c&&i.pop()}(e,r,o)},e.base=a,e.findNodeAfter=function(e,r,o,i,s){o=t(o),i||(i=a);try{!function e(t,a,s){if(!(t.end<r)){var c=s||t.type;if(t.start>=r&&o(c,t))throw new n(t,a);i[c](t,a,e)}}(e,s)}catch(e){if(e instanceof n)return e;throw e}},e.findNodeAround=function(e,r,o,i,s){o=t(o),i||(i=a);try{!function e(t,a,s){var c=s||t.type;if(!(t.start>r||t.end<r)&&(i[c](t,a,e),o(c,t)))throw new n(t,a)}(e,s)}catch(e){if(e instanceof n)return e;throw e}},e.findNodeAt=function(e,r,o,i,s,c){s||(s=a),i=t(i);try{!function e(t,a,c){var p=c||t.type;if((null==r||t.start<=r)&&(null==o||t.end>=o)&&s[p](t,a,e),(null==r||t.start===r)&&(null==o||t.end===o)&&i(p,t))throw new n(t,a)}(e,c)}catch(e){if(e instanceof n)return e;throw e}},e.findNodeBefore=function(e,r,o,i,s){var c;return o=t(o),i||(i=a),function e(t,a,s){if(!(t.start>r)){var p=s||t.type;t.end<=r&&(!c||c.node.end<t.end)&&o(p,t)&&(c=new n(t,a)),i[p](t,a,e)}}(e,s),c},e.full=function(e,t,n,r,o){var i;n||(n=a),function e(r,o,a){var s=a||r.type;n[s](r,o,e),i!==r&&(t(r,o,s),i=r)}(e,r,o)},e.fullAncestor=function(e,t,n,r){n||(n=a);var o,i=[];!function e(r,a,s){var c=s||r.type,p=r!==i[i.length-1];p&&i.push(r),n[c](r,a,e),o!==r&&(t(r,a||i,i,c),o=r),p&&i.pop()}(e,r)},e.make=r,e.recursive=function(e,t,n,o,i){var a=n?r(n,o||void 0):o;!function e(t,n,r){a[r||t.type](t,n,e)}(e,t,i)},e.simple=function(e,t,n,r,o){n||(n=a),function e(r,o,i){var a=i||r.type;n[a](r,o,e),t[a]&&t[a](r,o)}(e,r,o)}}));
     </script>
+
+<style> /* Parakeet Terminal */
+#parakeet-term {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(20px);
+  width: min(720px, 92vw);
+  height: min(420px, 60vh);
+  background: rgba(8, 15, 28, 0.97);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 229, 255, 0.12);
+  z-index: 2147483646;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+#parakeet-term.open { display: flex; opacity: 1; transform: translateX(-50%) translateY(0); }
+#parakeet-term-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(0, 229, 255, 0.08);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+  color: #00e5ff; font-size: 12px; font-weight: 600;
+  user-select: none; cursor: default;
+}
+#parakeet-term-head .dots { display: flex; gap: 6px; }
+#parakeet-term-head .dot { width: 10px; height: 10px; border-radius: 50%; }
+#parakeet-term-close { background: none; border: none; color: #7ff0ff; cursor: pointer; font-size: 14px; padding: 2px 6px; }
+#parakeet-term-out {
+  flex: 1; overflow-y: auto; padding: 10px 12px;
+  color: #c8f4ff; font-size: 13px; line-height: 1.5;
+  white-space: pre-wrap; word-break: break-word;
+}
+#parakeet-term-out .tp { color: #00e5ff; }
+#parakeet-term-out .tdim { color: #5a7a8a; }
+#parakeet-term-out .terr { color: #ff6b6b; }
+#parakeet-term-out .tok { color: #7dffb0; }
+#parakeet-term-inrow { display: flex; align-items: center; padding: 8px 12px; border-top: 1px solid rgba(0,229,255,0.15); }
+#parakeet-term-prompt { color: #00e5ff; font-size: 13px; margin-right: 8px; white-space: nowrap; }
+#parakeet-term-in {
+  flex: 1; background: none; border: none; outline: none;
+  color: #e8fbff; font-family: inherit; font-size: 13px;
+  caret-color: #00e5ff;
+}
+#parakeet-term-btn {
+  position: fixed; left: 20px; bottom: 20px; z-index: 2147483645;
+  width: 46px; height: 46px; border-radius: 12px;
+  border: 1px solid rgba(0,229,255,0.4);
+  background: rgba(8, 15, 28, 0.9); color: #00e5ff;
+  font-size: 20px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+#parakeet-term-btn:hover { background: rgba(0,229,255,0.15); }
+</style>
+<script> /* Parakeet Terminal */
+(function() {
+  var TERM_KEY = 'parakeet:term:hist';
+  var hist = [];
+  try { hist = JSON.parse(localStorage.getItem(TERM_KEY) || '[]'); } catch(e) { hist = []; }
+  var hIdx = -1;
+
+  function el(id) { return document.getElementById(id); }
+
+  function build() {
+    if (el('parakeet-term')) return;
+    var t = document.createElement('div');
+    t.id = 'parakeet-term';
+    t.innerHTML =
+      '<div id="parakeet-term-head"><div class="dots">' +
+      '<span class="dot" style="background:#ff5f57"></span>' +
+      '<span class="dot" style="background:#febc2e"></span>' +
+      '<span class="dot" style="background:#28c840"></span></div>' +
+      '<span>parakeet@terminal</span>' +
+      '<button id="parakeet-term-close" title="Close (Ctrl+`)">✕</button></div>' +
+      '<div id="parakeet-term-out"></div>' +
+      '<div id="parakeet-term-inrow"><span id="parakeet-term-prompt">parakeet:~$</span>' +
+      '<input id="parakeet-term-in" autocomplete="off" spellcheck="false" /></div>';
+    document.body.appendChild(t);
+    el('parakeet-term-close').onclick = toggle;
+    var inp = el('parakeet-term-in');
+    inp.addEventListener('keydown', onKey);
+    var btn = document.createElement('button');
+    btn.id = 'parakeet-term-btn';
+    btn.innerHTML = '&gt;_';
+    btn.title = 'Terminal (Ctrl+`)';
+    btn.onclick = toggle;
+    document.body.appendChild(btn);
+    print('<span class="tp">Parakeet Terminal</span> <span class="tdim">v1 — type</span> help <span class="tdim">to begin</span>');
+  }
+
+  function toggle() {
+    build();
+    var t = el('parakeet-term');
+    var open = t.classList.toggle('open');
+    if (open) { setTimeout(function(){ el('parakeet-term-in').focus(); }, 60); }
+  }
+
+  function print(html) {
+    var out = el('parakeet-term-out');
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    out.appendChild(div);
+    out.scrollTop = out.scrollHeight;
+  }
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function onKey(e) {
+    var inp = el('parakeet-term-in');
+    if (e.key === 'Enter') {
+      var cmd = inp.value;
+      print('<span class="tp">parakeet:~$</span> ' + esc(cmd));
+      inp.value = '';
+      if (cmd.trim()) {
+        hist.push(cmd);
+        try { localStorage.setItem(TERM_KEY, JSON.stringify(hist.slice(-100))); } catch(err) {}
+        run(cmd);
+      }
+      hIdx = -1;
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (hist.length) {
+        if (hIdx === -1) hIdx = hist.length - 1; else if (hIdx > 0) hIdx--;
+        inp.value = hist[hIdx];
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (hIdx !== -1) {
+        if (hIdx < hist.length - 1) { hIdx++; inp.value = hist[hIdx]; }
+        else { hIdx = -1; inp.value = ''; }
+      }
+    } else if (e.key === 'l' && e.ctrlKey) {
+      e.preventDefault();
+      el('parakeet-term-out').innerHTML = '';
+    }
+  }
+
+  var COMMANDS = {
+    help: function() {
+      print([
+        '<span class="tok">Commands:</span>',
+        '  <span class="tp">open &lt;url&gt;</span>      navigate the browser',
+        '  <span class="tp">fetch &lt;url&gt;</span>     GET a URL through the proxy',
+        '  <span class="tp">cloak &lt;preset&gt;</span>   disguise tab (off, classroom, drive, gmail, docs, calc, classlink, canvas)',
+        '  <span class="tp">js &lt;code&gt;</span>        evaluate JavaScript',
+        '  <span class="tp">echo &lt;text&gt;</span>      print text',
+        '  <span class="tp">date</span>             current date/time',
+        '  <span class="tp">whoami</span>           who you are',
+        '  <span class="tp">uname</span>            system info',
+        '  <span class="tp">history</span>          command history',
+        '  <span class="tp">clear</span>            clear screen',
+        '  <span class="tdim">Ctrl+` toggles · ↑/↓ history · Ctrl+L clears</span>'
+      ].join('\n'));
+    },
+    echo: function(a) { print(esc(a.join(' '))); },
+    clear: function() { el('parakeet-term-out').innerHTML = ''; },
+    date: function() { print(esc(new Date().toString())); },
+    whoami: function() { print('parakeet'); },
+    uname: function() { print('ParakeetOS 1.0 ' + esc(navigator.platform) + ' (web)'); },
+    history: function() {
+      hist.forEach(function(h, i) { print('<span class="tdim">' + (i+1) + '</span>  ' + esc(h)); });
+    },
+    open: function(a) {
+      var url = (a[0] || '').trim();
+      if (!url) { print('<span class="terr">usage: open &lt;url&gt;</span>'); return; }
+      if (!/^[a-z]+:\/\//i.test(url)) url = 'https://' + url;
+      print('<span class="tdim">navigating →</span> ' + esc(url));
+      try {
+        if (typeof window.go === 'function') window.go(url);
+        else window.location.href = url;
+      } catch(err) { print('<span class="terr">' + esc(err.message) + '</span>'); }
+    },
+    cloak: function(a) {
+      var p = (a[0] || '').toLowerCase();
+      var valid = ['off','none','classroom','drive','gmail','docs','calc','classlink','canvas'];
+      if (!p || valid.indexOf(p) === -1) {
+        print('<span class="terr">usage: cloak &lt;' + valid.join('|') + '&gt;</span>');
+        return;
+      }
+      try {
+        if (window.ParakeetCloak) {
+          window.ParakeetCloak.apply(p === 'off' ? 'none' : p);
+          print('<span class="tok">cloak →</span> ' + esc(p));
+        } else print('<span class="terr">cloak unavailable</span>');
+      } catch(err) { print('<span class="terr">' + esc(err.message) + '</span>'); }
+    },
+    js: function(a) {
+      var code = a.join(' ');
+      if (!code) { print('<span class="terr">usage: js &lt;code&gt;</span>'); return; }
+      try {
+        var r = (0, eval)(code);
+        print('<span class="tdim">→</span> ' + esc(r === undefined ? 'undefined' : String(r)));
+      } catch(err) { print('<span class="terr">' + esc(err.name + ': ' + err.message) + '</span>'); }
+    },
+    fetch: function(a) {
+      var url = (a[0] || '').trim();
+      if (!url) { print('<span class="terr">usage: fetch &lt;url&gt;</span>'); return; }
+      if (!/^[a-z]+:\/\//i.test(url)) url = 'https://' + url;
+      print('<span class="tdim">GET</span> ' + esc(url) + ' <span class="tdim">…</span>');
+      window.fetch(url).then(function(res) {
+        return res.text().then(function(t) {
+          print('<span class="tok">' + res.status + ' ' + esc(res.statusText) + '</span> <span class="tdim">' + t.length + ' bytes</span>');
+          print(esc(t.slice(0, 600)) + (t.length > 600 ? '<span class="tdim">…</span>' : ''));
+        });
+      }).catch(function(err) {
+        print('<span class="terr">fetch failed: ' + esc(err.message) + '</span>');
+      });
+    }
+  };
+
+  function run(cmdline) {
+    var parts = cmdline.trim().split(/\s+/);
+    var name = parts[0].toLowerCase();
+    var args = parts.slice(1);
+    if (COMMANDS[name]) {
+      try { COMMANDS[name](args); }
+      catch(err) { print('<span class="terr">' + esc(err.message) + '</span>'); }
+    } else {
+      print('<span class="terr">command not found:</span> ' + esc(name) + ' <span class="tdim">— try</span> help');
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === '`' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      toggle();
+    }
+    if (e.key === 'Escape' && el('parakeet-term') && el('parakeet-term').classList.contains('open')) {
+      toggle();
+    }
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', build);
+  } else { build(); }
+})();
+</script>
+
 </body>
 </html>
 
