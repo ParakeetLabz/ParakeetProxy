@@ -7478,7 +7478,7 @@ body {
                                                             The team behind Parakeet
                                                         </div>
                                                         <div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding-left:2px;">
-                                                            <a href="https://github.com/nautilus-os" target="_blank" rel="noopener" style="color:var(--ac);font-size:12px;text-decoration:none;background:rgba(157,229,255,0.08);border:1px solid rgba(157,229,255,0.2);border-radius:5px;padding:2px 8px;display:inline-flex;align-items:center;gap:5px;">Parakeet Labz <i class="fas fa-arrow-up-right-from-square" style="font-size:10px;opacity:0.7;"></i></a><span style="color:var(--tx2);font-size:12px;margin-left:-2px;">:</span>
+                                                            <a href="https://github.com/ParakeetLabz/ParakeetProxy" target="_blank" rel="noopener" style="color:var(--ac);font-size:12px;text-decoration:none;background:rgba(157,229,255,0.08);border:1px solid rgba(157,229,255,0.2);border-radius:5px;padding:2px 8px;display:inline-flex;align-items:center;gap:5px;">Parakeet Labz <i class="fas fa-arrow-up-right-from-square" style="font-size:10px;opacity:0.7;"></i></a><span style="color:var(--tx2);font-size:12px;margin-left:-2px;">:</span>
                                                             <a href="https://github.com/dinguschan-owo" target="_blank" rel="noopener" style="color:var(--ac);font-size:12px;text-decoration:none;background:rgba(157,229,255,0.08);border:1px solid rgba(157,229,255,0.2);border-radius:5px;padding:2px 8px;display:inline-flex;align-items:center;gap:5px;">dinguschan <i class="fas fa-arrow-up-right-from-square" style="font-size:10px;opacity:0.7;"></i></a><span style="color:var(--tx2);font-size:12px;margin-left:-2px;">,</span>
                                                             <a href="https://github.com/x8rr" target="_blank" rel="noopener" style="color:var(--ac);font-size:12px;text-decoration:none;background:rgba(157,229,255,0.08);border:1px solid rgba(157,229,255,0.2);border-radius:5px;padding:2px 8px;display:inline-flex;align-items:center;gap:5px;">xor <i class="fas fa-arrow-up-right-from-square" style="font-size:10px;opacity:0.7;"></i></a><span style="color:var(--tx2);font-size:12px;margin-left:-2px;">,</span>
                                                             <a href="https://github.com/CompactAIOfficial" target="_blank" rel="noopener" style="color:var(--ac);font-size:12px;text-decoration:none;background:rgba(157,229,255,0.08);border:1px solid rgba(157,229,255,0.2);border-radius:5px;padding:2px 8px;display:inline-flex;align-items:center;gap:5px;">lanefiedler <i class="fas fa-arrow-up-right-from-square" style="font-size:10px;opacity:0.7;"></i></a><span style="color:var(--tx2);font-size:12px;margin-left:-2px;">, and</span>
@@ -9168,6 +9168,103 @@ async function start(){
 document.body.dataset.skin=localStorage.getItem('skin')||'default';
 if(token){ $('#tok').value=token; start(); }
 <\/script>
+
+<script>
+// ===== Parakeet Tab Cloaking =====
+(function() {
+  const CLOAK_KEY = 'parakeet:cloak';
+  const cloaks = {
+    'none': { title: 'Parakeet', icon: null },
+    'classroom': { title: 'Google Classroom', icon: 'https://ssl.gstatic.com/classroom/favicon.png' },
+    'drive': { title: 'My Drive - Google Drive', icon: 'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png' },
+    'gmail': { title: 'Gmail', icon: 'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico' },
+    'docs': { title: 'Google Docs', icon: 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico' },
+    'calc': { title: 'Calculator', icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🧮</text></svg>' },
+    'classlink': { title: 'ClassLink', icon: 'https://www.classlink.com/favicon.ico' },
+    'canvas': { title: 'Dashboard', icon: 'https://canvas.instructure.com/favicon.ico' },
+  };
+
+  function setFavicon(url) {
+    let link = document.querySelector("link[rel*='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
+    link.href = url;
+  }
+
+  function applyCloak(name) {
+    const c = cloaks[name] || cloaks['none'];
+    if (name === 'none') {
+      document.title = 'Parakeet';
+      // Restore original favicon
+      setFavicon('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%2300d4ff"/></svg>');
+    } else {
+      document.title = c.title;
+      if (c.icon) setFavicon(c.icon);
+    }
+    try { localStorage.setItem(CLOAK_KEY, name); } catch(e) {}
+  }
+
+  // Restore on load
+  try {
+    const saved = localStorage.getItem(CLOAK_KEY);
+    if (saved && saved !== 'none' && cloaks[saved]) {
+      // Delay to override any title set by app
+      setTimeout(() => applyCloak(saved), 1000);
+      setTimeout(() => applyCloak(saved), 3000);
+    }
+  } catch(e) {}
+
+  // Expose globally
+  window.ParakeetCloak = { apply: applyCloak, list: Object.keys(cloaks) };
+
+  // Add UI to settings (simple select in Appearance)
+  // Wait for settings to exist, then inject
+  const injectUI = () => {
+    // Try to find Appearance section
+    const sections = document.querySelectorAll('[data-section], .settings-section, section');
+    // Fallback: add a floating cloak button
+    if (!document.getElementById('parakeet-cloak-btn')) {
+      const btn = document.createElement('button');
+      btn.id = 'parakeet-cloak-btn';
+      btn.innerHTML = '🎭';
+      btn.title = 'Tab Cloak (Alt+C to cycle)';
+      btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:99999;width:44px;height:44px;border-radius:50%;border:none;background:#00d4ff;color:#0a1628;font-size:20px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.3);';
+      btn.onclick = () => {
+        const names = Object.keys(cloaks);
+        const cur = localStorage.getItem(CLOAK_KEY) || 'none';
+        const idx = names.indexOf(cur);
+        const next = names[(idx + 1) % names.length];
+        applyCloak(next);
+        btn.title = 'Cloak: ' + next + ' (Alt+C to cycle)';
+      };
+      document.body.appendChild(btn);
+    }
+  };
+
+  // Keyboard shortcut Alt+C
+  document.addEventListener('keydown', (e) => {
+    if (e.altKey && e.key.toLowerCase() === 'c') {
+      e.preventDefault();
+      const names = Object.keys(cloaks);
+      const cur = localStorage.getItem(CLOAK_KEY) || 'none';
+      const idx = names.indexOf(cur);
+      const next = names[(idx + 1) % names.length];
+      applyCloak(next);
+    }
+  });
+
+  // Inject after load
+  if (document.readyState === 'complete') {
+    setTimeout(injectUI, 2000);
+  } else {
+    window.addEventListener('load', () => setTimeout(injectUI, 2000));
+  }
+})();
+</script>
+
 </body>
 </html>
 
@@ -21385,7 +21482,7 @@ _VIEWER_DL_JS +
                 if (e.key === "Enter") ntSearchBtn.click();
             };
             const ntGithubBtn = $("ntGithubBtn");
-            if (ntGithubBtn) ntGithubBtn.onclick = () => window.open("https://github.com/nautilus-os/Parakeet", "_blank", "noopener,noreferrer");
+            if (ntGithubBtn) ntGithubBtn.onclick = () => window.open("https://github.com/ParakeetLabz/ParakeetProxy", "_blank", "noopener,noreferrer");
 
             ntWallpaperBtn.onclick = () => {
                 $("wallpaperUrlInput").value = "";
@@ -24592,8 +24689,8 @@ _VIEWER_DL_JS +
                     SEP,
                     mi('mi:help', 'Help', null, { sub: [
                         mi('mi:help', 'About Google Chrome', () => go('gust://settings/about')),
-                        mi('mi:open-in-new', "What's new", () => createTab('https://github.com/nautilus-os')),
-                        mi('mi:open-in-new', 'Report an issue', () => createTab('https://github.com/nautilus-os'))
+                        mi('mi:open-in-new', "What's new", () => createTab('https://github.com/ParakeetLabz/ParakeetProxy')),
+                        mi('mi:open-in-new', 'Report an issue', () => createTab('https://github.com/ParakeetLabz/ParakeetProxy'))
                     ] }),
                     mi('mi:settings', 'Settings', () => go('gust://settings')),
                     mi('mi:logout', 'Exit', () => { try { window.close(); } catch (_) {} })
@@ -26981,7 +27078,7 @@ _VIEWER_DL_JS +
                     SEP,
                     mi('mi:help', 'Help', null, { sub: [
                         mi('mi:help', 'About Brave', () => go('gust://settings/about')),
-                        mi('mi:open-in-new', 'Report an issue', () => createTab('https://github.com/nautilus-os'))
+                        mi('mi:open-in-new', 'Report an issue', () => createTab('https://github.com/ParakeetLabz/ParakeetProxy'))
                     ] }),
                     mi('mi:settings', 'Settings', () => go('gust://settings')),
                     mi('mi:logout', 'Exit', () => { try { window.close(); } catch (_) {} })
@@ -27018,7 +27115,7 @@ _VIEWER_DL_JS +
                     ] }),
                     mi('', 'Help', null, { sub: [
                         mi('', 'About Firefox', () => go('gust://settings/about')),
-                        mi('', 'Report broken site...', () => createTab('https://github.com/nautilus-os'))
+                        mi('', 'Report broken site...', () => createTab('https://github.com/ParakeetLabz/ParakeetProxy'))
                     ] }),
                     SEP,
                     mi('', 'Quit', () => { try { window.close(); } catch (_) {} }, { accel: 'Ctrl+Shift+Q' })
