@@ -9263,14 +9263,14 @@ if(token){ $('#tok').value=token; start(); }
 (function() {
   const CLOAK_KEY = 'parakeet:cloak';
   const cloaks = {
-    'none': { title: 'Parakeet', icon: null },
+    'none': { title: 'Parakeet', icon: 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cellipse%20cx%3D%2245%22%20cy%3D%2260%22%20rx%3D%2222%22%20ry%3D%2226%22%20fill%3D%22%2300d4ff%22%2F%3E%3Ccircle%20cx%3D%2258%22%20cy%3D%2232%22%20r%3D%2216%22%20fill%3D%22%2300e5ff%22%2F%3E%3Cpath%20d%3D%22M72%2028%20Q80%2032%2072%2038%20Q68%2034%2072%2028%22%20fill%3D%22%23ff9500%22%2F%3E%3Ccircle%20cx%3D%2262%22%20cy%3D%2228%22%20r%3D%223.5%22%20fill%3D%22%230a1628%22%2F%3E%3Cpath%20d%3D%22M35%2050%20Q28%2065%2035%2080%20Q42%2070%2040%2055%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cpath%20d%3D%22M28%2078%20L12%2095%20L24%2088%20L20%2098%20L32%2090%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cellipse%20cx%3D%2252%22%20cy%3D%2262%22%20rx%3D%2212%22%20ry%3D%2216%22%20fill%3D%22%237ff0ff%22%20opacity%3D%220.5%22%2F%3E%3C%2Fsvg%3E' },
     'classroom': { title: 'Google Classroom', icon: 'https://ssl.gstatic.com/classroom/favicon.png' },
     'drive': { title: 'My Drive - Google Drive', icon: 'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png' },
     'gmail': { title: 'Gmail', icon: 'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico' },
     'docs': { title: 'Google Docs', icon: 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico' },
-    'calc': { title: 'Calculator', icon: null },
-    'classlink': { title: 'ClassLink', icon: null },
-    'canvas': { title: 'Dashboard', icon: null },
+    'calc': { title: 'Calculator', icon: 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20x%3D%2222%22%20y%3D%228%22%20width%3D%2256%22%20height%3D%2284%22%20rx%3D%2210%22%20fill%3D%22%232b3a4a%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2218%22%20width%3D%2240%22%20height%3D%2216%22%20rx%3D%223%22%20fill%3D%22%237ff0ff%22%2F%3E%3Cg%20fill%3D%22%2300e5ff%22%3E%3Crect%20x%3D%2230%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E' },
+    'classlink': { title: 'ClassLink', icon: 'https://launchpad.classlink.com/favicon.ico' },
+    'canvas': { title: 'Dashboard', icon: 'https://canvas.instructure.com/favicon.ico' },
   };
   function setFavicon(url) {
     let link = document.querySelector("link[rel*='icon']");
@@ -9523,13 +9523,12 @@ if(token){ $('#tok').value=token; start(); }
       try {
         var name = (p === 'off') ? 'none' : p;
         var titles = {none:'Parakeet', classroom:'Google Classroom', drive:'My Drive - Google Drive', gmail:'Gmail', docs:'Google Docs', calc:'Calculator', classlink:'ClassLink', canvas:'Dashboard'};
-        var icons = {classroom:'https://ssl.gstatic.com/classroom/favicon.png', drive:'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png', gmail:'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico', docs:'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico'};
+        var icons = {none:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cellipse%20cx%3D%2245%22%20cy%3D%2260%22%20rx%3D%2222%22%20ry%3D%2226%22%20fill%3D%22%2300d4ff%22%2F%3E%3Ccircle%20cx%3D%2258%22%20cy%3D%2232%22%20r%3D%2216%22%20fill%3D%22%2300e5ff%22%2F%3E%3Cpath%20d%3D%22M72%2028%20Q80%2032%2072%2038%20Q68%2034%2072%2028%22%20fill%3D%22%23ff9500%22%2F%3E%3Ccircle%20cx%3D%2262%22%20cy%3D%2228%22%20r%3D%223.5%22%20fill%3D%22%230a1628%22%2F%3E%3Cpath%20d%3D%22M35%2050%20Q28%2065%2035%2080%20Q42%2070%2040%2055%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cpath%20d%3D%22M28%2078%20L12%2095%20L24%2088%20L20%2098%20L32%2090%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cellipse%20cx%3D%2252%22%20cy%3D%2262%22%20rx%3D%2212%22%20ry%3D%2216%22%20fill%3D%22%237ff0ff%22%20opacity%3D%220.5%22%2F%3E%3C%2Fsvg%3E',classroom:'https://ssl.gstatic.com/classroom/favicon.png',drive:'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png',gmail:'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico',docs:'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico',classlink:'https://launchpad.classlink.com/favicon.ico',calc:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20x%3D%2222%22%20y%3D%228%22%20width%3D%2256%22%20height%3D%2284%22%20rx%3D%2210%22%20fill%3D%22%232b3a4a%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2218%22%20width%3D%2240%22%20height%3D%2216%22%20rx%3D%223%22%20fill%3D%22%237ff0ff%22%2F%3E%3Cg%20fill%3D%22%2300e5ff%22%3E%3Crect%20x%3D%2230%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',canvas:'https://canvas.instructure.com/favicon.ico'};
         document.title = titles[name] || 'Parakeet';
-        if (icons[name]) {
-          var link = document.querySelector("link[rel*='icon']");
-          if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
-          link.href = icons[name];
-        }
+        var iconUrl = icons[name] || icons.none;
+        var link = document.querySelector("link[rel*='icon']");
+        if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+        link.href = iconUrl;
         try { localStorage.setItem('parakeet:cloak', name); } catch(err2) {}
         var sel = document.getElementById('parakeet-cloak-select');
         if (sel) sel.value = name;
