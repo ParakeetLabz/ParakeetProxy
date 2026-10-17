@@ -5753,6 +5753,100 @@ body {
   background: linear-gradient(135deg, #0a1628 0%, #0d2137 100%) !important;
 }
 </style>
+
+<style> /* Parakeet Bird Theme */
+:root {
+  --bird-cyan: #00e5ff !important;
+  --bird-teal: #00b8a9 !important;
+  --bird-sky: #7ff0ff !important;
+}
+/* Subtle feather texture over the app background */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M60 10 C40 30 30 55 35 85 C37 95 45 100 55 95 C70 88 80 60 60 10 Z' fill='none' stroke='%2300e5ff' stroke-width='1.5'/%3E%3Cpath d='M60 15 L58 90' stroke='%2300e5ff' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+}
+/* Soft sky glow */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%, rgba(0,229,255,0.07), transparent),
+    radial-gradient(ellipse 50% 35% at 85% 15%, rgba(0,184,169,0.06), transparent);
+}
+/* Flying bird silhouettes drifting across the viewport */
+.parakeet-flock {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 220px;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+  opacity: 0.5;
+}
+.parakeet-bird {
+  position: absolute;
+  top: 0;
+  animation: parakeet-fly linear infinite;
+}
+.parakeet-bird svg { display: block; }
+@keyframes parakeet-fly {
+  from { transform: translateX(-10vw); }
+  to { transform: translateX(110vw); }
+}
+.parakeet-bird .wing { transform-origin: 50% 60%; animation: parakeet-flap 0.9s ease-in-out infinite; }
+@keyframes parakeet-flap {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.55); }
+}
+/* Perch glow behind the hero logo */
+.nt-brand { position: relative; }
+.nt-brand::before {
+  content: "";
+  position: absolute;
+  inset: -18px -30px;
+  background: radial-gradient(ellipse at center, rgba(0,229,255,0.14), transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+</style>
+<script> /* Parakeet flock injector */
+(function() {
+  function addFlock() {
+    if (document.querySelector('.parakeet-flock')) return;
+    var flock = document.createElement('div');
+    flock.className = 'parakeet-flock';
+    var birds = [
+      { top: '8%',  dur: '38s', delay: '0s',   size: 26, color: '#00e5ff', opacity: 0.55 },
+      { top: '22%', dur: '52s', delay: '-18s', size: 18, color: '#00b8a9', opacity: 0.4 },
+      { top: '4%',  dur: '65s', delay: '-40s', size: 14, color: '#7ff0ff', opacity: 0.35 }
+    ];
+    birds.forEach(function(b) {
+      var el = document.createElement('div');
+      el.className = 'parakeet-bird';
+      el.style.top = b.top;
+      el.style.animationDuration = b.dur;
+      el.style.animationDelay = b.delay;
+      el.style.opacity = b.opacity;
+      el.innerHTML = '<svg class="wing" width="' + b.size + '" height="' + Math.round(b.size*0.7) + '" viewBox="0 0 100 70"><path d="M5 45 Q30 10 50 38 Q70 10 95 45 Q70 35 50 50 Q30 35 5 45 Z" fill="' + b.color + '"/></svg>';
+      flock.appendChild(el);
+    });
+    document.body.appendChild(flock);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addFlock);
+  } else { addFlock(); }
+})();
+</script>
+
 <link rel="preconnect" href="https://lichology.com" />
 <link rel="preconnect" href="https://wisp.mercurywork.shop" />
 </head>
