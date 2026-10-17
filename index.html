@@ -6169,6 +6169,10 @@ body::before {
                         style="left:76px;right:auto;">
                         <i class="fab fa-github"></i>
                     </button>
+                    <button class="nt-wallpaper-btn" id="ntTerminalBtn" title="Terminal (Ctrl+`)"
+                        style="left:132px;right:auto;" onclick="window.ParakeetTerminal&&window.ParakeetTerminal.toggle()">
+                        <i class="fas fa-terminal"></i>
+                    </button>
                     <button class="nt-wallpaper-btn" id="ntWallpaperBtn" title="Change background"
                         style="left:20px;right:auto;">
                         <i class="fas fa-image"></i>
@@ -9383,16 +9387,7 @@ if(token){ $('#tok').value=token; start(); }
   color: #e8fbff; font-family: inherit; font-size: 13px;
   caret-color: #00e5ff;
 }
-#parakeet-term-btn {
-  position: fixed; left: 20px; bottom: 20px; z-index: 2147483645;
-  width: 46px; height: 46px; border-radius: 12px;
-  border: 1px solid rgba(0,229,255,0.4);
-  background: rgba(8, 15, 28, 0.9); color: #00e5ff;
-  font-size: 20px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-}
-#parakeet-term-btn:hover { background: rgba(0,229,255,0.15); }
+
 </style>
 <script> /* Parakeet Terminal */
 (function() {
@@ -9421,13 +9416,8 @@ if(token){ $('#tok').value=token; start(); }
     el('parakeet-term-close').onclick = toggle;
     var inp = el('parakeet-term-in');
     inp.addEventListener('keydown', onKey);
-    var btn = document.createElement('button');
-    btn.id = 'parakeet-term-btn';
-    btn.innerHTML = '&gt;_';
-    btn.title = 'Terminal (Ctrl+`)';
-    btn.onclick = toggle;
-    document.body.appendChild(btn);
-    print('<span class="tp">Parakeet Terminal</span> <span class="tdim">v1 — type</span> help <span class="tdim">to begin</span>');
+
+    print('<span class="tp">Parakeet Terminal</span> <span class="tdim">v2 — type</span> help <span class="tdim">to begin</span>');
   }
 
   function toggle() {
@@ -9580,6 +9570,8 @@ if(token){ $('#tok').value=token; start(); }
       toggle();
     }
   });
+
+  window.ParakeetTerminal = { toggle: toggle };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', build);
