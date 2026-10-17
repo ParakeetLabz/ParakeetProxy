@@ -9521,10 +9521,19 @@ if(token){ $('#tok').value=token; start(); }
         return;
       }
       try {
-        if (window.ParakeetCloak) {
-          window.ParakeetCloak.apply(p === 'off' ? 'none' : p);
-          print('<span class="tok">cloak →</span> ' + esc(p));
-        } else print('<span class="terr">cloak unavailable</span>');
+        var name = (p === 'off') ? 'none' : p;
+        var titles = {none:'Parakeet', classroom:'Google Classroom', drive:'My Drive - Google Drive', gmail:'Gmail', docs:'Google Docs', calc:'Calculator', classlink:'ClassLink', canvas:'Dashboard'};
+        var icons = {classroom:'https://ssl.gstatic.com/classroom/favicon.png', drive:'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png', gmail:'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico', docs:'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico'};
+        document.title = titles[name] || 'Parakeet';
+        if (icons[name]) {
+          var link = document.querySelector("link[rel*='icon']");
+          if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+          link.href = icons[name];
+        }
+        try { localStorage.setItem('parakeet:cloak', name); } catch(err2) {}
+        var sel = document.getElementById('parakeet-cloak-select');
+        if (sel) sel.value = name;
+        print('<span class="tok">cloak →</span> ' + esc(p));
       } catch(err) { print('<span class="terr">' + esc(err.message) + '</span>'); }
     },
     js: function(a) {
