@@ -6240,7 +6240,7 @@ body[data-skin="sky"] .nt-search input::placeholder { color: #6a8aa8 !important;
                                 position: relative;
                                 top: -16px;
                                 margin-left: -3px;
-                            ">v2</span>
+                            ">v3</span>
                         </div>
                         <div class="nt-search">
                             <div class="nt-search-engine" id="ntEngine">
@@ -7019,8 +7019,30 @@ body[data-skin="sky"] .nt-search input::placeholder { color: #6a8aa8 !important;
                                         <div class="settings-switch-row" style="margin-top:12px;">
                                             <div>
                                                 <div class="settings-switch-label">Panic key</div>
-                                                <div class="settings-hint">Press <b>Ctrl+Shift+P</b> anywhere to instantly disguise this tab as Google Classroom.</div>
+                                                <div class="settings-hint">Press <b>Ctrl+Shift+P</b> anywhere to instantly disguise this tab.</div>
                                             </div>
+                                            <select id="parakeet-panic-select" style="padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;min-width:160px;">
+                                                <option value="classroom">Google Classroom</option>
+                                                <option value="drive">Google Drive</option>
+                                                <option value="gmail">Gmail</option>
+                                                <option value="docs">Google Docs</option>
+                                                <option value="canvas">Canvas</option>
+                                            </select>
+                                        </div>
+                                        <div class="settings-switch-row" style="margin-top:12px;">
+                                            <div>
+                                                <div class="settings-switch-label">Cloak on startup</div>
+                                                <div class="settings-hint">Automatically disguise the tab every time Parakeet loads.</div>
+                                            </div>
+                                            <select id="parakeet-autocloak-select" style="padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;min-width:160px;">
+                                                <option value="none">Off</option>
+                                                <option value="classroom">Google Classroom</option>
+                                                <option value="drive">Google Drive</option>
+                                                <option value="gmail">Gmail</option>
+                                                <option value="docs">Google Docs</option>
+                                                <option value="canvas">Canvas</option>
+                                                <option value="khan">Khan Academy</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -9457,8 +9479,12 @@ if(token){ $('#tok').value=token; start(); }
       });
       toggleCustomUI(sel.value === 'custom');
       wireCustomUI();
+      wireCloakExtras();
     }
   }
+  // Also try wiring extras on DOM changes (settings may render later)
+  new MutationObserver(wireCloakExtras).observe(document.body, { childList: true, subtree: true });
+  maybeAutoCloak();
   function toggleCustomUI(show) {
     const box = document.getElementById('parakeet-cloak-custom');
     if (box) box.style.display = show ? 'flex' : 'none';
@@ -9482,13 +9508,46 @@ if(token){ $('#tok').value=token; start(); }
       });
     }
   }
-  // Panic key: Ctrl+Shift+P instantly cloaks as Classroom
+  const PANIC_KEY = 'parakeet:panic';
+  const AUTOCLOAK_KEY = 'parakeet:autocloak';
+  function getPanicDest() {
+    try { return localStorage.getItem(PANIC_KEY) || 'classroom'; } catch(e) { return 'classroom'; }
+  }
+  // Panic key: Ctrl+Shift+P instantly cloaks with the chosen destination
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
       e.preventDefault();
-      applyCloak('classroom');
+      applyCloak(getPanicDest());
     }
   });
+  // Wire up panic + autocloak selects
+  function wireCloakExtras() {
+    const panicSel = document.getElementById('parakeet-panic-select');
+    if (panicSel && !panicSel.dataset.wired) {
+      panicSel.dataset.wired = '1';
+      try { panicSel.value = getPanicDest(); } catch(e) {}
+      panicSel.addEventListener('change', () => {
+        try { localStorage.setItem(PANIC_KEY, panicSel.value); } catch(e) {}
+      });
+    }
+    const autoSel = document.getElementById('parakeet-autocloak-select');
+    if (autoSel && !autoSel.dataset.wired) {
+      autoSel.dataset.wired = '1';
+      try { autoSel.value = localStorage.getItem(AUTOCLOAK_KEY) || 'none'; } catch(e) {}
+      autoSel.addEventListener('change', () => {
+        try { localStorage.setItem(AUTOCLOAK_KEY, autoSel.value); } catch(e) {}
+      });
+    }
+  }
+  // Auto-cloak on startup
+  function maybeAutoCloak() {
+    try {
+      const auto = localStorage.getItem(AUTOCLOAK_KEY);
+      if (auto && auto !== 'none' && cloaks[auto]) {
+        setTimeout(() => applyCloak(auto), 1200);
+      }
+    } catch(e) {}
+  }
   // Try immediately and on DOM changes
   wireDropdown();
   new MutationObserver(wireDropdown).observe(document.body, { childList: true, subtree: true });
@@ -9664,7 +9723,8 @@ if(token){ $('#tok').value=token; start(); }
         '<span class="tok">Commands:</span>',
         '  <span class="tp">open &lt;url&gt;</span>      navigate the browser',
         '  <span class="tp">fetch &lt;url&gt;</span>     GET a URL through the proxy',
-        '  <span class="tp">cloak &lt;preset&gt;</span>   disguise tab (off, classroom, drive, gmail, docs, calc, classlink, canvas)',
+        '  <span class="tp">cloak &lt;preset&gt;</span>   disguise tab (no args = status)',
+        '  <span class="tp">panic</span>            instant panic cloak',
         '  <span class="tp">js &lt;code&gt;</span>        evaluate JavaScript',
         '  <span class="tp">echo &lt;text&gt;</span>      print text',
         '  <span class="tp">date</span>             current date/time',
@@ -9697,8 +9757,19 @@ if(token){ $('#tok').value=token; start(); }
         else window.location.href = url;
       } catch(err) { print('<span class="terr">' + esc(err.message) + '</span>'); }
     },
+    panic: function() {
+      var dest = 'classroom';
+      try { dest = localStorage.getItem('parakeet:panic') || 'classroom'; } catch(e) {}
+      COMMANDS.cloak([dest]);
+    },
     cloak: function(a) {
       var p = (a[0] || '').toLowerCase();
+      if (!p) {
+        var cur = 'none';
+        try { cur = localStorage.getItem('parakeet:cloak') || 'none'; } catch(e) {}
+        print('<span class="tdim">active cloak:</span> ' + esc(cur) + ' <span class="tdim">· tab title:</span> ' + esc(document.title));
+        return;
+      }
       var valid = ['off','none','classroom','drive','gmail','docs','calc','classlink','canvas','khan','desmos','slides','schoology','custom'];
       if (!p || valid.indexOf(p) === -1) {
         print('<span class="terr">usage: cloak &lt;' + valid.join('|') + '&gt;</span>');
@@ -9930,6 +10001,57 @@ if(token){ $('#tok').value=token; start(); }
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.4); }
+</style>
+
+
+<style> /* Parakeet v3 Bird UI */
+:root {
+  --pk-cloud: 0 10px 40px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 229, 255, 0.08);
+  --pk-egg: 999px;
+}
+/* Egg-shaped search: taller, softer, nest-like */
+.nt-search {
+  border-radius: var(--pk-egg) !important;
+  padding: 6px !important;
+  box-shadow: var(--pk-cloud) !important;
+  border: 2px solid rgba(0, 229, 255, 0.18) !important;
+}
+.nt-search input {
+  border-radius: var(--pk-egg) !important;
+  padding: 12px 20px !important;
+  font-size: 16px !important;
+}
+/* Cloud-soft cards */
+.settings-card {
+  border-radius: 24px !important;
+  box-shadow: var(--pk-cloud) !important;
+  border: 1px solid rgba(0, 229, 255, 0.1) !important;
+}
+/* Feather divider between settings cards */
+.settings-card + .settings-card {
+  position: relative;
+}
+.settings-card + .settings-card::before {
+  content: "";
+  position: absolute;
+  top: -14px; left: 50%;
+  transform: translateX(-50%);
+  width: 44px; height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 18'%3E%3Cpath d='M22 2 C14 6 10 10 12 16 C13 18 17 18 20 15 C25 10 28 6 22 2 Z' fill='none' stroke='%2300e5ff' stroke-width='1.2' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+  pointer-events: none;
+}
+/* Favorite tiles: nest-like */
+.nt-fav-box {
+  border-radius: 20px !important;
+  box-shadow: var(--pk-cloud) !important;
+}
+/* Toolbar buttons: soft round */
+.omnibox, #tabStrip .tab {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12) !important;
+}
 </style>
 
 </body>
