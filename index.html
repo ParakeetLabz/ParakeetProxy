@@ -5996,7 +5996,7 @@ body {
                     <i class="fas fa-lock" id="securityIcon"></i>
                     <span id="securityText"></span>
                 </div>
-                <input type="text" class="url-input" id="url" value="gust://newtab" spellcheck="false"
+                <input type="text" class="url-input" id="url" value="parakeet://newtab" spellcheck="false"
                     autocomplete="off" placeholder="Search or enter address">
                 <span class="omni-drop-hint" id="omniDropHint">
                     <i class="fas fa-arrow-right-to-bracket"></i>drop to navigate
@@ -11432,11 +11432,11 @@ window._libcurlReady = true;
             let cachedHits = 0;
             let streamCount = 0;
             let idleTimer = null;
-            const HOME_INTERNAL = "gust://newtab";
+            const HOME_INTERNAL = "parakeet://newtab";
 
-            const SETTINGS_INTERNAL = "gust://settings";
-            const DISCORD_INTERNAL = "gust://discord";
-            const EXTSTORE_INTERNAL = "gust://extensions";
+            const SETTINGS_INTERNAL = "parakeet://settings";
+            const DISCORD_INTERNAL = "parakeet://discord";
+            const EXTSTORE_INTERNAL = "parakeet://extensions";
             // Find runs inside the (opaque-origin) frame; the parent drives it by
             // postMessage and only tracks the reported count/index. matches[] is kept
             // as an empty array so any stray legacy reference reads length 0, never throws.
@@ -11458,14 +11458,14 @@ window._libcurlReady = true;
             ]);
 
             function isSettingsPage(url) {
-                return url === SETTINGS_INTERNAL || (url && url.startsWith("gust://settings/"));
+                return url === SETTINGS_INTERNAL || (url && url.startsWith("parakeet://settings/"));
             }
 
             function isInvalidInternal(url) {
-                if (!url || !url.startsWith("gust://")) return false;
+                if (!url || !url.startsWith("parakeet://")) return false;
                 if (url === HOME_INTERNAL || url === SETTINGS_INTERNAL || url === DISCORD_INTERNAL) return false;
-                if (url.startsWith("gust://settings/")) {
-                    const section = url.replace("gust://settings/", "").split("/")[0];
+                if (url.startsWith("parakeet://settings/")) {
+                    const section = url.replace("parakeet://settings/", "").split("/")[0];
                     return !VALID_SETTINGS_SECTIONS.has(section);
                 }
                 return true;
@@ -11526,7 +11526,7 @@ window._libcurlReady = true;
 
             function isFindAvailable() {
                 if (!pageUrl || pageUrl === HOME_INTERNAL || isSettingsPage(pageUrl) || isErrorPage) return false;
-                if (pageUrl.startsWith('gust://')) return false;
+                if (pageUrl.startsWith('parakeet://')) return false;
                 // The frame's document is opaque-origin (unreachable), so availability
                 // is "a real page is loaded" — find itself runs inside the frame.
                 return !!(frame && frame.contentWindow);
@@ -12068,7 +12068,7 @@ window._libcurlReady = true;
 </head>
 <body>
     <div class="error-content">
-        <div class="error-brand" onclick="window.parent.postMessage({t:'n', u:'gust://newtab'}, '*')">
+        <div class="error-brand" onclick="window.parent.postMessage({t:'n', u:'parakeet://newtab'}, '*')">
             <i class="fas fa-wind"></i>
             <span>Parakeet</span>
         </div>
@@ -12489,9 +12489,9 @@ window._libcurlReady = true;
                 if (tab.url === HOME_INTERNAL) {
                     showNewTab(false);
                 } else if (isSettingsPage(tab.url) && !tab.hasError) {
-                    const section = tab.url.replace("gust://settings/", "") || "skins";
-                    showSettingsPage(false, section === "gust://settings" ? "skins" : section);
-                } else if ((tab.url === EXTSTORE_INTERNAL || tab.url.startsWith("gust://extensions/")) && !tab.hasError) {
+                    const section = tab.url.replace("parakeet://settings/", "") || "skins";
+                    showSettingsPage(false, section === "parakeet://settings" ? "skins" : section);
+                } else if ((tab.url === EXTSTORE_INTERNAL || tab.url.startsWith("parakeet://extensions/")) && !tab.hasError) {
                     const sm = tab.url.match(/^gust:\/\/extensions\/search\/(.+)$/);
                     showExtensionsStore(false, sm ? decodeURIComponent(sm[1]) : '');
                 } else if (SKIN_PAGES[tab.url] && !tab.hasError) {
@@ -13576,7 +13576,7 @@ window._libcurlReady = true;
                     return;
                 }
 
-                if (!url || url === HOME_INTERNAL || isSettingsPage(url) || url.startsWith("gust://")) {
+                if (!url || url === HOME_INTERNAL || isSettingsPage(url) || url.startsWith("parakeet://")) {
                     securityChip.classList.add("secure");
                     if (securityIcon) securityIcon.className = "fas fa-lock";
                     securityText.textContent = "";
@@ -13875,7 +13875,7 @@ window._libcurlReady = true;
                 renderTabs();
             }
 
-            // gust:// pages registered by the active skin (e.g. Opera GX Corner/Control)
+            // parakeet:// pages registered by the active skin (e.g. Opera GX Corner/Control)
             const SKIN_PAGES = {};
             function closeSkinPages() { Object.values(SKIN_PAGES).forEach(p => { try { p.close(); } catch (e) {} }); }
             function showSkinPage(url, push = true) {
@@ -14897,15 +14897,15 @@ window._libcurlReady = true;
             function normUrl(u) {
                 u = (u || "").trim();
                 if (!u) return "";
-                if (/^gust:\/\/settings(\/.*)?$/i.test(u)) return u.toLowerCase().startsWith("gust://settings/") ? u : SETTINGS_INTERNAL;
+                if (/^gust:\/\/settings(\/.*)?$/i.test(u)) return u.toLowerCase().startsWith("parakeet://settings/") ? u : SETTINGS_INTERNAL;
                 if (/^gust:\/\/newtab$/i.test(u) || /^about:newtab$/i.test(u)) return HOME_INTERNAL;
                 if (/^gust:\/\/discord$/i.test(u) || /^about:discord$/i.test(u)) return DISCORD_INTERNAL;
-                // gust://extensions = native fallback store; the REAL Chrome Web Store
+                // parakeet://extensions = native fallback store; the REAL Chrome Web Store
                 // loads directly through the proxy (boq works since the dynamic-script
                 // execution-order fix) and is never intercepted.
-                if (/^gust:\/\/extensions(\/.*)?$/i.test(u) || /^about:extensions$/i.test(u)) return u.toLowerCase().startsWith('gust://extensions/') ? u : EXTSTORE_INTERNAL;
-                // Unknown gust:// URLs pass through — go() will show an error page
-                if (u.startsWith("gust://")) return u;
+                if (/^gust:\/\/extensions(\/.*)?$/i.test(u) || /^about:extensions$/i.test(u)) return u.toLowerCase().startsWith('parakeet://extensions/') ? u : EXTSTORE_INTERNAL;
+                // Unknown parakeet:// URLs pass through — go() will show an error page
+                if (u.startsWith("parakeet://")) return u;
                 if (/^discord$/i.test(u)) return DISCORD_INTERNAL;
                 try {
                     const _p = canonicalizeHost(new URL(u));
@@ -18234,7 +18234,7 @@ parent.postMessage({ t: 'ready' }, '*');
                     // normalised before the async go() fetch completes.
                     if (d.u) {
                         const cleaned = normUrl(d.u);
-                        if (cleaned && !cleaned.startsWith('gust://')) {
+                        if (cleaned && !cleaned.startsWith('parakeet://')) {
                             urlInput.value = cleaned;
                             pageUrl = cleaned;
                             const navTab = getActiveTab();
@@ -18811,7 +18811,7 @@ _VIEWER_DL_JS +
 '<script>' +
 'var ORIG=' + jUrl + ';' +
 'function go(){parent.postMessage({t:"n",u:ORIG},"*");}' +
-'function openSettings(){parent.postMessage({t:"n",u:"gust://settings/filesandmedia"},"*");}' +
+'function openSettings(){parent.postMessage({t:"n",u:"parakeet://settings/filesandmedia"},"*");}' +
 'function copyUrl(){' +
 '  if(navigator.clipboard){navigator.clipboard.writeText(ORIG);}' +
 '  else{var ta=document.createElement("textarea");ta.value=ORIG;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);}' +
@@ -18856,7 +18856,7 @@ _VIEWER_DL_JS +
 '  <div class="meta">' + esc_mime + ' &nbsp;&middot;&nbsp; ' + esc_size + '</div>' +
 '  <div class="btn-row">' +
 '    <button class="dl-btn" onclick="dl(DATA,FILENAME)"><i class="fas fa-download"></i> Download File</button>' +
-'    <button class="sec-btn" onclick="parent.postMessage({t:\'n\',u:\'gust://settings/filesandmedia\'},\'*\')"><i class="fas fa-gear"></i> File Settings</button>' +
+'    <button class="sec-btn" onclick="parent.postMessage({t:\'n\',u:\'parakeet://settings/filesandmedia\'},\'*\')"><i class="fas fa-gear"></i> File Settings</button>' +
 '  </div>' +
 '</div>' +
 '<script>' +
@@ -18932,10 +18932,10 @@ _VIEWER_DL_JS +
                 }
                 // Skin overlay pages (GX Corner etc.) are tab-scoped — any navigation dismisses them
                 if (activeTabId === initiatorTabId && !SKIN_PAGES[url]) closeSkinPages();
-                // Abort the tab's in-flight load before showing any gust:// page,
+                // Abort the tab's in-flight load before showing any parakeet:// page,
                 // same as we do when navigating to a real URL. Without this the old
                 // page keeps loading in the background after the early return.
-                if ((url === HOME_INTERNAL || url === DISCORD_INTERNAL || url === SETTINGS_INTERNAL || url.startsWith("gust://settings/") || url === EXTSTORE_INTERNAL || url.startsWith("gust://extensions/") || SKIN_PAGES[url]) && activeTabId === initiatorTabId) {
+                if ((url === HOME_INTERNAL || url === DISCORD_INTERNAL || url === SETTINGS_INTERNAL || url.startsWith("parakeet://settings/") || url === EXTSTORE_INTERNAL || url.startsWith("parakeet://extensions/") || SKIN_PAGES[url]) && activeTabId === initiatorTabId) {
                     const prevCtrl = tabAbortControllers.get(initiatorTabId);
                     if (prevCtrl) prevCtrl.abort();
                     tabAbortControllers.delete(initiatorTabId);
@@ -18953,9 +18953,9 @@ _VIEWER_DL_JS +
                     if (activeTabId === initiatorTabId) renderDiscordPage(push);
                     return;
                 }
-                if (url === SETTINGS_INTERNAL || url.startsWith("gust://settings/")) {
-                    const section = url.replace("gust://settings/", "") || "skins";
-                    const cleanSection = section === "gust://settings" ? "skins" : section.split("/")[0];
+                if (url === SETTINGS_INTERNAL || url.startsWith("parakeet://settings/")) {
+                    const section = url.replace("parakeet://settings/", "") || "skins";
+                    const cleanSection = section === "parakeet://settings" ? "skins" : section.split("/")[0];
                     if (url !== SETTINGS_INTERNAL && !VALID_SETTINGS_SECTIONS.has(cleanSection)) {
                         // Unknown settings section — show error page
                         if (activeTabId === initiatorTabId) {
@@ -18992,7 +18992,7 @@ _VIEWER_DL_JS +
                     return;
                 }
 
-                if (url === EXTSTORE_INTERNAL || url.startsWith("gust://extensions/")) {
+                if (url === EXTSTORE_INTERNAL || url.startsWith("parakeet://extensions/")) {
                     if (activeTabId === initiatorTabId) {
                         const sm = url.match(/^gust:\/\/extensions\/search\/(.+)$/);
                         showExtensionsStore(push, sm ? decodeURIComponent(sm[1]) : '');
@@ -19005,8 +19005,8 @@ _VIEWER_DL_JS +
                     return;
                 }
 
-                // Unknown gust:// URL — show error page (don't proxy it)
-                if (url.startsWith("gust://")) {
+                // Unknown parakeet:// URL — show error page (don't proxy it)
+                if (url.startsWith("parakeet://")) {
                     if (activeTabId === initiatorTabId) {
                         hideNewTab();
                         hideSettingsPage();
@@ -19015,7 +19015,7 @@ _VIEWER_DL_JS +
                             "Unknown Parakeet Page",
                             "ERR_INVALID_Parakeet_URL",
                             `<code>${url}</code> is not a valid Parakeet internal page.`,
-                            ["Check for typos in the address", "Valid pages: gust://newtab, gust://settings"]
+                            ["Check for typos in the address", "Valid pages: parakeet://newtab, parakeet://settings"]
                         );
                         setTabTitle("Not Found");
                         isErrorPage = true;
@@ -19076,7 +19076,7 @@ _VIEWER_DL_JS +
                             "Invalid Internal URL",
                             "ERR_INVALID_Parakeet_URL",
                             `The internal address <code>${url}</code> is not a valid Parakeet page.`,
-                            ["Check for typos in the address", "Use the Home button to return to the search page", "Common pages: gust://newtab, gust://settings"]
+                            ["Check for typos in the address", "Use the Home button to return to the search page", "Common pages: parakeet://newtab, parakeet://settings"]
                         );
 
                         setTabTitle("Invalid URL");
@@ -20941,12 +20941,12 @@ _VIEWER_DL_JS +
                     } catch { return 0; }
                 }
 
-                if (!url || url === HOME_INTERNAL || isSettingsPage(url) || url.startsWith("gust://")) {
+                if (!url || url === HOME_INTERNAL || isSettingsPage(url) || url.startsWith("parakeet://")) {
                     iconEl.className = "site-info-icon neutral";
                     iconI.className = "fas fa-wind";
                     title.textContent = "Parakeet Browser";
                     subtitle.textContent = "Internal page";
-                    hostEl.textContent = "gust://";
+                    hostEl.textContent = "parakeet://";
                     protoEl.innerHTML = `<span class="ok">Internal</span>`;
                     blockEl.innerHTML = `<span style="color:var(--tx3)">N/A</span>`;
                     cookieEl.innerHTML = `<span style="color:var(--tx3)">N/A</span>`;
@@ -21056,7 +21056,7 @@ _VIEWER_DL_JS +
             recentSites = recentSites.map(e => typeof e === 'string' ? { url: e, time: Date.now() } : e);
 
             function addRecentSite(url) {
-                if (!url || url === HOME_INTERNAL || url.startsWith('gust://') || isSettingsPage(url)) return;
+                if (!url || url === HOME_INTERNAL || url.startsWith('parakeet://') || isSettingsPage(url)) return;
                 // Remove existing entry for same URL so it moves to top
                 recentSites = recentSites.filter(e => e.url !== url);
                 recentSites.unshift({ url, time: Date.now() });
@@ -21309,7 +21309,7 @@ _VIEWER_DL_JS +
             document.querySelectorAll('.settings-nav-item').forEach(navBtn => {
                 navBtn.addEventListener('click', () => {
                     const section = navBtn.dataset.section;
-                    const settingsUrl = `gust://settings/${section}`;
+                    const settingsUrl = `parakeet://settings/${section}`;
                     urlInput.value = settingsUrl;
                     pageUrl = settingsUrl;
                     setTabTitle(`Settings - ${section.charAt(0).toUpperCase() + section.slice(1)}`);
@@ -21695,8 +21695,8 @@ _VIEWER_DL_JS +
                         } else if (activeTab && activeTab.url === HOME_INTERNAL) {
                             showNewTab(false);
                         } else if (activeTab && isSettingsPage(activeTab.url)) {
-                            const section = activeTab.url.replace("gust://settings/", "") || "skins";
-                            showSettingsPage(false, section === "gust://settings" ? "skins" : section);
+                            const section = activeTab.url.replace("parakeet://settings/", "") || "skins";
+                            showSettingsPage(false, section === "parakeet://settings" ? "skins" : section);
                         }
                     } else {
                         go(urlInput.value);
@@ -21724,8 +21724,8 @@ _VIEWER_DL_JS +
                 const settingsEl = $("settingsPage");
                 if (!settingsEl) return;
 
-                if (!section && pageUrl && pageUrl.startsWith("gust://settings/")) {
-                    section = pageUrl.replace("gust://settings/", "");
+                if (!section && pageUrl && pageUrl.startsWith("parakeet://settings/")) {
+                    section = pageUrl.replace("parakeet://settings/", "");
                 }
                 if (!section) section = "skins";
 
@@ -21736,7 +21736,7 @@ _VIEWER_DL_JS +
                 overlay.classList.add("hidden");
                 if (progressWrap) progressWrap.classList.add("hidden");
 
-                const settingsUrl = `gust://settings/${section}`;
+                const settingsUrl = `parakeet://settings/${section}`;
                 urlInput.value = settingsUrl;
                 pageUrl = settingsUrl;
                 currentDoc = null; 
@@ -24585,17 +24585,17 @@ _VIEWER_DL_JS +
                         const btn = (w && w.classList.contains('hidden')) ? $('showBookmarksBtn') : $('bookmarksToggle');
                         if (btn) btn.click();
                     }),
-                    downloads: mi('fa-solid fa-download', 'Downloads', () => go('gust://settings/filesandmedia')),
+                    downloads: mi('fa-solid fa-download', 'Downloads', () => go('parakeet://settings/filesandmedia')),
                     find: mi('fa-solid fa-magnifying-glass', 'Find in page…', () => { try { toggleFindBar(); } catch (_) {} }),
                     assistant: mi('fa-solid fa-wand-magic-sparkles', 'Parakeet Assistant', () => { const b = $('aiBtn'); if (b) b.click(); }, { accel: 'Alt+A' }),
                     metrics: mi('fa-solid fa-gauge-high', 'Browser metrics', () => { const b = $('metricsBtn'); if (b) b.click(); }),
                     inspector: mi('fa-solid fa-code', 'Page inspector', () => { const b = $('codeBtn'); if (b) b.click(); }),
                     logs: mi('fa-solid fa-terminal', 'Developer logs', () => { const b = $('devToggle'); if (b) b.click(); }),
                     shields: mi('fa-solid fa-shield-halved', 'Shields & adblock', a => openShieldsAt(a)),
-                    skins: mi('fa-solid fa-mask', 'Skins', () => go('gust://settings/skins')),
-                    settings: mi('fa-solid fa-gear', 'Settings', () => go('gust://settings')),
+                    skins: mi('fa-solid fa-mask', 'Skins', () => go('parakeet://settings/skins')),
+                    settings: mi('fa-solid fa-gear', 'Settings', () => go('parakeet://settings')),
                     fullscreen: mi('fa-solid fa-expand', 'Fullscreen', () => { const b = $('fullscreenBtn'); if (b) b.click(); }),
-                    about: mi('fa-solid fa-circle-info', 'About Parakeet', () => go('gust://settings/about'))
+                    about: mi('fa-solid fa-circle-info', 'About Parakeet', () => go('parakeet://settings/about'))
                 };
 
                 // ── Chrome 150 ⋮ menu — full item set with accelerators & submenus ──
@@ -24617,12 +24617,12 @@ _VIEWER_DL_JS +
                     SEP,
                     mi('mi:account-circle', 'Your Chrome', () => openProfilePanel($('skinAvatarBtn')), { cls: 'sk-your-row', badge: 'Not signed in' }),
                     mi('mi:key', 'Passwords and autofill', null, { sub: [
-                        mi('mi:key', 'Google Password Manager', () => go('gust://settings/privacy')),
-                        mi('mi:tune', 'Payment methods', () => go('gust://settings/privacy')),
-                        mi('mi:edit', 'Addresses and more', () => go('gust://settings/privacy'))
+                        mi('mi:key', 'Google Password Manager', () => go('parakeet://settings/privacy')),
+                        mi('mi:tune', 'Payment methods', () => go('parakeet://settings/privacy')),
+                        mi('mi:edit', 'Addresses and more', () => go('parakeet://settings/privacy'))
                     ] }),
                     mi('mi:history', 'History', null, { sub: chromeHistorySub }),
-                    mi('mi:download', 'Downloads', () => go('gust://settings/filesandmedia'), { accel: 'Ctrl+J' }),
+                    mi('mi:download', 'Downloads', () => go('parakeet://settings/filesandmedia'), { accel: 'Ctrl+J' }),
                     mi('mi:star', 'Bookmarks and lists', null, { sub: [
                         mi('mi:star', 'Bookmark this tab', () => { const b = $('bookmarkBtn'); if (b) b.click(); }, { accel: 'Ctrl+D' }),
                         mi('mi:star', 'Show bookmarks bar', A.bookmarks.fn, { accel: 'Ctrl+Shift+B' })
@@ -24632,7 +24632,7 @@ _VIEWER_DL_JS +
                         mi('mi:extension', 'Manage extensions', () => openPuzzlePanel($('skinPuzzleBtn'))),
                         mi('mi:open-in-new', 'Visit Chrome Web Store', () => createTab('https://chromewebstore.google.com'))
                     ] }),
-                    mi('mi:delete', 'Delete browsing data...', () => go('gust://settings/cache'), { accel: 'Ctrl+Shift+Del' }),
+                    mi('mi:delete', 'Delete browsing data...', () => go('parakeet://settings/cache'), { accel: 'Ctrl+Shift+Del' }),
                     SEP,
                     { zoom: true },
                     SEP,
@@ -24658,11 +24658,11 @@ _VIEWER_DL_JS +
                     ] }),
                     SEP,
                     mi('mi:help', 'Help', null, { sub: [
-                        mi('mi:help', 'About Google Chrome', () => go('gust://settings/about')),
+                        mi('mi:help', 'About Google Chrome', () => go('parakeet://settings/about')),
                         mi('mi:open-in-new', "What's new", () => createTab('https://github.com/ParakeetLabz/ParakeetProxy')),
                         mi('mi:open-in-new', 'Report an issue', () => createTab('https://github.com/ParakeetLabz/ParakeetProxy'))
                     ] }),
-                    mi('mi:settings', 'Settings', () => go('gust://settings')),
+                    mi('mi:settings', 'Settings', () => go('parakeet://settings')),
                     mi('mi:logout', 'Exit', () => { try { window.close(); } catch (_) {} })
                 ];
 
@@ -24687,11 +24687,11 @@ _VIEWER_DL_JS +
                     mi('', 'Downloads', A.downloads.fn, { accel: 'Ctrl+J' }),
                     mi('', 'Find in page…', () => { try { toggleFindBar(); } catch (_) {} }, { accel: 'Ctrl+F' }),
                     SEP,
-                    mi('', 'Skins', () => go('gust://settings/skins')),
-                    mi('', 'Settings', () => go('gust://settings'), { accel: 'Alt+P' }),
+                    mi('', 'Skins', () => go('parakeet://settings/skins')),
+                    mi('', 'Settings', () => go('parakeet://settings'), { accel: 'Alt+P' }),
                     SEP,
                     mi('', 'Fullscreen', () => { const b = $('fullscreenBtn'); if (b) b.click(); }, { accel: 'F11' }),
-                    mi('', 'About Opera GX', () => go('gust://settings/about')),
+                    mi('', 'About Opera GX', () => go('parakeet://settings/about')),
                     mi('', 'Exit', () => { try { window.close(); } catch (_) {} })
                 ];
                 const GX_CORNER = [HD('GX Corner'), HD('Free games'),
@@ -24851,7 +24851,7 @@ _VIEWER_DL_JS +
                         return;
                     }
                     const defs = [
-                        { icon: 'mi:key', label: 'Passwords and autofill', fn: () => go('gust://settings/privacy') },
+                        { icon: 'mi:key', label: 'Passwords and autofill', fn: () => go('parakeet://settings/privacy') },
                         { icon: 'mi:edit', label: 'Customize profile', fn: () => { const b = $('ntWallpaperBtn'); if (b) b.click(); } },
                         { icon: 'mi:person-add', label: 'Add Chrome profile', fn: () => { try { window.open(window.location.href, '_blank'); } catch (_) {} } },
                         { icon: 'mi:account-circle', label: 'Open Guest profile', fn: () => { try { window.open(window.location.href, '_blank'); } catch (_) {} } },
@@ -24889,7 +24889,7 @@ _VIEWER_DL_JS +
                         panelRow('mi:extension') + panelRow('mi:open-in-new') +
                         '<div style="height:8px;"></div>';
                     const defs2 = [
-                        { label: current === 'firefox' ? 'Manage add-ons' : 'Manage extensions', fn: () => go('gust://settings/privacy') },
+                        { label: current === 'firefox' ? 'Manage add-ons' : 'Manage extensions', fn: () => go('parakeet://settings/privacy') },
                         current === 'firefox'
                             ? { label: 'Visit addons.mozilla.org', fn: () => createTab('https://addons.mozilla.org/en-US/firefox/') }
                             : { label: 'Visit Chrome Web Store', fn: () => createTab('https://chromewebstore.google.com') }
@@ -24931,7 +24931,7 @@ _VIEWER_DL_JS +
                             .forEach(t => {
                                 const row = document.createElement('button');
                                 row.className = 'skp-row';
-                                let host = ''; try { host = new URL(t.url).hostname; } catch (_) { host = t.url === 'gust://newtab' ? 'New Tab' : (t.url || ''); }
+                                let host = ''; try { host = new URL(t.url).hostname; } catch (_) { host = t.url === 'parakeet://newtab' ? 'New Tab' : (t.url || ''); }
                                 row.innerHTML = '<img style="width:16px;height:16px;border-radius:3px;flex-shrink:0;" data-skfav="' + encodeURIComponent(t.url || '') + '" src="" onerror="this.style.visibility=\'hidden\'">' +
                                     '<span class="sk-lbl" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>' +
                                     '<button class="skp-tabrow-x" title="Close tab">' + miSpan('close') + '</button>';
@@ -24980,7 +24980,7 @@ _VIEWER_DL_JS +
                             const title = (t && t.title) || (tabEl.querySelector('.tab-title') || {}).textContent || '';
                             const url = (t && t.url) || '';
                             hoverEl.querySelector('.hc-title').textContent = title;
-                            hoverEl.querySelector('.hc-url').textContent = url === 'gust://newtab' ? '' : url;
+                            hoverEl.querySelector('.hc-url').textContent = url === 'parakeet://newtab' ? '' : url;
                             hoverEl.style.display = 'block';
                             const r = tabEl.getBoundingClientRect();
                             let left = Math.max(8, Math.min(r.left, window.innerWidth - hoverEl.offsetWidth - 8));
@@ -25377,7 +25377,7 @@ _VIEWER_DL_JS +
                     tabs.filter(t => zenTabWsId(t) === zws.active).forEach(t => {
                         const row = document.createElement('div');
                         row.className = 'zb-tab' + (t.id === activeTabId ? ' zb-active' : '');
-                        const isNtp = t.url === 'gust://newtab';
+                        const isNtp = t.url === 'parakeet://newtab';
                         const ic = isNtp || isSettingsPage(t.url)
                             ? '<span class="zb-tfb"><i class="fas ' + (isNtp ? 'fa-earth-americas' : 'fa-gear') + '"></i></span>'
                             : '<img alt="">';
@@ -25437,7 +25437,7 @@ _VIEWER_DL_JS +
                     if (!zenOn()) return;
                     const t = tabs.find(x => x.id === activeTabId);
                     const url = t ? t.url : '';
-                    if (!url || url === 'gust://newtab') {
+                    if (!url || url === 'parakeet://newtab') {
                         zbPill.classList.remove('zb-site'); zbPillTxt.textContent = 'Search...';
                     } else if (isSettingsPage(url)) {
                         zbPill.classList.add('zb-site'); zbPillTxt.textContent = 'Settings';
@@ -25468,7 +25468,7 @@ _VIEWER_DL_JS +
                         seen.add(o.url); out.push(o);
                     };
                     tabs.forEach(t => {
-                        if (t.id === activeTabId || t.url === 'gust://newtab' || isSettingsPage(t.url)) return;
+                        if (t.id === activeTabId || t.url === 'parakeet://newtab' || isSettingsPage(t.url)) return;
                         const hay = ((t.title || '') + ' ' + t.url).toLowerCase();
                         if (!q || hay.includes(q)) push({ url: t.url, title: t.title || zenHostOf(t.url), tab: t.id });
                     });
@@ -25772,7 +25772,7 @@ _VIEWER_DL_JS +
                             renderTabs();
                         }),
                         mi('', 'Add to Essentials', () => {
-                            if (t.url && t.url !== 'gust://newtab' && !isSettingsPage(t.url) &&
+                            if (t.url && t.url !== 'parakeet://newtab' && !isSettingsPage(t.url) &&
                                 !favorites.some(f => f && f.url === t.url)) {
                                 favorites.push({ url: t.url, name: t.title || '' });
                                 saveFavorites(); renderFavorites();
@@ -25819,9 +25819,9 @@ _VIEWER_DL_JS +
                         mi('', 'Show bookmarks toolbar', A.bookmarks.fn, { accel: 'Ctrl+Shift+B' })
                     ] }),
                     mi('mi:history', 'History', null, { sub: chromeHistorySub }),
-                    mi('mi:download', 'Downloads', () => go('gust://settings/filesandmedia'), { accel: 'Ctrl+Shift+Y' }),
-                    mi('mi:key', 'Passwords', () => go('gust://settings/privacy')),
-                    mi('mi:extension', 'Extensions and Themes', () => go('gust://settings/skins'), { accel: 'Ctrl+Shift+A' }),
+                    mi('mi:download', 'Downloads', () => go('parakeet://settings/filesandmedia'), { accel: 'Ctrl+Shift+Y' }),
+                    mi('mi:key', 'Passwords', () => go('parakeet://settings/privacy')),
+                    mi('mi:extension', 'Extensions and Themes', () => go('parakeet://settings/skins'), { accel: 'Ctrl+Shift+A' }),
                     SEP,
                     mi('mi:print', 'Print...', () => { try { (frame.contentWindow || window).print(); } catch (_) {} }, { accel: 'Ctrl+P' }),
                     mi('mi:download', 'Save Page As...', savePageAs, { accel: 'Ctrl+Shift+Alt+S' }),
@@ -25829,14 +25829,14 @@ _VIEWER_DL_JS +
                     mi('mi:translate', 'Translate Page...', null, { disabled: true }),
                     { zoom: true },
                     SEP,
-                    mi('mi:settings', 'Settings', () => go('gust://settings')),
+                    mi('mi:settings', 'Settings', () => go('parakeet://settings')),
                     mi('mi:build', 'More Tools', null, { sub: [
                         mi('', 'Customize Zen...', zenThemePanelOpen),
                         mi('', 'Web Developer Tools', () => { const b = $('codeBtn'); if (b) b.click(); }, { accel: 'F12' }),
                         mi('', 'Task Manager', () => { const b = $('metricsBtn'); if (b) b.click(); })
                     ] }),
                     mi('mi:help', 'Help', null, { sub: [
-                        mi('', 'About Zen', () => go('gust://settings/about'))
+                        mi('', 'About Zen', () => go('parakeet://settings/about'))
                     ] }),
                     SEP,
                     mi('mi:close', 'Quit', () => { try { window.close(); } catch (_) {} }, { accel: 'Ctrl+Q' })
@@ -25876,7 +25876,7 @@ _VIEWER_DL_JS +
                 $('zbReload').addEventListener('click', () => { const r = $('reload') || $('refresh') || $('stop'); if (r) r.click(); });
                 zbPill.addEventListener('click', () => {
                     const t = tabs.find(x => x.id === activeTabId);
-                    zenOpenUrlbar(t && t.url && t.url !== 'gust://newtab' && !isSettingsPage(t.url) ? t.url : '');
+                    zenOpenUrlbar(t && t.url && t.url !== 'parakeet://newtab' && !isSettingsPage(t.url) ? t.url : '');
                 });
                 $('zbNewTab').addEventListener('click', () => createTab());
                 $('zbClear').addEventListener('click', () => {
@@ -25946,7 +25946,7 @@ _VIEWER_DL_JS +
                     try {
                         if (!NTP_RENDERERS[effHome()]) return;
                         const t = tabs.find(x => x.id === activeTabId);
-                        if (t && t.url === 'gust://newtab') urlInput.value = '';
+                        if (t && t.url === 'parakeet://newtab') urlInput.value = '';
                     } catch (_) {}
                 }
                 const _origShowNewTab = showNewTab;
@@ -26522,12 +26522,12 @@ _VIEWER_DL_JS +
                     if (t && SKIN_PAGES[t.url]) closeTabAnimated(t.id);
                     else closeGXPages();
                 }
-                SKIN_PAGES['gust://gx-corner'] = {
+                SKIN_PAGES['parakeet://gx-corner'] = {
                     title: 'GX Corner',
                     open: () => { gxControl.classList.remove('open'); if (!gxCorner.innerHTML) renderGXCornerShell(); gxCorner.classList.add('open'); loadGXCorner(); },
                     close: () => gxCorner.classList.remove('open')
                 };
-                SKIN_PAGES['gust://gx-control'] = {
+                SKIN_PAGES['parakeet://gx-control'] = {
                     title: 'GX Control',
                     open: () => { gxCorner.classList.remove('open'); renderGXControl(); gxControl.classList.add('open'); },
                     close: () => gxControl.classList.remove('open')
@@ -26698,7 +26698,7 @@ _VIEWER_DL_JS +
                     if (ex) { switchToTab(ex.id); return; }
                     createTab(url);
                 }
-                function openGXControl() { gxPageToggle('gust://gx-control'); }
+                function openGXControl() { gxPageToggle('parakeet://gx-control'); }
                 try { if (ls.getItem('gust:gx:lowpower') === '1') document.documentElement.classList.add('gx-lowpower'); } catch (_) {}
 
                 // GX Corner — live data through direct CORS APIs + the Parakeet proxy
@@ -26801,7 +26801,7 @@ _VIEWER_DL_JS +
                         } catch (e) { box.innerHTML = '<div class="gxk-load">News unavailable</div>'; }
                     })();
                 }
-                function openGXCorner() { gxPageToggle('gust://gx-corner'); }
+                function openGXCorner() { gxPageToggle('parakeet://gx-corner'); }
 
                 // ═══════════ BRAVE deep implementation ═══════════
                 const BSTAT_KEY = 'gust:brave:stats:v1';
@@ -26994,7 +26994,7 @@ _VIEWER_DL_JS +
                         if (p) p.click();
                         closePanel();
                     });
-                    panelEl.querySelector('#bshGlobal').addEventListener('click', () => { closePanel(); go('gust://settings/privacy'); });
+                    panelEl.querySelector('#bshGlobal').addEventListener('click', () => { closePanel(); go('parakeet://settings/privacy'); });
                     positionPanel(anchor);
                 }
                 function openBraveRewards(anchor) {
@@ -27025,12 +27025,12 @@ _VIEWER_DL_JS +
                         mi('mi:star', 'Bookmark this tab', () => { const b = $('bookmarkBtn'); if (b) b.click(); }, { accel: 'Ctrl+D' }),
                         mi('mi:star', 'Show bookmarks bar', A.bookmarks.fn, { accel: 'Ctrl+Shift+B' })
                     ] }),
-                    mi('mi:download', 'Downloads', () => go('gust://settings/filesandmedia'), { accel: 'Ctrl+J' }),
+                    mi('mi:download', 'Downloads', () => go('parakeet://settings/filesandmedia'), { accel: 'Ctrl+J' }),
                     mi('mi:extension', 'Extensions', null, { sub: [
                         mi('mi:extension', 'Manage extensions', () => openPuzzlePanel($('skinPuzzleBtn'))),
                         mi('mi:open-in-new', 'Visit Web Store', () => createTab('https://chromewebstore.google.com'))
                     ] }),
-                    mi('mi:delete', 'Delete browsing data...', () => go('gust://settings/cache'), { accel: 'Ctrl+Shift+Del' }),
+                    mi('mi:delete', 'Delete browsing data...', () => go('parakeet://settings/cache'), { accel: 'Ctrl+Shift+Del' }),
                     SEP,
                     { zoom: true },
                     SEP,
@@ -27047,10 +27047,10 @@ _VIEWER_DL_JS +
                     ] }),
                     SEP,
                     mi('mi:help', 'Help', null, { sub: [
-                        mi('mi:help', 'About Brave', () => go('gust://settings/about')),
+                        mi('mi:help', 'About Brave', () => go('parakeet://settings/about')),
                         mi('mi:open-in-new', 'Report an issue', () => createTab('https://github.com/ParakeetLabz/ParakeetProxy'))
                     ] }),
-                    mi('mi:settings', 'Settings', () => go('gust://settings')),
+                    mi('mi:settings', 'Settings', () => go('parakeet://settings')),
                     mi('mi:logout', 'Exit', () => { try { window.close(); } catch (_) {} })
                 ];
 
@@ -27065,8 +27065,8 @@ _VIEWER_DL_JS +
                         mi('', 'Show bookmarks toolbar', A.bookmarks.fn, { accel: 'Ctrl+Shift+B' })
                     ] }),
                     mi('', 'History', null, { sub: chromeHistorySub }),
-                    mi('', 'Downloads', () => go('gust://settings/filesandmedia'), { accel: 'Ctrl+J' }),
-                    mi('', 'Passwords', () => go('gust://settings/privacy')),
+                    mi('', 'Downloads', () => go('parakeet://settings/filesandmedia'), { accel: 'Ctrl+J' }),
+                    mi('', 'Passwords', () => go('parakeet://settings/privacy')),
                     mi('', 'Add-ons and themes', () => openPuzzlePanel($('skinPuzzleBtn')), { accel: 'Ctrl+Shift+A' }),
                     SEP,
                     mi('', 'Print...', () => { try { (frame.contentWindow || window).print(); } catch (_) {} }, { accel: 'Ctrl+P' }),
@@ -27075,16 +27075,16 @@ _VIEWER_DL_JS +
                     mi('', 'Translate page...', null, { disabled: true }),
                     { zoom: true },
                     SEP,
-                    mi('', 'Settings', () => go('gust://settings')),
+                    mi('', 'Settings', () => go('parakeet://settings')),
                     mi('', 'More tools', null, { sub: [
                         mi('', 'Parakeet Assistant', () => { const b = $('aiBtn'); if (b) b.click(); }, { accel: 'Alt+A' }),
-                        mi('', 'Customize toolbar...', () => go('gust://settings/skins')),
+                        mi('', 'Customize toolbar...', () => go('parakeet://settings/skins')),
                         mi('', 'Task Manager', () => { const b = $('metricsBtn'); if (b) b.click(); }, { accel: 'Shift+Esc' }),
                         mi('', 'Web Developer Tools', () => { const b = $('codeBtn'); if (b) b.click(); }, { accel: 'F12' }),
                         mi('', 'Browser logs', () => { const b = $('devToggle'); if (b) b.click(); })
                     ] }),
                     mi('', 'Help', null, { sub: [
-                        mi('', 'About Firefox', () => go('gust://settings/about')),
+                        mi('', 'About Firefox', () => go('parakeet://settings/about')),
                         mi('', 'Report broken site...', () => createTab('https://github.com/ParakeetLabz/ParakeetProxy'))
                     ] }),
                     SEP,
@@ -28432,7 +28432,7 @@ _VIEWER_DL_JS +
                     popupPath(id) { const e = registry.get(id); return e && (e.popupPage || (e.manifest.action && e.manifest.action.default_popup) || (e.manifest.browser_action && e.manifest.browser_action.default_popup)); },
                     optionsPath(id) { const e = registry.get(id); return e && (e.manifest.options_page || (e.manifest.options_ui && e.manifest.options_ui.page)); },
                     mountPage,
-                    async openPage(id, path) { createTab('gust://newtab'); /* ponytail: extension pages open in the popup UI, not a real tab route */ const cont = document.getElementById('extPopupHost'); if (cont) { cont.innerHTML = ''; await mountPage(cont, id, path, { w: '760px', h: '80vh' }); } },
+                    async openPage(id, path) { createTab('parakeet://newtab'); /* ponytail: extension pages open in the popup UI, not a real tab route */ const cont = document.getElementById('extPopupHost'); if (cont) { cont.innerHTML = ''; await mountPage(cont, id, path, { w: '760px', h: '80vh' }); } },
                     _togglePopupFn: null,
                     togglePopup(id) { if (API._togglePopupFn) API._togglePopupFn(id); }
                 };
