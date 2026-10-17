@@ -9172,122 +9172,61 @@ if(token){ $('#tok').value=token; start(); }
 
 
 
+
+
+
 <script>
-// ===== Parakeet Tab Cloaking (Settings) =====
+// ===== Parakeet Tab Cloaking =====
 (function() {
   const CLOAK_KEY = 'parakeet:cloak';
   const cloaks = {
-    'none': { label: 'Off', title: 'Parakeet', icon: null },
-    'classroom': { label: 'Google Classroom', title: 'Google Classroom', icon: 'https://ssl.gstatic.com/classroom/favicon.png' },
-    'drive': { label: 'Google Drive', title: 'My Drive - Google Drive', icon: 'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png' },
-    'gmail': { label: 'Gmail', title: 'Gmail', icon: 'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico' },
-    'docs': { label: 'Google Docs', title: 'Google Docs', icon: 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico' },
-    'calc': { label: 'Calculator', title: 'Calculator', icon: null },
-    'classlink': { label: 'ClassLink', title: 'ClassLink', icon: null },
-    'canvas': { label: 'Canvas', title: 'Dashboard', icon: null },
+    'none': { title: 'Parakeet', icon: null },
+    'classroom': { title: 'Google Classroom', icon: 'https://ssl.gstatic.com/classroom/favicon.png' },
+    'drive': { title: 'My Drive - Google Drive', icon: 'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png' },
+    'gmail': { title: 'Gmail', icon: 'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico' },
+    'docs': { title: 'Google Docs', icon: 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico' },
+    'calc': { title: 'Calculator', icon: null },
+    'classlink': { title: 'ClassLink', icon: null },
+    'canvas': { title: 'Dashboard', icon: null },
   };
-
   function setFavicon(url) {
     let link = document.querySelector("link[rel*='icon']");
-    if (!link) {
-      link = document.createElement('link');
-      link.rel = 'icon';
-      document.head.appendChild(link);
-    }
+    if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
     if (url) link.href = url;
   }
-
   function applyCloak(name) {
-    const c = cloaks[name] || cloaks['none'];
-    document.title = c.title;
-    if (c.icon) setFavicon(c.icon);
+    const cl = cloaks[name] || cloaks['none'];
+    document.title = cl.title;
+    if (cl.icon) setFavicon(cl.icon);
     try { localStorage.setItem(CLOAK_KEY, name); } catch(e) {}
-    // Update dropdown if it exists
     const sel = document.getElementById('parakeet-cloak-select');
     if (sel) sel.value = name;
   }
-
-  // Restore on load
-  try {
-    const saved = localStorage.getItem(CLOAK_KEY);
-    if (saved && saved !== 'none' && cloaks[saved]) {
-      setTimeout(() => applyCloak(saved), 1500);
-    }
-  } catch(e) {}
-
-  window.ParakeetCloak = { apply: applyCloak, list: cloaks };
-
-  // Inject into Appearance settings section
-  function injectIntoSettings() {
-    // Find the appearance section content
-    const apSection = document.querySelector('[data-section="appearance"]');
-    if (!apSection || document.getElementById('parakeet-cloak-row')) return;
-
-    // Create cloak row
-    const row = document.createElement('div');
-    row.id = 'parakeet-cloak-row';
-    row.className = 'settings-row';
-    row.style.cssText = 'padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;';
-
-    const label = document.createElement('div');
-    label.innerHTML = '<div style="font-weight:600;">Tab Cloaking</div><div style="font-size:12px;opacity:0.7;">Disguise the tab as another site</div>';
-
-    const sel = document.createElement('select');
-    sel.id = 'parakeet-cloak-select';
-    sel.style.cssText = 'padding:6px 10px;border-radius:6px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);';
-    for (const [key, val] of Object.entries(cloaks)) {
-      const opt = document.createElement('option');
-      opt.value = key;
-      opt.textContent = val.label;
-      sel.appendChild(opt);
-    }
-    try { sel.value = localStorage.getItem(CLOAK_KEY) || 'none'; } catch(e) {}
-    sel.onchange = () => applyCloak(sel.value);
-
-    row.appendChild(label);
-    row.appendChild(sel);
-
-    // Try to find where to insert - look for the section content container
-    // The data-section="appearance" might be the nav item, not the content
-    // Let's try to find the actual settings panel
-    const panel = apSection.closest('.settings-panel') || apSection.parentElement;
-    if (panel) {
-      // Find the content area within the panel
-      const content = panel.querySelector('.settings-content, .panel-content') || panel;
-      content.appendChild(row);
-      console.log('Cloak injected into Appearance');
-    } else {
-      // Fallback: append to the section element itself
-      apSection.appendChild(row);
+  window.ParakeetCloak = { apply: applyCloak };
+  // Wire up dropdown
+  function wireDropdown() {
+    const sel = document.getElementById('parakeet-cloak-select');
+    if (sel && !sel.dataset.wired) {
+      sel.dataset.wired = '1';
+      try { sel.value = localStorage.getItem(CLOAK_KEY) || 'none'; } catch(e) {}
+      sel.addEventListener('change', () => applyCloak(sel.value));
     }
   }
-
-  // Watch for settings being opened
-  const observer = new MutationObserver(() => {
-    const apSection = document.querySelector('[data-section="appearance"]');
-    if (apSection && !document.getElementById('parakeet-cloak-row')) {
-      // Check if appearance panel is visible
-      setTimeout(injectIntoSettings, 300);
-    }
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
-
-  // Also try on settings open (listen for clicks on appearance nav)
-  document.addEventListener('click', (e) => {
-    const nav = e.target.closest('[data-section="appearance"]');
-    if (nav) {
-      setTimeout(injectIntoSettings, 500);
-    }
-  });
-
-  // Keyboard shortcut
+  // Try immediately and on DOM changes
+  wireDropdown();
+  new MutationObserver(wireDropdown).observe(document.body, { childList: true, subtree: true });
+  // Restore cloak on load
+  try {
+    const saved = localStorage.getItem(CLOAK_KEY);
+    if (saved && saved !== 'none' && cloaks[saved]) setTimeout(() => applyCloak(saved), 1500);
+  } catch(e) {}
+  // Alt+C to cycle
   document.addEventListener('keydown', (e) => {
     if (e.altKey && e.key.toLowerCase() === 'c') {
       e.preventDefault();
       const names = Object.keys(cloaks);
       const cur = localStorage.getItem(CLOAK_KEY) || 'none';
-      const next = names[(names.indexOf(cur) + 1) % names.length];
-      applyCloak(next);
+      applyCloak(names[(names.indexOf(cur) + 1) % names.length]);
     }
   });
 })();
@@ -28801,4 +28740,26 @@ _VIEWER_DL_JS +
 
 </body>
 
-</html>
+</html><div class="settings-card">
+                                    <div class="settings-card-head"><i class="fas fa-theater-masks"></i> Tab Cloaking
+                                    </div>
+                                    <div class="settings-card-body">
+                                        <div class="settings-switch-row">
+                                            <div>
+                                                <div class="settings-switch-label">Disguise this tab</div>
+                                                <div class="settings-hint">Change the tab title and icon to look like another site. Press Alt+C to cycle quickly.</div>
+                                            </div>
+                                            <select id="parakeet-cloak-select" style="padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;min-width:160px;">
+                                                <option value="none">Off</option>
+                                                <option value="classroom">Google Classroom</option>
+                                                <option value="drive">Google Drive</option>
+                                                <option value="gmail">Gmail</option>
+                                                <option value="docs">Google Docs</option>
+                                                <option value="calc">Calculator</option>
+                                                <option value="classlink">ClassLink</option>
+                                                <option value="canvas">Canvas</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
