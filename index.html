@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="description" content="Parakeet: A service worker -less web browser-in-a-browser" />
     <title>Parakeet</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cellipse%20cx%3D%2245%22%20cy%3D%2260%22%20rx%3D%2222%22%20ry%3D%2226%22%20fill%3D%22%2300d4ff%22%2F%3E%3Ccircle%20cx%3D%2258%22%20cy%3D%2232%22%20r%3D%2216%22%20fill%3D%22%2300e5ff%22%2F%3E%3Cpath%20d%3D%22M72%2028%20Q80%2032%2072%2038%20Q68%2034%2072%2028%22%20fill%3D%22%23ff9500%22%2F%3E%3Ccircle%20cx%3D%2262%22%20cy%3D%2228%22%20r%3D%223.5%22%20fill%3D%22%230a1628%22%2F%3E%3Cpath%20d%3D%22M35%2050%20Q28%2065%2035%2080%20Q42%2070%2040%2055%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cpath%20d%3D%22M28%2078%20L12%2095%20L24%2088%20L20%2098%20L32%2090%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cellipse%20cx%3D%2252%22%20cy%3D%2262%22%20rx%3D%2212%22%20ry%3D%2216%22%20fill%3D%22%237ff0ff%22%20opacity%3D%220.5%22%2F%3E%3C%2Fsvg%3E" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20140%22%3E%3Cpath%20d%3D%22M32%2088%20L8%20128%20L24%20122%20L20%20136%20L40%20116%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%2276%22%20rx%3D%2227%22%20ry%3D%2234%22%20fill%3D%22%2300d4ff%22%2F%3E%3Cellipse%20cx%3D%2267%22%20cy%3D%2282%22%20rx%3D%2215%22%20ry%3D%2223%22%20fill%3D%22%237ff0ff%22%20opacity%3D%220.55%22%2F%3E%3Cpath%20d%3D%22M44%2060%20Q34%2080%2044%20100%20Q54%2090%2051%2070%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Ccircle%20cx%3D%2272%22%20cy%3D%2238%22%20r%3D%2220%22%20fill%3D%22%2300e5ff%22%2F%3E%3Cpath%20d%3D%22M90%2034%20Q101%2038%2090%2047%20Q85%2041%2090%2034%20Z%22%20fill%3D%22%23ff9500%22%2F%3E%3Ccircle%20cx%3D%2276%22%20cy%3D%2234%22%20r%3D%224.2%22%20fill%3D%22%230a1628%22%2F%3E%3Ccircle%20cx%3D%2277.6%22%20cy%3D%2232.4%22%20r%3D%221.3%22%20fill%3D%22%23ffffff%22%2F%3E%3C%2Fsvg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
@@ -9584,24 +9584,6 @@ if(token){ $('#tok').value=token; start(); }
 #parakeet-logo-pip {
   filter: drop-shadow(0 2px 8px rgba(0, 229, 255, 0.35));
   overflow: visible;
-}
-#parakeet-logo-pip .m-eye {
-  transform-origin: 76px 34px;
-  transform-box: fill-box;
-  animation: mascot-blink 4.5s ease-in-out infinite;
-}
-@keyframes mascot-blink {
-  0%, 92%, 100% { transform: scaleY(1); }
-  95% { transform: scaleY(0.08); }
-}
-#parakeet-logo-pip .m-tail {
-  transform-origin: 30px 90px;
-  transform-box: fill-box;
-  animation: mascot-tail 3.2s ease-in-out infinite;
-}
-@keyframes mascot-tail {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(7deg); }
 }
 </style>
 
