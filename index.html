@@ -13576,7 +13576,7 @@ window._libcurlReady = true;
                     return;
                 }
 
-                if (!url || url === HOME_INTERNAL || isSettingsPage(url) || url.startsWith("parakeet://")) {
+                if (!url || url === HOME_INTERNAL || isSettingsPage(url) || (url && (url.startsWith("parakeet://") || url.startsWith("gust://")))) {
                     securityChip.classList.add("secure");
                     if (securityIcon) securityIcon.className = "fas fa-lock";
                     securityText.textContent = "";
