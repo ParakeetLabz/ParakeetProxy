@@ -5818,6 +5818,36 @@ body::before {
   z-index: -1;
 }
 </style>
+
+<style> /* Parakeet Sky (light) theme */
+body[data-skin="sky"] {
+  --bg0: #e8f4fd !important;
+  --bg1: #d6e9f8 !important;
+  --bg2: #c2ddf3 !important;
+  --bg3: #aed1ee !important;
+  --tx: #0d2137 !important;
+  --tx2: #3a5a78 !important;
+  --tx3: #6a8aa8 !important;
+  --ac: #0090c8 !important;
+  --ac2: #0077a8 !important;
+  --cyan: #00a8d8 !important;
+  --border: rgba(13, 33, 55, 0.14) !important;
+  background: linear-gradient(135deg, #d6eafb 0%, #eef7ff 50%, #d6eafb 100%) !important;
+  color: #0d2137;
+}
+body[data-skin="sky"]::before {
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%, rgba(0, 168, 216, 0.12), transparent),
+    radial-gradient(ellipse 50% 35% at 85% 15%, rgba(0, 184, 169, 0.10), transparent) !important;
+}
+body[data-skin="sky"]::after { opacity: 0.08; }
+/* Terminal stays dark in light mode for readability */
+body[data-skin="sky"] #parakeet-term { filter: none; }
+/* New tab adjustments */
+body[data-skin="sky"] .nt-search input { color: #0d2137 !important; }
+body[data-skin="sky"] .nt-search input::placeholder { color: #6a8aa8 !important; }
+</style>
+
 <script> /* Parakeet flock injector */
 (function() {
   function addFlock() {
@@ -9066,7 +9096,7 @@ function setStatus(s){ G.status=s; renderMe();
   api('/users/@me/settings',{method:'PATCH',body:JSON.stringify({status:s})}).catch(()=>{});
 }
 /* settings */
-const THEMES=[{id:'default',name:'Default'},{id:'nebula',name:'Nebula'}];
+const THEMES=[{id:'default',name:'Default'},{id:'nebula',name:'Nebula'},{id:'sky',name:'Sky ☀️'}];
 function applyTheme(id){ document.body.dataset.skin=id; localStorage.setItem('skin',id); }
 $('#settings-btn').onclick=()=>{
   const cur=localStorage.getItem('skin')||'default';
@@ -9275,6 +9305,10 @@ if(token){ $('#tok').value=token; start(); }
     'calc': { title: 'Calculator', icon: 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20x%3D%2222%22%20y%3D%228%22%20width%3D%2256%22%20height%3D%2284%22%20rx%3D%2210%22%20fill%3D%22%232b3a4a%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2218%22%20width%3D%2240%22%20height%3D%2216%22%20rx%3D%223%22%20fill%3D%22%237ff0ff%22%2F%3E%3Cg%20fill%3D%22%2300e5ff%22%3E%3Crect%20x%3D%2230%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E' },
     'classlink': { title: 'ClassLink', icon: 'https://launchpad.classlink.com/favicon.ico' },
     'canvas': { title: 'Dashboard', icon: 'https://canvas.instructure.com/favicon.ico' },
+    'khan': { title: 'Khan Academy', icon: 'https://www.khanacademy.org/favicon.ico' },
+    'desmos': { title: 'Desmos | Scientific Calculator', icon: 'https://www.desmos.com/favicon.ico' },
+    'slides': { title: 'Google Slides', icon: 'https://ssl.gstatic.com/docs/presentations/images/favicon5.ico' },
+    'schoology': { title: 'Schoology', icon: 'https://www.schoology.com/favicon.ico' },
   };
   function setFavicon(url) {
     let link = document.querySelector("link[rel*='icon']");
@@ -9282,7 +9316,12 @@ if(token){ $('#tok').value=token; start(); }
     if (url) link.href = url;
   }
   function applyCloak(name) {
-    const cl = cloaks[name] || cloaks['none'];
+    let cl = cloaks[name];
+    if (name === 'custom') {
+      const cu = getCustom();
+      cl = { title: cu.title || 'Parakeet', icon: cu.icon || null };
+    }
+    cl = cl || cloaks['none'];
     document.title = cl.title;
     if (cl.icon) setFavicon(cl.icon);
     try { localStorage.setItem(CLOAK_KEY, name); } catch(e) {}
@@ -9303,15 +9342,54 @@ if(token){ $('#tok').value=token; start(); }
       if (_link.href !== _pipIcon) _link.href = _pipIcon;
     }
   } catch (_e) {}
+  const CUSTOM_KEY = 'parakeet:cloak:custom';
+  function getCustom() {
+    try { return JSON.parse(localStorage.getItem(CUSTOM_KEY) || '{}'); } catch(e) { return {}; }
+  }
   // Wire up dropdown
   function wireDropdown() {
     const sel = document.getElementById('parakeet-cloak-select');
     if (sel && !sel.dataset.wired) {
       sel.dataset.wired = '1';
       try { sel.value = localStorage.getItem(CLOAK_KEY) || 'none'; } catch(e) {}
-      sel.addEventListener('change', () => applyCloak(sel.value));
+      sel.addEventListener('change', () => {
+        toggleCustomUI(sel.value === 'custom');
+        if (sel.value !== 'custom') applyCloak(sel.value);
+      });
+      toggleCustomUI(sel.value === 'custom');
+      wireCustomUI();
     }
   }
+  function toggleCustomUI(show) {
+    const box = document.getElementById('parakeet-cloak-custom');
+    if (box) box.style.display = show ? 'flex' : 'none';
+    if (show) {
+      const cu = getCustom();
+      const ti = document.getElementById('parakeet-cloak-title');
+      const ii = document.getElementById('parakeet-cloak-icon');
+      if (ti && cu.title) ti.value = cu.title;
+      if (ii && cu.icon) ii.value = cu.icon;
+    }
+  }
+  function wireCustomUI() {
+    const btn = document.getElementById('parakeet-cloak-apply');
+    if (btn && !btn.dataset.wired) {
+      btn.dataset.wired = '1';
+      btn.addEventListener('click', () => {
+        const title = (document.getElementById('parakeet-cloak-title').value || '').trim() || 'Parakeet';
+        const icon = (document.getElementById('parakeet-cloak-icon').value || '').trim();
+        try { localStorage.setItem(CUSTOM_KEY, JSON.stringify({ title, icon })); } catch(e) {}
+        applyCloak('custom');
+      });
+    }
+  }
+  // Panic key: Ctrl+Shift+P instantly cloaks as Classroom
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
+      e.preventDefault();
+      applyCloak('classroom');
+    }
+  });
   // Try immediately and on DOM changes
   wireDropdown();
   new MutationObserver(wireDropdown).observe(document.body, { childList: true, subtree: true });
@@ -9430,7 +9508,7 @@ if(token){ $('#tok').value=token; start(); }
     var inp = el('parakeet-term-in');
     inp.addEventListener('keydown', onKey);
 
-    print('<span class="tp">Parakeet Terminal</span> <span class="tdim">v2 — type</span> help <span class="tdim">to begin</span>');
+    print('<span class="tp">Parakeet Terminal</span> <span class="tdim">v3 — type</span> help <span class="tdim">to begin</span>');
   }
 
   function toggle() {
@@ -9494,6 +9572,10 @@ if(token){ $('#tok').value=token; start(); }
         '  <span class="tp">whoami</span>           who you are',
         '  <span class="tp">uname</span>            system info',
         '  <span class="tp">history</span>          command history',
+        '  <span class="tp">tabs</span>              list open tabs',
+        '  <span class="tp">tab &lt;n&gt;</span>           switch to tab n',
+        '  <span class="tp">closetab &lt;n&gt;</span>      close tab n',
+        '  <span class="tp">theme &lt;name&gt;</span>      switch theme (default, nebula, sky)',
         '  <span class="tp">clear</span>            clear screen',
         '  <span class="tdim">Ctrl+` toggles · ↑/↓ history · Ctrl+L clears</span>'
       ].join('\n'));
@@ -9518,15 +9600,15 @@ if(token){ $('#tok').value=token; start(); }
     },
     cloak: function(a) {
       var p = (a[0] || '').toLowerCase();
-      var valid = ['off','none','classroom','drive','gmail','docs','calc','classlink','canvas'];
+      var valid = ['off','none','classroom','drive','gmail','docs','calc','classlink','canvas','khan','desmos','slides','schoology','custom'];
       if (!p || valid.indexOf(p) === -1) {
         print('<span class="terr">usage: cloak &lt;' + valid.join('|') + '&gt;</span>');
         return;
       }
       try {
         var name = (p === 'off') ? 'none' : p;
-        var titles = {none:'Parakeet', classroom:'Google Classroom', drive:'My Drive - Google Drive', gmail:'Gmail', docs:'Google Docs', calc:'Calculator', classlink:'ClassLink', canvas:'Dashboard'};
-        var icons = {none:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cellipse%20cx%3D%2245%22%20cy%3D%2260%22%20rx%3D%2222%22%20ry%3D%2226%22%20fill%3D%22%2300d4ff%22%2F%3E%3Ccircle%20cx%3D%2258%22%20cy%3D%2232%22%20r%3D%2216%22%20fill%3D%22%2300e5ff%22%2F%3E%3Cpath%20d%3D%22M72%2028%20Q80%2032%2072%2038%20Q68%2034%2072%2028%22%20fill%3D%22%23ff9500%22%2F%3E%3Ccircle%20cx%3D%2262%22%20cy%3D%2228%22%20r%3D%223.5%22%20fill%3D%22%230a1628%22%2F%3E%3Cpath%20d%3D%22M35%2050%20Q28%2065%2035%2080%20Q42%2070%2040%2055%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cpath%20d%3D%22M28%2078%20L12%2095%20L24%2088%20L20%2098%20L32%2090%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cellipse%20cx%3D%2252%22%20cy%3D%2262%22%20rx%3D%2212%22%20ry%3D%2216%22%20fill%3D%22%237ff0ff%22%20opacity%3D%220.5%22%2F%3E%3C%2Fsvg%3E',classroom:'https://ssl.gstatic.com/classroom/favicon.png',drive:'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png',gmail:'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico',docs:'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico',classlink:'https://launchpad.classlink.com/favicon.ico',calc:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20x%3D%2222%22%20y%3D%228%22%20width%3D%2256%22%20height%3D%2284%22%20rx%3D%2210%22%20fill%3D%22%232b3a4a%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2218%22%20width%3D%2240%22%20height%3D%2216%22%20rx%3D%223%22%20fill%3D%22%237ff0ff%22%2F%3E%3Cg%20fill%3D%22%2300e5ff%22%3E%3Crect%20x%3D%2230%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',canvas:'https://canvas.instructure.com/favicon.ico'};
+        var titles = {none:'Parakeet', classroom:'Google Classroom', drive:'My Drive - Google Drive', gmail:'Gmail', docs:'Google Docs', calc:'Calculator', classlink:'ClassLink', canvas:'Dashboard',khan:'Khan Academy',desmos:'Desmos | Scientific Calculator',slides:'Google Slides',schoology:'Schoology'};
+        var icons = {none:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cellipse%20cx%3D%2245%22%20cy%3D%2260%22%20rx%3D%2222%22%20ry%3D%2226%22%20fill%3D%22%2300d4ff%22%2F%3E%3Ccircle%20cx%3D%2258%22%20cy%3D%2232%22%20r%3D%2216%22%20fill%3D%22%2300e5ff%22%2F%3E%3Cpath%20d%3D%22M72%2028%20Q80%2032%2072%2038%20Q68%2034%2072%2028%22%20fill%3D%22%23ff9500%22%2F%3E%3Ccircle%20cx%3D%2262%22%20cy%3D%2228%22%20r%3D%223.5%22%20fill%3D%22%230a1628%22%2F%3E%3Cpath%20d%3D%22M35%2050%20Q28%2065%2035%2080%20Q42%2070%2040%2055%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cpath%20d%3D%22M28%2078%20L12%2095%20L24%2088%20L20%2098%20L32%2090%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cellipse%20cx%3D%2252%22%20cy%3D%2262%22%20rx%3D%2212%22%20ry%3D%2216%22%20fill%3D%22%237ff0ff%22%20opacity%3D%220.5%22%2F%3E%3C%2Fsvg%3E',classroom:'https://ssl.gstatic.com/classroom/favicon.png',drive:'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png',gmail:'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico',docs:'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico',classlink:'https://launchpad.classlink.com/favicon.ico',calc:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20x%3D%2222%22%20y%3D%228%22%20width%3D%2256%22%20height%3D%2284%22%20rx%3D%2210%22%20fill%3D%22%232b3a4a%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2218%22%20width%3D%2240%22%20height%3D%2216%22%20rx%3D%223%22%20fill%3D%22%237ff0ff%22%2F%3E%3Cg%20fill%3D%22%2300e5ff%22%3E%3Crect%20x%3D%2230%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',canvas:'https://canvas.instructure.com/favicon.ico',khan:'https://www.khanacademy.org/favicon.ico',desmos:'https://www.desmos.com/favicon.ico',slides:'https://ssl.gstatic.com/docs/presentations/images/favicon5.ico',schoology:'https://www.schoology.com/favicon.ico'};
         document.title = titles[name] || 'Parakeet';
         var iconUrl = icons[name] || icons.none;
         var link = document.querySelector("link[rel*='icon']");
@@ -9545,6 +9627,48 @@ if(token){ $('#tok').value=token; start(); }
         var r = (0, eval)(code);
         print('<span class="tdim">→</span> ' + esc(r === undefined ? 'undefined' : String(r)));
       } catch(err) { print('<span class="terr">' + esc(err.name + ': ' + err.message) + '</span>'); }
+    },
+    tabs: function() {
+      try {
+        if (typeof tabs === 'undefined' || !tabs.length) { print('<span class="terr">no tabs found</span>'); return; }
+        tabs.forEach(function(t, i) {
+          var active = (typeof activeTabId !== 'undefined' && t.id === activeTabId) ? '<span class="tok">●</span> ' : '<span class="tdim">○</span> ';
+          print(active + '<span class="tp">[' + (i+1) + ']</span> ' + esc(t.title || 'Untitled') + ' <span class="tdim">' + esc((t.url || '').slice(0, 60)) + '</span>');
+        });
+      } catch(err) { print('<span class="terr">' + esc(err.message) + '</span>'); }
+    },
+    tab: function(a) {
+      var n = parseInt(a[0], 10);
+      try {
+        if (isNaN(n) || n < 1 || n > tabs.length) { print('<span class="terr">usage: tab &lt;1-' + tabs.length + '&gt;</span>'); return; }
+        var t = tabs[n-1];
+        if (typeof switchToTab === 'function') { switchToTab(t.id); print('<span class="tok">switched →</span> ' + esc(t.title || '')); }
+        else print('<span class="terr">tab switching unavailable</span>');
+      } catch(err) { print('<span class="terr">' + esc(err.message) + '</span>'); }
+    },
+    closetab: function(a) {
+      var n = parseInt(a[0], 10);
+      try {
+        if (isNaN(n) || n < 1 || n > tabs.length) { print('<span class="terr">usage: closetab &lt;1-' + tabs.length + '&gt;</span>'); return; }
+        var t = tabs[n-1];
+        if (typeof closeTab === 'function') { closeTab(t.id); print('<span class="tok">closed</span> ' + esc(t.title || '')); }
+        else print('<span class="terr">tab closing unavailable</span>');
+      } catch(err) { print('<span class="terr">' + esc(err.message) + '</span>'); }
+    },
+    theme: function(a) {
+      var name = (a[0] || '').toLowerCase();
+      var valid = ['default', 'nebula', 'sky'];
+      if (!name) {
+        var cur = 'default';
+        try { cur = localStorage.getItem('skin') || 'default'; } catch(e) {}
+        print('<span class="tdim">current:</span> ' + esc(cur) + ' <span class="tdim">· available:</span> ' + valid.join(', '));
+        return;
+      }
+      if (valid.indexOf(name) === -1) { print('<span class="terr">unknown theme. try: ' + valid.join(', ') + '</span>'); return; }
+      try {
+        if (typeof applyTheme === 'function') { applyTheme(name); print('<span class="tok">theme →</span> ' + esc(name)); }
+        else { document.body.dataset.skin = name; try { localStorage.setItem('skin', name); } catch(e) {} print('<span class="tok">theme →</span> ' + esc(name)); }
+      } catch(err) { print('<span class="terr">' + esc(err.message) + '</span>'); }
     },
     fetch: function(a) {
       var url = (a[0] || '').trim();
@@ -9602,6 +9726,110 @@ if(token){ $('#tok').value=token; start(); }
 
 
 
+
+
+<style> /* Parakeet Remodel v2 */
+:root {
+  --pk-radius: 16px;
+  --pk-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  --pk-glow: 0 0 24px rgba(0, 229, 255, 0.25);
+}
+
+/* === Tabs: pill-shaped === */
+#tabStrip .tab {
+  border-radius: 12px !important;
+  margin: 4px 3px !important;
+  transition: background 0.15s ease, transform 0.15s ease !important;
+}
+#tabStrip .tab:hover { transform: translateY(-1px); }
+#tabStrip .tab.active {
+  box-shadow: var(--pk-glow) !important;
+}
+#tabStrip .tab-add {
+  border-radius: 50% !important;
+  transition: background 0.15s ease, transform 0.15s ease !important;
+}
+#tabStrip .tab-add:hover { transform: scale(1.08); }
+
+/* === Omnibox: floating pill === */
+.omnibox {
+  border-radius: 999px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2) !important;
+  transition: box-shadow 0.2s ease !important;
+}
+.omnibox:focus-within {
+  box-shadow: var(--pk-glow) !important;
+}
+.omnibox .url-input {
+  border-radius: 999px !important;
+}
+
+/* === New tab hero === */
+.nt-brand {
+  transform: scale(1.12);
+  margin-bottom: 8px !important;
+}
+.nt-brand span:first-child {
+  background: linear-gradient(135deg, #00e5ff, #7ff0ff, #00b8a9) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* === New tab search: pill with glow === */
+.nt-search {
+  border-radius: 999px !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
+  transition: box-shadow 0.25s ease !important;
+  overflow: hidden;
+}
+.nt-search:focus-within {
+  box-shadow: var(--pk-glow), 0 4px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* === Favorite tiles === */
+.nt-fav-box {
+  border-radius: var(--pk-radius) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+.nt-fav-box:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--pk-glow) !important;
+}
+
+/* === New tab buttons (github, terminal, wallpaper) === */
+.nt-wallpaper-btn {
+  border-radius: 16px !important;
+  transition: transform 0.15s ease, background 0.15s ease !important;
+  backdrop-filter: blur(8px);
+}
+.nt-wallpaper-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* === Settings cards === */
+.settings-card, [class*="settings-card"] {
+  border-radius: 20px !important;
+  box-shadow: var(--pk-shadow) !important;
+}
+
+/* === Buttons === */
+.btn, button.btn {
+  border-radius: 12px !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+/* === Scrollbars === */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.25);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.4); }
+</style>
 
 </body>
 </html>
@@ -29129,7 +29357,23 @@ _VIEWER_DL_JS +
                                                 <option value="calc">Calculator</option>
                                                 <option value="classlink">ClassLink</option>
                                                 <option value="canvas">Canvas</option>
+                                                <option value="khan">Khan Academy</option>
+                                                <option value="desmos">Desmos</option>
+                                                <option value="slides">Google Slides</option>
+                                                <option value="schoology">Schoology</option>
+                                                <option value="custom">Custom...</option>
                                             </select>
+                                        </div>
+                                        <div id="parakeet-cloak-custom" style="display:none;margin-top:12px;gap:8px;flex-wrap:wrap;">
+                                            <input id="parakeet-cloak-title" placeholder="Tab title" style="flex:1;min-width:140px;padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;" />
+                                            <input id="parakeet-cloak-icon" placeholder="Icon URL (optional)" style="flex:2;min-width:180px;padding:8px 12px;border-radius:8px;background:var(--bg1);color:var(--tx);border:1px solid var(--border);font-size:14px;" />
+                                            <button id="parakeet-cloak-apply" class="btn" style="padding:8px 16px;">Apply</button>
+                                        </div>
+                                        <div class="settings-switch-row" style="margin-top:12px;">
+                                            <div>
+                                                <div class="settings-switch-label">Panic key</div>
+                                                <div class="settings-hint">Press <b>Ctrl+Shift+P</b> anywhere to instantly disguise this tab as Google Classroom.</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
