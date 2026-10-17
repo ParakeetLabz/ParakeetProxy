@@ -9351,9 +9351,21 @@ if(token){ $('#tok').value=token; start(); }
     'slides': { title: 'Google Slides', icon: 'https://ssl.gstatic.com/docs/presentations/images/favicon5.ico' },
     'schoology': { title: 'Schoology', icon: 'https://www.schoology.com/favicon.ico' },
   };
+  // The Parakeet UI runs inside an iframe; the real browser tab is the TOP document.
+  // All cloak changes must target top.document, falling back to document if cross-origin.
+  function cloakDoc() {
+    try {
+      if (window.top && window.top.document) {
+        void window.top.document.title; // throws if cross-origin
+        return window.top.document;
+      }
+    } catch(e) {}
+    return document;
+  }
   function setFavicon(url) {
-    let link = document.querySelector("link[rel*='icon']");
-    if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+    const d = cloakDoc();
+    let link = d.querySelector("link[rel*='icon']");
+    if (!link) { link = d.createElement('link'); link.rel = 'icon'; d.head.appendChild(link); }
     if (url) link.href = url;
   }
   function applyCloak(name) {
@@ -9363,7 +9375,7 @@ if(token){ $('#tok').value=token; start(); }
       cl = { title: cu.title || 'Parakeet', icon: cu.icon || null };
     }
     cl = cl || cloaks['none'];
-    document.title = cl.title;
+    try { cloakDoc().title = cl.title; } catch(e) { document.title = cl.title; }
     if (cl.icon) setFavicon(cl.icon);
     try {
       const tabEl = document.querySelector('.tab.active .tab-title');
@@ -9392,22 +9404,26 @@ if(token){ $('#tok').value=token; start(); }
     const name = activeCloakName();
     if (!name || name === 'none') return;
     const want = cloakTitleFor(name);
-    if (document.title !== want) {
+    const d = cloakDoc();
+    if (d.title !== want) {
       _cloakGuard = true;
-      document.title = want;
+      try { d.title = want; } catch(e) {}
+      _cloakGuard = false;
+      return;
       // Also update the in-app tab strip
       try {
         const tabEl = document.querySelector('.tab.active .tab-title');
         if (tabEl) tabEl.textContent = want;
       } catch(e) {}
-      _cloakGuard = false;
     }
   }
   // Watch for title changes
-  const _titleEl = document.querySelector('title');
-  if (_titleEl) {
-    new MutationObserver(guardTitle).observe(_titleEl, { childList: true, characterData: true, subtree: true });
-  }
+  try {
+    const _topTitleEl = cloakDoc().querySelector('title');
+    if (_topTitleEl) {
+      new MutationObserver(guardTitle).observe(_topTitleEl, { childList: true, characterData: true, subtree: true });
+    }
+  } catch(e) {}
   // Also re-assert on tab switches/navigation
   document.addEventListener('visibilitychange', () => { if (!document.hidden) guardTitle(); });
   setInterval(guardTitle, 2000);
@@ -9417,9 +9433,10 @@ if(token){ $('#tok').value=token; start(); }
     var _savedCloak = localStorage.getItem(CLOAK_KEY);
     if (!_savedCloak || _savedCloak === 'none') {
       var _pipIcon = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20140%22%3E%3Cpath%20d%3D%22M32%2088%20L8%20128%20L24%20122%20L20%20136%20L40%20116%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%2276%22%20rx%3D%2227%22%20ry%3D%2234%22%20fill%3D%22%2300d4ff%22%2F%3E%3Cellipse%20cx%3D%2267%22%20cy%3D%2282%22%20rx%3D%2215%22%20ry%3D%2223%22%20fill%3D%22%237ff0ff%22%20opacity%3D%220.55%22%2F%3E%3Cpath%20d%3D%22M44%2060%20Q34%2080%2044%20100%20Q54%2090%2051%2070%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Ccircle%20cx%3D%2272%22%20cy%3D%2238%22%20r%3D%2220%22%20fill%3D%22%2300e5ff%22%2F%3E%3Cpath%20d%3D%22M90%2034%20Q101%2038%2090%2047%20Q85%2041%2090%2034%20Z%22%20fill%3D%22%23ff9500%22%2F%3E%3Ccircle%20cx%3D%2276%22%20cy%3D%2234%22%20r%3D%224.2%22%20fill%3D%22%230a1628%22%2F%3E%3Ccircle%20cx%3D%2277.6%22%20cy%3D%2232.4%22%20r%3D%221.3%22%20fill%3D%22%23ffffff%22%2F%3E%3C%2Fsvg%3E';
-      var _links = document.querySelectorAll("link[rel*='icon']");
+      var _d = cloakDoc();
+      var _links = _d.querySelectorAll("link[rel*='icon']");
       var _link = _links[0];
-      if (!_link) { _link = document.createElement('link'); _link.rel = 'icon'; document.head.appendChild(_link); }
+      if (!_link) { _link = _d.createElement('link'); _link.rel = 'icon'; _d.head.appendChild(_link); }
       for (var _i = 1; _i < _links.length; _i++) { _links[_i].remove(); }
       if (_link.href !== _pipIcon) _link.href = _pipIcon;
     }
@@ -9691,10 +9708,12 @@ if(token){ $('#tok').value=token; start(); }
         var name = (p === 'off') ? 'none' : p;
         var titles = {none:'Parakeet', classroom:'Google Classroom', drive:'My Drive - Google Drive', gmail:'Gmail', docs:'Google Docs', calc:'Calculator', classlink:'ClassLink', canvas:'Dashboard',khan:'Khan Academy',desmos:'Desmos | Scientific Calculator',slides:'Google Slides',schoology:'Schoology'};
         var icons = {none:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cellipse%20cx%3D%2245%22%20cy%3D%2260%22%20rx%3D%2222%22%20ry%3D%2226%22%20fill%3D%22%2300d4ff%22%2F%3E%3Ccircle%20cx%3D%2258%22%20cy%3D%2232%22%20r%3D%2216%22%20fill%3D%22%2300e5ff%22%2F%3E%3Cpath%20d%3D%22M72%2028%20Q80%2032%2072%2038%20Q68%2034%2072%2028%22%20fill%3D%22%23ff9500%22%2F%3E%3Ccircle%20cx%3D%2262%22%20cy%3D%2228%22%20r%3D%223.5%22%20fill%3D%22%230a1628%22%2F%3E%3Cpath%20d%3D%22M35%2050%20Q28%2065%2035%2080%20Q42%2070%2040%2055%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cpath%20d%3D%22M28%2078%20L12%2095%20L24%2088%20L20%2098%20L32%2090%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cellipse%20cx%3D%2252%22%20cy%3D%2262%22%20rx%3D%2212%22%20ry%3D%2216%22%20fill%3D%22%237ff0ff%22%20opacity%3D%220.5%22%2F%3E%3C%2Fsvg%3E',classroom:'https://ssl.gstatic.com/classroom/favicon.png',drive:'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png',gmail:'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico',docs:'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico',classlink:'https://launchpad.classlink.com/favicon.ico',calc:'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20x%3D%2222%22%20y%3D%228%22%20width%3D%2256%22%20height%3D%2284%22%20rx%3D%2210%22%20fill%3D%22%232b3a4a%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2218%22%20width%3D%2240%22%20height%3D%2216%22%20rx%3D%223%22%20fill%3D%22%237ff0ff%22%2F%3E%3Cg%20fill%3D%22%2300e5ff%22%3E%3Crect%20x%3D%2230%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2242%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2257%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2230%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2245%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2272%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E',canvas:'https://canvas.instructure.com/favicon.ico',khan:'https://www.khanacademy.org/favicon.ico',desmos:'https://www.desmos.com/favicon.ico',slides:'https://ssl.gstatic.com/docs/presentations/images/favicon5.ico',schoology:'https://www.schoology.com/favicon.ico'};
-        document.title = titles[name] || 'Parakeet';
+        var _td = document;
+        try { if (window.top && window.top.document) { void window.top.document.title; _td = window.top.document; } } catch(_e) {}
+        _td.title = titles[name] || 'Parakeet';
         var iconUrl = icons[name] || icons.none;
-        var link = document.querySelector("link[rel*='icon']");
-        if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+        var link = _td.querySelector("link[rel*='icon']");
+        if (!link) { link = _td.createElement('link'); link.rel = 'icon'; _td.head.appendChild(link); }
         link.href = iconUrl;
         try { localStorage.setItem('parakeet:cloak', name); } catch(err2) {}
         var sel = document.getElementById('parakeet-cloak-select');
