@@ -6190,7 +6190,7 @@ body::before {
                             <div class="nt-time" id="ntTime" style="display:flex;align-items:center;gap:12px;">--:-- <i id="ntTimeIcon" class="fas fa-moon" style="font-size:0.85em;color:var(--ac);"></i></div>
                         </div>
                         <div class="nt-brand" style="position:relative;">
-                            <svg class="gust-icon-anim" style="margin-right: -4px; width: 42px; height: 42px;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="45" cy="60" rx="22" ry="26" fill="#00d4ff"/><circle cx="58" cy="32" r="16" fill="#00e5ff"/><path d="M72 28 Q80 32 72 38 Q68 34 72 28" fill="#ff9500"/><circle cx="62" cy="28" r="3.5" fill="#0a1628"/><path d="M35 50 Q28 65 35 80 Q42 70 40 55 Z" fill="#0099cc"/><path d="M28 78 L12 95 L24 88 L20 98 L32 90 Z" fill="#0099cc"/><ellipse cx="52" cy="62" rx="12" ry="16" fill="#7ff0ff" opacity="0.5"/></svg>
+                            <svg id="parakeet-logo-pip" style="margin-right: 2px; width: 58px; height: 68px;" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="116" width="96" height="9" rx="4.5" fill="#4a6a8a"/><g class="m-tail"><path d="M32 88 L8 128 L24 122 L20 136 L40 116 Z" fill="#0099cc"/></g><ellipse cx="60" cy="76" rx="27" ry="34" fill="#00d4ff"/><ellipse cx="67" cy="82" rx="15" ry="23" fill="#7ff0ff" opacity="0.55"/><path d="M44 60 Q34 80 44 100 Q54 90 51 70 Z" fill="#0099cc"/><circle cx="72" cy="38" r="20" fill="#00e5ff"/><path d="M90 34 Q101 38 90 47 Q85 41 90 34 Z" fill="#ff9500"/><g class="m-eye"><circle cx="76" cy="34" r="4.2" fill="#0a1628"/><circle cx="77.6" cy="32.4" r="1.3" fill="#ffffff"/></g><path d="M52 106 L50 116 M68 106 L70 116" stroke="#ff9500" stroke-width="3.5" stroke-linecap="round"/></svg>
                             <span style="letter-spacing: 3px; display:inline-flex;">
                                 <span>Parakeet</span>
                             </span>
@@ -9581,71 +9581,32 @@ if(token){ $('#tok').value=token; start(); }
 
 
 <style> /* Parakeet Mascot */
-#parakeet-mascot {
-  position: fixed;
-  right: 6vw;
-  bottom: 12vh;
-  width: 110px;
-  height: 130px;
-  pointer-events: none;
-  z-index: 3;
-  opacity: 0.92;
-  animation: mascot-bob 3.2s ease-in-out infinite;
-  filter: drop-shadow(0 6px 12px rgba(0, 229, 255, 0.25));
+#parakeet-logo-pip {
+  filter: drop-shadow(0 2px 8px rgba(0, 229, 255, 0.35));
+  overflow: visible;
 }
-@keyframes mascot-bob {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-9px) rotate(2deg); }
-}
-#parakeet-mascot .m-eye {
+#parakeet-logo-pip .m-eye {
   transform-origin: 76px 34px;
+  transform-box: fill-box;
   animation: mascot-blink 4.5s ease-in-out infinite;
 }
 @keyframes mascot-blink {
   0%, 92%, 100% { transform: scaleY(1); }
   95% { transform: scaleY(0.08); }
 }
-#parakeet-mascot .m-tail {
+#parakeet-logo-pip .m-tail {
   transform-origin: 30px 90px;
+  transform-box: fill-box;
   animation: mascot-tail 3.2s ease-in-out infinite;
 }
 @keyframes mascot-tail {
   0%, 100% { transform: rotate(0deg); }
   50% { transform: rotate(7deg); }
 }
-@media (max-width: 700px) {
-  #parakeet-mascot { width: 74px; height: 88px; right: 4vw; bottom: 9vh; }
-}
 </style>
 
 
-<script> /* Parakeet mascot injector */
-(function() {
-  function addMascot() {
-    if (document.getElementById('parakeet-mascot')) return;
-    // Only on the new tab / home page
-    if (!document.querySelector('.nt-brand') && !document.getElementById('newtab')) return;
-    var m = document.createElement('div');
-    m.id = 'parakeet-mascot';
-    m.innerHTML = '<svg viewBox="0 0 120 140" width="100%" height="100%">' +
-      '<rect x="14" y="116" width="96" height="9" rx="4.5" fill="#4a6a8a"/>' +
-      '<g class="m-tail"><path d="M32 88 L8 128 L24 122 L20 136 L40 116 Z" fill="#0099cc"/></g>' +
-      '<ellipse cx="60" cy="76" rx="27" ry="34" fill="#00d4ff"/>' +
-      '<ellipse cx="67" cy="82" rx="15" ry="23" fill="#7ff0ff" opacity="0.55"/>' +
-      '<path d="M44 60 Q34 80 44 100 Q54 90 51 70 Z" fill="#0099cc"/>' +
-      '<circle cx="72" cy="38" r="20" fill="#00e5ff"/>' +
-      '<path d="M90 34 Q101 38 90 47 Q85 41 90 34 Z" fill="#ff9500"/>' +
-      '<g class="m-eye"><circle cx="76" cy="34" r="4.2" fill="#0a1628"/><circle cx="77.6" cy="32.4" r="1.3" fill="#ffffff"/></g>' +
-      '<path d="M52 106 L50 116 M68 106 L70 116" stroke="#ff9500" stroke-width="3.5" stroke-linecap="round"/>' +
-      '</svg>';
-    m.title = 'Pip the Parakeet';
-    document.body.appendChild(m);
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() { setTimeout(addMascot, 800); });
-  } else { setTimeout(addMascot, 800); }
-})();
-</script>
+
 
 </body>
 </html>
