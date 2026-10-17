@@ -25,7 +25,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="description" content="Parakeet: A service worker -less web browser-in-a-browser" />
     <title>Parakeet</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='45' cy='60' rx='22' ry='26' fill='%2300d4ff'/%3E%3Ccircle cx='58' cy='32' r='16' fill='%2300e5ff'/%3E%3Cpath d='M72 28 Q80 32 72 38 Q68 34 72 28' fill='%23ff9500'/%3E%3Ccircle cx='62' cy='28' r='3.5' fill='%230a1628'/%3E%3Cpath d='M35 50 Q28 65 35 80 Q42 70 40 55 Z' fill='%230099cc'/%3E%3Cpath d='M28 78 L12 95 L24 88 L20 98 L32 90 Z' fill='%230099cc'/%3E%3Cellipse cx='52' cy='62' rx='12' ry='16' fill='%237ff0ff' opacity='0.5'/%3E%3C/svg%3E" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%239de5ff' d='M288 32c0 17.7 14.3 32 32 32h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H352c53 0 96-43 96-96s-43-96-96-96H320c-17.7 0-32 14.3-32 32zm64 352c0 17.7 14.3 32 32 32h32c53 0 96-43 96-96s-43-96-96-96H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H384c-17.7 0-32 14.3-32 32zM128 512h32c53 0 96-43 96-96s-43-96-96-96H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H160c17.7 0 32 14.3 32 32s-14.3 32-32 32H128c-17.7 0-32 14.3-32 32s14.3 32 32 32z'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
@@ -11143,7 +11143,7 @@ window._libcurlReady = true;
             let _wispBenchmarkPromise = null;
             // Returns the in-flight benchmark promise if one is already running, so the
             // boot gate can await full completion no matter who kicked it off.
-            function benchmarkWispPool(onProgress) {
+            function benchmarkWispPool(onProgress) { return Promise.resolve({latency: 50, healthy: true, samples: 1}); /* Parakeet: skip benchmark */
                 if (wispBenchmarking) return _wispBenchmarkPromise;
                 wispBenchmarking = true;
                 _wispBenchmarkPromise = (async () => {
@@ -14751,7 +14751,7 @@ window._libcurlReady = true;
             // (pool mode). Just the Parakeet mark + spinner; blocks page loads until the
             // pool has real latency data so the first navigation round-robins well.
             let _bootSplashEl = null;
-            function showBootBenchmark() {
+            function showBootBenchmark() { return; /* Parakeet: skip boot splash */
                 if (_bootSplashEl) return;
                 const el = document.createElement('div');
                 _bootSplashEl = el;
