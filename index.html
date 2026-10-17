@@ -9290,6 +9290,19 @@ if(token){ $('#tok').value=token; start(); }
     if (sel) sel.value = name;
   }
   window.ParakeetCloak = { apply: applyCloak };
+  // Force the Parakeet (Pip) favicon on load when no cloak is active.
+  // Setting it via JS defeats stubborn browser favicon caching that survives refreshes.
+  try {
+    var _savedCloak = localStorage.getItem(CLOAK_KEY);
+    if (!_savedCloak || _savedCloak === 'none') {
+      var _pipIcon = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20140%22%3E%3Cpath%20d%3D%22M32%2088%20L8%20128%20L24%20122%20L20%20136%20L40%20116%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%2276%22%20rx%3D%2227%22%20ry%3D%2234%22%20fill%3D%22%2300d4ff%22%2F%3E%3Cellipse%20cx%3D%2267%22%20cy%3D%2282%22%20rx%3D%2215%22%20ry%3D%2223%22%20fill%3D%22%237ff0ff%22%20opacity%3D%220.55%22%2F%3E%3Cpath%20d%3D%22M44%2060%20Q34%2080%2044%20100%20Q54%2090%2051%2070%20Z%22%20fill%3D%22%230099cc%22%2F%3E%3Ccircle%20cx%3D%2272%22%20cy%3D%2238%22%20r%3D%2220%22%20fill%3D%22%2300e5ff%22%2F%3E%3Cpath%20d%3D%22M90%2034%20Q101%2038%2090%2047%20Q85%2041%2090%2034%20Z%22%20fill%3D%22%23ff9500%22%2F%3E%3Ccircle%20cx%3D%2276%22%20cy%3D%2234%22%20r%3D%224.2%22%20fill%3D%22%230a1628%22%2F%3E%3Ccircle%20cx%3D%2277.6%22%20cy%3D%2232.4%22%20r%3D%221.3%22%20fill%3D%22%23ffffff%22%2F%3E%3C%2Fsvg%3E';
+      var _links = document.querySelectorAll("link[rel*='icon']");
+      var _link = _links[0];
+      if (!_link) { _link = document.createElement('link'); _link.rel = 'icon'; document.head.appendChild(_link); }
+      for (var _i = 1; _i < _links.length; _i++) { _links[_i].remove(); }
+      if (_link.href !== _pipIcon) _link.href = _pipIcon;
+    }
+  } catch (_e) {}
   // Wire up dropdown
   function wireDropdown() {
     const sel = document.getElementById('parakeet-cloak-select');
