@@ -9365,11 +9365,52 @@ if(token){ $('#tok').value=token; start(); }
     cl = cl || cloaks['none'];
     document.title = cl.title;
     if (cl.icon) setFavicon(cl.icon);
+    try {
+      const tabEl = document.querySelector('.tab.active .tab-title');
+      if (tabEl) tabEl.textContent = cl.title;
+    } catch(e) {}
     try { localStorage.setItem(CLOAK_KEY, name); } catch(e) {}
     const sel = document.getElementById('parakeet-cloak-select');
     if (sel) sel.value = name;
   }
   window.ParakeetCloak = { apply: applyCloak };
+  // Sticky cloak: watch <title> and instantly restore the cloak if anything changes it
+  function activeCloakName() {
+    try { return localStorage.getItem(CLOAK_KEY) || 'none'; } catch(e) { return 'none'; }
+  }
+  function cloakTitleFor(name) {
+    if (name === 'custom') {
+      const cu = getCustom();
+      return cu.title || 'Parakeet';
+    }
+    const cl = cloaks[name];
+    return cl ? cl.title : 'Parakeet';
+  }
+  let _cloakGuard = false;
+  function guardTitle() {
+    if (_cloakGuard) return;
+    const name = activeCloakName();
+    if (!name || name === 'none') return;
+    const want = cloakTitleFor(name);
+    if (document.title !== want) {
+      _cloakGuard = true;
+      document.title = want;
+      // Also update the in-app tab strip
+      try {
+        const tabEl = document.querySelector('.tab.active .tab-title');
+        if (tabEl) tabEl.textContent = want;
+      } catch(e) {}
+      _cloakGuard = false;
+    }
+  }
+  // Watch for title changes
+  const _titleEl = document.querySelector('title');
+  if (_titleEl) {
+    new MutationObserver(guardTitle).observe(_titleEl, { childList: true, characterData: true, subtree: true });
+  }
+  // Also re-assert on tab switches/navigation
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) guardTitle(); });
+  setInterval(guardTitle, 2000);
   // Force the Parakeet (Pip) favicon on load when no cloak is active.
   // Setting it via JS defeats stubborn browser favicon caching that survives refreshes.
   try {
