@@ -10598,20 +10598,32 @@ body::after {
     try {
       Object.keys(ICONS).forEach(function(id) {
         var btn = document.getElementById(id);
-        if (!btn) return;
-        var icon = btn.querySelector('i[class*="fa-"], svg');
-        // Only swap if current icon is FA (or missing) — don't double-swap
-        if (btn.querySelector('i[class*="fa-"]')) {
-          btn.querySelector('i[class*="fa-"]').outerHTML = ICONS[id];
+        if (!btn || btn.dataset.svgDone) return;
+        var faIcon = btn.querySelector('i[class*="fa-"]');
+        if (faIcon) {
+          // Hide the FA icon (don't remove — app code may still reference it)
+          // and insert SVG next to it
+          faIcon.style.display = 'none';
+          var wrap = document.createElement('span');
+          wrap.className = 'pk-svg-icon';
+          wrap.innerHTML = ICONS[id];
+          wrap.style.display = 'inline-flex';
+          faIcon.parentNode.insertBefore(wrap, faIcon.nextSibling);
+          btn.dataset.svgDone = '1';
         }
       });
     } catch(e) {}
   }
-  // Run on load and on DOM changes (toolbar renders late)
-  if (document.readyState === 'complete') setTimeout(swap, 300);
-  else window.addEventListener('load', function() { setTimeout(swap, 300); });
-  new MutationObserver(swap).observe(document.documentElement, { childList: true, subtree: true });
-  setTimeout(swap, 2000);
+  // Run after app init settles (avoid racing init's DOM building)
+  var _swapTimer = null;
+  function debouncedSwap() {
+    if (_swapTimer) clearTimeout(_swapTimer);
+    _swapTimer = setTimeout(swap, 400);
+  }
+  if (document.readyState === 'complete') setTimeout(debouncedSwap, 1500);
+  else window.addEventListener('load', function() { setTimeout(debouncedSwap, 1500); });
+  new MutationObserver(debouncedSwap).observe(document.documentElement, { childList: true, subtree: true });
+  setTimeout(debouncedSwap, 3000);
 })();
 </script>
 </body>
