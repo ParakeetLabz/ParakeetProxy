@@ -6405,7 +6405,7 @@ body[data-skin="sky"] .nt-search input::placeholder { color: #6a8aa8 !important;
                     <div class="context-menu-separator"></div>
                     <button class="context-menu-item" id="ctxSettings">
                         <i class="fas fa-gear"></i>
-                        <span>Settings</span>
+                        <span>Aviary</span>
                     </button>
                     <div class="context-menu-separator"></div>
                     <button class="context-menu-item" id="ctxBookmark">
@@ -10307,6 +10307,219 @@ if(token){ $('#tok').value=token; start(); }
 /* Omnibox: twig-textured pill */
 .omnibox, #urlInput, .url-input {
   border-radius: 999px !important;
+}
+</style>
+
+
+<style> /* PARAKEET MEGA BIRD THEME */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+:root {
+  --pk-sky1: #0a1a33;
+  --pk-sky2: #0d2a52;
+  --pk-feather: #00e5ff;
+  --pk-feather-soft: #7ff0ff;
+  --pk-nest: #2a1f14;
+  --pk-egg: #f4f9ff;
+  --pk-font: 'Quicksand', 'Segoe UI', sans-serif;
+}
+* { font-family: var(--pk-font) !important; }
+/* Everything round and soft - nothing sharp like GUST */
+button, input, select, .btn, .tab, .card, .settings-card, .modal {
+  border-radius: 18px !important;
+}
+/* Sky gradient everywhere */
+body {
+  background: linear-gradient(180deg, var(--pk-sky1) 0%, #081226 50%, #060b18 100%) !important;
+}
+/* Feather texture overlay */
+body::after {
+  content: "";
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M60 15 C45 35 40 60 50 95 C52 100 58 100 60 95 C70 60 68 35 60 15 Z' fill='none' stroke='%2300e5ff' stroke-width='0.6' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9998; opacity: .6;
+}
+/* Scrollbars: feather cyan */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: rgba(0,20,40,.3); border-radius: 8px; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #00e5ff, #0099cc); border-radius: 8px; }
+</style>
+
+
+<style> /* THE NEST - new tab remodel */
+/* Nest: woven twig texture background for the new tab container */
+.nt-page, .newtab-page {
+  background:
+    radial-gradient(ellipse 500px 280px at 50% 110%, rgba(90, 61, 36, 0.35), transparent 70%),
+    linear-gradient(180deg, #0a1a33 0%, #0d2242 55%, #0a1628 100%) !important;
+}
+/* Woven nest under the search */
+.nt-search {
+  position: relative;
+}
+.nt-search::after {
+  content: "";
+  position: absolute; bottom: -14px; left: 8%; right: 8%; height: 22px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='22'%3E%3Cpath d='M0 11 Q20 4 40 11 T80 11' fill='none' stroke='%237a5230' stroke-width='2.5' opacity='0.7'/%3E%3Cpath d='M0 15 Q20 8 40 15 T80 15' fill='none' stroke='%235a3d24' stroke-width='2' opacity='0.6'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  pointer-events: none; opacity: .8;
+}
+/* Favorites as eggs in the nest */
+.nt-fav-box, .fav-box, .nt-fav {
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40% !important;
+  background: linear-gradient(160deg, #f4f9ff 0%, #d4e8ff 60%, #a8d4f0 100%) !important;
+  color: #0a1a33 !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,.3), inset -3px -6px 12px rgba(0,100,160,.15) !important;
+  aspect-ratio: 1 / 1.15;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1) !important;
+}
+.nt-fav-box:hover, .fav-box:hover, .nt-fav:hover {
+  transform: translateY(-6px) rotate(-3deg) !important;
+}
+/* Nest greeting */
+.nt-brand h1, .nt-brand .title {
+  text-shadow: 0 2px 20px rgba(0,229,255,.3);
+}
+/* "Your Nest" label above search */
+.nt-search::before {
+  content: "your nest";
+  position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+  font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(127,240,255,.5); pointer-events: none;
+  font-weight: 600;
+}
+</style>
+
+
+<style> /* THE FLOCK (tabs) + THE PERCH (toolbar) */
+/* Tab strip: sky branch */
+#tabStrip, .tabstrip {
+  background: linear-gradient(180deg, rgba(13,42,82,.9), rgba(8,18,38,.95)) !important;
+  padding: 10px 12px 14px !important;
+  gap: 8px !important;
+}
+/* Each tab: a bird in the flock */
+#tabStrip .tab, .tab {
+  background: linear-gradient(160deg, rgba(30,60,110,.85), rgba(18,36,70,.9)) !important;
+  border: 1.5px solid rgba(0,229,255,.14) !important;
+  border-radius: 20px 24px 16px 16px !important;
+  padding: 8px 14px !important;
+  transition: all .25s cubic-bezier(.34,1.4,.64,1) !important;
+}
+#tabStrip .tab:hover, .tab:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(0,229,255,.4) !important;
+  box-shadow: 0 6px 18px rgba(0,229,255,.18) !important;
+}
+/* Active tab: lead bird with glowing wings */
+#tabStrip .tab.active, .tab.active {
+  background: linear-gradient(160deg, #0e3a6e, #0a2547) !important;
+  border-color: var(--pk-feather, #00e5ff) !important;
+  box-shadow: 0 0 20px rgba(0,229,255,.35), 0 4px 14px rgba(0,0,0,.3) !important;
+  transform: translateY(-2px) !important;
+}
+/* New tab button: an egg */
+#newTabBtn, .new-tab-btn, [id*="newtab-btn"], [class*="newtab-btn"] {
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40% !important;
+  background: linear-gradient(160deg, #e8f4ff, #a8d4f0) !important;
+  color: #0a2547 !important;
+  width: 34px !important; height: 38px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.25) !important;
+  transition: transform .2s !important;
+}
+#newTabBtn:hover, .new-tab-btn:hover {
+  transform: scale(1.12) rotate(-6deg) !important;
+}
+/* Toolbar: the perch - warm wood branch */
+#toolbar, .toolbar, #navBar {
+  background: linear-gradient(180deg, #3d2c1a 0%, #2a1f14 100%) !important;
+  border-top: 3px solid #5a3d24 !important;
+  border-bottom: 2px solid rgba(0,0,0,.4) !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4) !important;
+}
+/* Omnibox: hollow log */
+.omnibox, #urlInput, .url-input, #omnibox {
+  background: linear-gradient(180deg, #1a1208, #241a0e) !important;
+  border: 2px solid #5a3d24 !important;
+  border-radius: 999px !important;
+  color: #ffe9c4 !important;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,.5) !important;
+}
+.omnibox:focus-within, #urlInput:focus {
+  border-color: var(--pk-feather, #00e5ff) !important;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,.5), 0 0 16px rgba(0,229,255,.25) !important;
+}
+/* Toolbar buttons: acorns */
+.toolbar button, #toolbar button, .nav-btn {
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 35% 30%, #8a6238, #5a3d24) !important;
+  color: #ffe9c4 !important;
+  width: 36px !important; height: 36px !important;
+  transition: transform .2s !important;
+}
+.toolbar button:hover, #toolbar button:hover, .nav-btn:hover {
+  transform: scale(1.12) !important;
+  box-shadow: 0 0 12px rgba(0,229,255,.3) !important;
+}
+</style>
+
+
+<style> /* THE AVIARY (settings) */
+/* Settings page: aviary */
+.settings-page, [data-page="settings"], .settings-container {
+  background:
+    radial-gradient(ellipse 700px 350px at 50% 0%, rgba(0,229,255,.06), transparent 70%),
+    linear-gradient(180deg, #0a1a33 0%, #081226 100%) !important;
+}
+/* Settings nav: perches */
+.settings-nav-item, .settings-nav button, .nav-item {
+  border-radius: 14px !important;
+  transition: all .2s !important;
+}
+.settings-nav-item.active, .settings-nav-item:hover {
+  background: linear-gradient(160deg, rgba(0,229,255,.15), rgba(0,153,204,.08)) !important;
+  box-shadow: 0 2px 12px rgba(0,229,255,.12) !important;
+}
+/* Settings cards: nests */
+.settings-card {
+  background:
+    linear-gradient(160deg, rgba(30,50,90,.75), rgba(16,30,60,.85)) !important;
+  border: 1.5px solid rgba(0,229,255,.12) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.06) !important;
+  position: relative;
+  overflow: visible !important;
+}
+/* Nest twigs on card top edge */
+.settings-card::before {
+  content: "";
+  position: absolute; top: -2px; left: 24px; right: 24px; height: 4px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='4'%3E%3Cpath d='M0 2 Q15 0 30 2 T60 2' fill='none' stroke='%237a5230' stroke-width='1.6' opacity='0.8'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  pointer-events: none; opacity: .7;
+}
+.settings-card-head {
+  font-weight: 700 !important;
+  letter-spacing: .5px;
+}
+/* Toggles: eggs */
+.settings-switch input[type="checkbox"], .switch input {
+  appearance: none;
+  width: 52px !important; height: 30px !important;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40% !important;
+  background: #1a2a4a !important;
+  border: 2px solid rgba(0,229,255,.25) !important;
+  position: relative; cursor: pointer;
+  transition: all .25s !important;
+}
+.settings-switch input[type="checkbox"]:checked, .switch input:checked {
+  background: linear-gradient(160deg, #00e5ff, #0099cc) !important;
+  box-shadow: 0 0 14px rgba(0,229,255,.4) !important;
+}
+/* Section titles */
+.settings-section-title, .settings-title {
+  font-weight: 700 !important;
 }
 </style>
 
