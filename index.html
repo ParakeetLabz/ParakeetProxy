@@ -6166,7 +6166,7 @@ body[data-skin="sky"] .nt-search input::placeholder { color: #6a8aa8 !important;
         <main>
             <div class="view">
                 <div class="progress-wrap hidden" id="progressWrap">
-                    <div class="progress-bar" id="progress"><div class="pk-progress-bird" id="pkProgressBird">🐦</div></div>
+                    <div class="progress-bar" id="progress"><div class="pk-progress-bird" id="pkProgressBird"><svg viewBox="0 0 24 24" width="20" height="20" style="display:block"><path d="M20 7c-1.5 0-3 .8-3.8 2C14.5 9.5 12 11 9 11H6l-1-2-2 3 2 1v3h3v-2c3 0 6-1.5 8-4 .5 1 1.5 1.8 2.7 2.2L20 14l-.5-2.5c1-.8 1.5-2 1.5-3.5 0-.4-.3-.7-.7-.7z" fill="#00e5ff"/><circle cx="16.5" cy="8.5" r="1" fill="#0a1628"/></svg></div></div>
                 </div>
 
                 <div class="find-bar hidden" id="findBar">
@@ -8000,9 +8000,9 @@ settings-section" data-section="skins" style="display:none;">
                     </div>
                     <div id="overlayText">Hatching...</div>
                     <div class="pk-splash-birds">
-                        <span style="animation-delay:0s">&#x1F426;</span>
-                        <span style="animation-delay:0.7s">&#x1F426;</span>
-                        <span style="animation-delay:1.4s">&#x1F426;</span>
+                        <span style="animation-delay:0s"><svg viewBox="0 0 24 24" width="20" height="20" style="display:block"><path d="M20 7c-1.5 0-3 .8-3.8 2C14.5 9.5 12 11 9 11H6l-1-2-2 3 2 1v3h3v-2c3 0 6-1.5 8-4 .5 1 1.5 1.8 2.7 2.2L20 14l-.5-2.5c1-.8 1.5-2 1.5-3.5 0-.4-.3-.7-.7-.7z" fill="#00e5ff"/><circle cx="16.5" cy="8.5" r="1" fill="#0a1628"/></svg></span>
+                        <span style="animation-delay:0.7s"><svg viewBox="0 0 24 24" width="20" height="20" style="display:block"><path d="M20 7c-1.5 0-3 .8-3.8 2C14.5 9.5 12 11 9 11H6l-1-2-2 3 2 1v3h3v-2c3 0 6-1.5 8-4 .5 1 1.5 1.8 2.7 2.2L20 14l-.5-2.5c1-.8 1.5-2 1.5-3.5 0-.4-.3-.7-.7-.7z" fill="#00e5ff"/><circle cx="16.5" cy="8.5" r="1" fill="#0a1628"/></svg></span>
+                        <span style="animation-delay:1.4s"><svg viewBox="0 0 24 24" width="20" height="20" style="display:block"><path d="M20 7c-1.5 0-3 .8-3.8 2C14.5 9.5 12 11 9 11H6l-1-2-2 3 2 1v3h3v-2c3 0 6-1.5 8-4 .5 1 1.5 1.8 2.7 2.2L20 14l-.5-2.5c1-.8 1.5-2 1.5-3.5 0-.4-.3-.7-.7-.7z" fill="#00e5ff"/><circle cx="16.5" cy="8.5" r="1" fill="#0a1628"/></svg></span>
                     </div>
                 </div>
                 <div id="elemHighlightOverlay" style="
@@ -9179,7 +9179,7 @@ function setStatus(s){ G.status=s; renderMe();
   api('/users/@me/settings',{method:'PATCH',body:JSON.stringify({status:s})}).catch(()=>{});
 }
 /* settings */
-const THEMES=[{id:'default',name:'Default'},{id:'nebula',name:'Nebula'},{id:'sky',name:'Sky ☀️'}];
+const THEMES=[{id:'default',name:'Default'},{id:'nebula',name:'Nebula'},{id:'sky',name:'Sky'}];
 function applyTheme(id){ document.body.dataset.skin=id; localStorage.setItem('skin',id); }
 $('#settings-btn').onclick=()=>{
   const cur=localStorage.getItem('skin')||'default';
@@ -10260,7 +10260,7 @@ if(token){ $('#tok').value=token; start(); }
       // far flock
       var fl = document.createElement('div');
       fl.className = 'pk-flock-far';
-      fl.textContent = '\u1F426\u1F426\u1F426\u1F426\u1F426';
+      fl.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" style="display:inline-block;margin:0 9px"><path d="M2 12 Q7 8 12 12 Q17 8 22 12" fill="none" stroke="#7ff0ff" stroke-width="2" stroke-linecap="round"/></svg><svg viewBox="0 0 24 24" width="14" height="14" style="display:inline-block;margin:0 9px"><path d="M2 12 Q7 8 12 12 Q17 8 22 12" fill="none" stroke="#7ff0ff" stroke-width="2" stroke-linecap="round"/></svg><svg viewBox="0 0 24 24" width="14" height="14" style="display:inline-block;margin:0 9px"><path d="M2 12 Q7 8 12 12 Q17 8 22 12" fill="none" stroke="#7ff0ff" stroke-width="2" stroke-linecap="round"/></svg><svg viewBox="0 0 24 24" width="14" height="14" style="display:inline-block;margin:0 9px"><path d="M2 12 Q7 8 12 12 Q17 8 22 12" fill="none" stroke="#7ff0ff" stroke-width="2" stroke-linecap="round"/></svg><svg viewBox="0 0 24 24" width="14" height="14" style="display:inline-block;margin:0 9px"><path d="M2 12 Q7 8 12 12 Q17 8 22 12" fill="none" stroke="#7ff0ff" stroke-width="2" stroke-linecap="round"/></svg>';;
       p.appendChild(fl);
     });
   }
@@ -10522,6 +10522,32 @@ body::after {
   font-weight: 700 !important;
 }
 </style>
+
+<script> /* FA icon fallback */
+(function() {
+  function faLoaded() {
+    try {
+      var t = document.createElement('i');
+      t.className = 'fas fa-home';
+      t.style.cssText = 'position:absolute;visibility:hidden;';
+      document.body.appendChild(t);
+      var fam = getComputedStyle(t).fontFamily || '';
+      document.body.removeChild(t);
+      return fam.indexOf('Font Awesome') !== -1;
+    } catch(e) { return true; }
+  }
+  function ensureFA() {
+    if (faLoaded()) return;
+    var l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css';
+    document.head.appendChild(l);
+  }
+  if (document.readyState === 'complete') setTimeout(ensureFA, 500);
+  else window.addEventListener('load', function() { setTimeout(ensureFA, 500); });
+  setTimeout(ensureFA, 4000);
+})();
+</script>
 
 </body>
 </html>
