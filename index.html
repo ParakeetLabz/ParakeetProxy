@@ -10572,6 +10572,48 @@ body::after {
 })();
 </script>
 
+<script> /* Parakeet SVG icon hard-replace */
+(function() {
+  var S = function(paths) {
+    return '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block">' + paths + '</svg>';
+  };
+  var ICONS = {
+    'back': S('<path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>'),
+    'fwd': S('<path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>'),
+    'reload': S('<path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10"/><path d="M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/>'),
+    'stop': S('<rect x="6" y="6" width="12" height="12" fill="currentColor" stroke="none"/>'),
+    'home': S('<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>'),
+    'go': S('<path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>'),
+    'settingsBtn': S('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'),
+    'historyBtn': S('<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>'),
+    'bookmarkBtn': S('<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>'),
+    'findOmniBtn': S('<circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>'),
+    'fullscreenBtn': S('<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>'),
+    'newTab': S('<path d="M12 5v14"/><path d="M5 12h14"/>'),
+    'devToggle': S('<path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/>'),
+    'codeBtn': S('<path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/>'),
+    'aiBtn': S('<path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/><path d="M17.8 11.8L19 12l-1.2.2"/><path d="M15 9h0"/><path d="M17.8 6.2L19 6l-1.2-.2"/><path d="M12.2 6.2L11 6l1.2-.2"/><path d="M12.2 11.8L11 12l1.2.2"/>')
+  };
+  function swap() {
+    try {
+      Object.keys(ICONS).forEach(function(id) {
+        var btn = document.getElementById(id);
+        if (!btn) return;
+        var icon = btn.querySelector('i[class*="fa-"], svg');
+        // Only swap if current icon is FA (or missing) — don't double-swap
+        if (btn.querySelector('i[class*="fa-"]')) {
+          btn.querySelector('i[class*="fa-"]').outerHTML = ICONS[id];
+        }
+      });
+    } catch(e) {}
+  }
+  // Run on load and on DOM changes (toolbar renders late)
+  if (document.readyState === 'complete') setTimeout(swap, 300);
+  else window.addEventListener('load', function() { setTimeout(swap, 300); });
+  new MutationObserver(swap).observe(document.documentElement, { childList: true, subtree: true });
+  setTimeout(swap, 2000);
+})();
+</script>
 </body>
 </html>
 
