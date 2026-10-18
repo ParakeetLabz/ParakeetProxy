@@ -10527,6 +10527,11 @@ body::after {
 (function() {
   function faLoaded() {
     try {
+      // document.fonts.check actually verifies the font FILE loaded, not just the CSS
+      if (document.fonts && document.fonts.check) {
+        return document.fonts.check('16px "Font Awesome 6 Free"') ||
+               document.fonts.check('16px "FontAwesome"');
+      }
       var t = document.createElement('i');
       t.className = 'fas fa-home';
       t.style.cssText = 'position:absolute;visibility:hidden;';
@@ -10542,6 +10547,24 @@ body::after {
     l.rel = 'stylesheet';
     l.href = 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css';
     document.head.appendChild(l);
+    // Final fallback: if even jsdelivr fails, swap critical icons to text
+    setTimeout(function() {
+      if (faLoaded()) return;
+      var swaps = { 'fa-home': '\u2302', 'fa-gear': '\u2699', 'fa-plus': '+', 'fa-xmark': '\u00d7',
+        'fa-arrow-left': '\u2190', 'fa-arrow-right': '\u2192', 'fa-rotate-right': '\u21bb',
+        'fa-heart': '\u2764', 'fa-terminal': '>_', 'fa-dove': '~' };
+      document.querySelectorAll('i[class*="fa-"]').forEach(function(el) {
+        for (var k in swaps) {
+          if (el.className.indexOf(k) !== -1) {
+            var s = document.createElement('span');
+            s.textContent = swaps[k];
+            s.className = el.className;
+            el.replaceWith(s);
+            break;
+          }
+        }
+      });
+    }, 3000);
   }
   if (document.readyState === 'complete') setTimeout(ensureFA, 500);
   else window.addEventListener('load', function() { setTimeout(ensureFA, 500); });
