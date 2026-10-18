@@ -9493,15 +9493,24 @@ if(token){ $('#tok').value=token; start(); }
     if (sel && !sel.dataset.wired) {
       sel.dataset.wired = '1';
       try { sel.value = localStorage.getItem(CLOAK_KEY) || 'none'; } catch(e) {}
-      sel.addEventListener('change', () => {
-        toggleCustomUI(sel.value === 'custom');
-        if (sel.value !== 'custom') applyCloak(sel.value);
-      });
       toggleCustomUI(sel.value === 'custom');
       wireCustomUI();
       wireCloakExtras();
     }
   }
+  // Delegated change handler — works even if the select is re-rendered
+  document.addEventListener('change', (e) => {
+    try {
+      if (e.target && e.target.id === 'parakeet-cloak-select') {
+        const v = e.target.value;
+        toggleCustomUI(v === 'custom');
+        if (v !== 'custom') applyCloak(v);
+        else {
+          // Custom selected: apply when user clicks Apply (handled by wireCustomUI)
+        }
+      }
+    } catch(err) {}
+  });
   // Also try wiring extras on DOM changes (settings may render later)
   new MutationObserver(wireCloakExtras).observe(document.body, { childList: true, subtree: true });
   maybeAutoCloak();
@@ -10095,17 +10104,19 @@ if(token){ $('#tok').value=token; start(); }
   --pk-cloud: 0 10px 40px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 229, 255, 0.08);
   --pk-egg: 999px;
 }
-/* Egg-shaped search: taller, softer, nest-like */
+/* Egg-shaped search: true egg silhouette */
 .nt-search {
-  border-radius: var(--pk-egg) !important;
-  padding: 6px !important;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38% !important;
+  padding: 14px 8px 10px 8px !important;
   box-shadow: var(--pk-cloud) !important;
   border: 2px solid rgba(0, 229, 255, 0.18) !important;
+  min-height: 64px !important;
 }
 .nt-search input {
-  border-radius: var(--pk-egg) !important;
-  padding: 12px 20px !important;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38% !important;
+  padding: 12px 24px !important;
   font-size: 16px !important;
+  background: transparent !important;
 }
 /* Cloud-soft cards */
 .settings-card {
@@ -10203,7 +10214,7 @@ if(token){ $('#tok').value=token; start(); }
 
 
 <style> /* Parakeet Sky Scene */
-.nt-page, .newtab-page, [data-page="newtab"] {
+.newtab, .nt-page, .newtab-page, [data-page="newtab"] {
   background:
     radial-gradient(ellipse 600px 300px at 85% 8%, rgba(255, 236, 180, 0.25), transparent 70%),
     radial-gradient(ellipse 800px 400px at 15% 90%, rgba(0, 153, 204, 0.12), transparent 70%),
@@ -10212,7 +10223,7 @@ if(token){ $('#tok').value=token; start(); }
   overflow: hidden;
 }
 /* Sun */
-.nt-page::before {
+.newtab::before, .nt-page::before {
   content: "";
   position: absolute; top: 6%; right: 10%;
   width: 90px; height: 90px; border-radius: 50%;
@@ -10242,7 +10253,7 @@ if(token){ $('#tok').value=token; start(); }
 <script> /* Parakeet sky clouds */
 (function() {
   function addSky() {
-    var pages = document.querySelectorAll('.nt-page, .newtab-page');
+    var pages = document.querySelectorAll('.newtab, .nt-page, .newtab-page');
     pages.forEach(function(p) {
       if (p.dataset.sky) return;
       p.dataset.sky = '1';
