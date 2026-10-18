@@ -6240,7 +6240,7 @@ body[data-skin="sky"] .nt-search input::placeholder { color: #6a8aa8 !important;
                                 position: relative;
                                 top: -16px;
                                 margin-left: -3px;
-                            ">v3</span>
+                            ">v4</span>
                         </div>
                         <div class="nt-search">
                             <div class="nt-search-engine" id="ntEngine">
@@ -9686,7 +9686,7 @@ if(token){ $('#tok').value=token; start(); }
     var inp = el('parakeet-term-in');
     inp.addEventListener('keydown', onKey);
 
-    print('<span class="tp">Parakeet Terminal</span> <span class="tdim">v3 — type</span> help <span class="tdim">to begin</span>');
+    print('<span class="tp">Parakeet Terminal</span> <span class="tdim">v4 — type</span> help <span class="tdim">to begin</span>');
   }
 
   function toggle() {
@@ -9745,6 +9745,10 @@ if(token){ $('#tok').value=token; start(); }
         '  <span class="tp">fetch &lt;url&gt;</span>     GET a URL through the proxy',
         '  <span class="tp">cloak &lt;preset&gt;</span>   disguise tab (no args = status)',
         '  <span class="tp">panic</span>            instant panic cloak',
+        '  <span class="tp">flock save &lt;n&gt;</span> save tabs as a flock',
+        '  <span class="tp">flock load &lt;n&gt;</span> restore a saved flock',
+        '  <span class="tp">flock list</span>       list saved flocks',
+        '  <span class="tp">find &lt;text&gt;</span>      search open tabs',
         '  <span class="tp">js &lt;code&gt;</span>        evaluate JavaScript',
         '  <span class="tp">echo &lt;text&gt;</span>      print text',
         '  <span class="tp">date</span>             current date/time',
@@ -9828,6 +9832,68 @@ if(token){ $('#tok').value=token; start(); }
           print(active + '<span class="tp">[' + (i+1) + ']</span> ' + esc(t.title || 'Untitled') + ' <span class="tdim">' + esc((t.url || '').slice(0, 60)) + '</span>');
         });
       } catch(err) { print('<span class="terr">' + esc(err.message) + '</span>'); }
+    },
+    flock: function(a) {
+      var sub = (a[0] || '').toLowerCase();
+      var name = a.slice(1).join(' ') || a[0] || '';
+      var FKEY = 'parakeet:flocks';
+      function getFlocks() {
+        try { return JSON.parse(localStorage.getItem(FKEY) || '{}'); } catch(e) { return {}; }
+      }
+      function setFlocks(f) {
+        try { localStorage.setItem(FKEY, JSON.stringify(f)); } catch(e) {}
+      }
+      if (sub === 'save') {
+        if (!name || name === 'save') { print('<span class="terr">usage: flock save &lt;name&gt;</span>'); return; }
+        if (typeof tabs === 'undefined' || !tabs.length) { print('<span class="terr">no tabs to save</span>'); return; }
+        var f = getFlocks();
+        f[name] = tabs.map(function(t) { return { url: t.url, title: t.title }; });
+        setFlocks(f);
+        print('<span class="tok">flock saved:</span> ' + esc(name) + ' <span class="tdim">(' + tabs.length + ' tabs)</span>');
+      } else if (sub === 'load') {
+        if (!name || name === 'load') { print('<span class="terr">usage: flock load &lt;name&gt;</span>'); return; }
+        var fl = getFlocks();
+        if (!fl[name]) { print('<span class="terr">no flock named "' + esc(name) + '"</span>'); return; }
+        var urls = fl[name];
+        print('<span class="tok">restoring flock:</span> ' + esc(name) + ' <span class="tdim">(' + urls.length + ' tabs)</span>');
+        urls.forEach(function(u, i) {
+          setTimeout(function() {
+            try {
+              if (typeof createTab === 'function') { createTab(u.url); }
+              else if (typeof window.go === 'function' && i === 0) { window.go(u.url); }
+            } catch(e) {}
+          }, i * 400);
+        });
+      } else if (sub === 'list' || sub === '') {
+        var all = getFlocks();
+        var keys = Object.keys(all);
+        if (!keys.length) { print('<span class="tdim">no saved flocks — flock save &lt;name&gt;</span>'); return; }
+        keys.forEach(function(k) {
+          print('<span class="tp">' + esc(k) + '</span> <span class="tdim">(' + all[k].length + ' tabs)</span>');
+        });
+      } else if (sub === 'delete' || sub === 'rm') {
+        var fl2 = getFlocks();
+        if (fl2[name]) { delete fl2[name]; setFlocks(fl2); print('<span class="tok">deleted:</span> ' + esc(name)); }
+        else print('<span class="terr">no flock named "' + esc(name) + '"</span>');
+      } else {
+        print('<span class="tdim">usage: flock save|load|list|delete &lt;name&gt;</span>');
+      }
+    },
+    find: function(a) {
+      var q = a.join(' ').toLowerCase();
+      if (!q) { print('<span class="terr">usage: find &lt;text&gt;</span>'); return; }
+      if (typeof tabs === 'undefined' || !tabs.length) { print('<span class="terr">no tabs open</span>'); return; }
+      var hits = [];
+      tabs.forEach(function(t, i) {
+        var hay = ((t.title || '') + ' ' + (t.url || '')).toLowerCase();
+        if (hay.indexOf(q) !== -1) hits.push({ i: i, t: t });
+      });
+      if (!hits.length) { print('<span class="tdim">no tabs match "' + esc(q) + '"</span>'); return; }
+      hits.forEach(function(h) {
+        var active = (typeof activeTabId !== 'undefined' && h.t.id === activeTabId) ? '<span class="tok">●</span> ' : '<span class="tdim">○</span> ';
+        print(active + '<span class="tp">[' + (h.i+1) + ']</span> ' + esc(h.t.title || 'Untitled') + ' <span class="tdim">' + esc(h.t.url || '') + '</span>');
+      });
+      print('<span class="tdim">tip: tab &lt;n&gt; to jump</span>');
     },
     tab: function(a) {
       var n = parseInt(a[0], 10);
