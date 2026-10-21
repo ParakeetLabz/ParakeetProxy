@@ -605,7 +605,7 @@
           if (!("serviceWorker" in navigator)) throw new Error("Service workers are not supported in this browser.");
           if (typeof window.$scramjetLoadController !== "function") throw new Error("Scramjet could not be loaded.");
 
-          var registration = await navigator.serviceWorker.register("/lanstupid-sw.js");
+          var registration = await navigator.serviceWorker.register("/lanstupid-sw2.js");
           await navigator.serviceWorker.ready;
           // The page MUST be controlled by the SW, or /assets/sj/ navigations
           // bypass it entirely and hit Vercel's 404. Wait for the claim to
