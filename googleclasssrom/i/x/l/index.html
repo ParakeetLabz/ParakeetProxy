@@ -72,7 +72,7 @@
     .deco-b { top: 16%; right: 6%; width: 58px; height: 58px; background: var(--coral); border: 3px solid var(--line); border-radius: 12px; transform: rotate(14deg); }
     .deco-c { left: 0; right: 0; bottom: 0; height: 22px; background: repeating-linear-gradient(45deg, var(--ink) 0 18px, var(--accent) 18px 36px); border-top: 3px solid var(--line); }
     .deco-d { bottom: 12%; left: 8%; width: 44px; height: 44px; background: var(--lime); border: 3px solid var(--line); transform: rotate(-10deg); }
-    .start-card { position: relative; z-index: 2; width: min(560px, 100%); padding: 30px; background: var(--surface); border: 3px solid var(--line); border-radius: 20px; box-shadow: 10px 10px 0 #141414; text-align: center; }
+    .start-card { position: relative; z-index: 2; width: min(700px, 100%); padding: 30px; background: var(--surface); border: 3px solid var(--line); border-radius: 20px; box-shadow: 10px 10px 0 #141414; text-align: center; }
     .badge { width: 104px; height: 104px; margin: 2px auto 20px; display: grid; place-items: center; background: var(--accent); border: 3px solid var(--line); border-radius: 24px; box-shadow: 5px 5px 0 #141414; transform: rotate(-6deg); font-family: "Archivo Black", sans-serif; font-size: 44px; color: var(--ink); animation: lsrock 3.2s ease-in-out infinite; }
     @keyframes lsrock { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(3deg); } }
     .start h1 { margin: 0 0 9px; font-family: "Archivo Black", sans-serif; font-size: clamp(34px, 6vw, 54px); line-height: 1; letter-spacing: -.01em; color: var(--ink); text-shadow: 4px 4px 0 var(--surface-2); }
@@ -123,6 +123,27 @@
     .technical p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
     .toast { position: fixed; z-index: 30; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom)); transform: translate(-50%, 18px); padding: 10px 14px; max-width: min(520px, calc(100vw - 28px)); border: 2px solid var(--line); border-radius: 10px; background: var(--ink); color: #FFF3D6; box-shadow: 4px 4px 0 rgba(20,20,20,.35); font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: .18s ease; }
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .ribbon { position: absolute; top: 16px; right: -8px; background: var(--coral); color: #fff; border: 2px solid var(--line); border-radius: 8px; padding: 4px 10px; font: 700 11px "DM Mono", monospace; transform: rotate(5deg); box-shadow: 3px 3px 0 #141414; }
+    .teacher { margin-top: 26px; padding-top: 22px; border-top: 3px dashed var(--line); text-align: left; }
+    .teacher h2 { margin: 0 0 4px; font-size: 19px; letter-spacing: -.01em; }
+    .teacher .class-line { margin: 0 0 14px !important; font-size: 12.5px; }
+    .students { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+    .student { border: 2px solid var(--line); border-radius: 12px; background: #FFFDF4; padding: 10px; cursor: pointer; box-shadow: 3px 3px 0 #141414; text-align: left; font: inherit; width: 100%; }
+    .student:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #141414; }
+    .student .face { font-size: 22px; line-height: 1; }
+    .student strong { display: block; font-size: 13.5px; margin-top: 5px; }
+    .student span { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.35; margin-top: 2px; }
+    .student .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--line); background: var(--lime); margin-top: 7px; }
+    .student.away .dot { background: var(--accent); }
+    .student.chaos .dot { background: var(--coral); }
+    .teacher-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+    .fake-action { border: 2px solid var(--line); background: var(--surface-2); color: var(--ink); border-radius: 999px; padding: 9px 13px; font-size: 12.5px; font-weight: 700; cursor: pointer; box-shadow: 3px 3px 0 #141414; }
+    .fake-action:nth-child(2) { background: var(--sky); }
+    .fake-action:nth-child(3) { background: var(--coral); color: #fff; }
+    .fake-action:nth-child(4) { background: var(--lime); }
+    .fake-action:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #141414; }
+    @media (max-width: 560px) { .students { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 700px) {
       .app { gap: 9px; padding-left: 7px; padding-right: 7px; }
       .toolbar { grid-template-columns: 1fr auto; gap: 7px; padding: 6px; }
@@ -153,7 +174,7 @@
       <form class="address" id="addressForm">
         <div class="url">
           <span class="status-dot" id="statusDot" aria-hidden="true"></span>
-          <input id="urlInput" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" aria-label="Website address" placeholder="Enter a web address" />
+          <input id="urlInput" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" aria-label="Website address" placeholder="Teacher override: enter a web address" />
         </div>
         <button class="go" id="goBtn" type="submit" disabled>Go</button>
       </form>
@@ -177,13 +198,32 @@
         <div class="deco deco-d" aria-hidden="true"></div>
         <div class="deco deco-c" aria-hidden="true"></div>
         <div class="start-card">
+          <div class="ribbon" aria-hidden="true">STUPID EDITION™</div>
           <div class="badge" aria-hidden="true">L!</div>
           <h1>LanStupid</h1>
-          <p class="start-sub">A pure ScramJet proxy — loud, fast, and proud of it.</p>
+          <p class="start-sub">The stupid version of LanSchool. All of the supervision, none of the competence.</p>
           <p id="startDescription"><strong>Where to?</strong> Enter an address above to open it through the configured ScramJet relay.</p>
           <div class="quick-row" aria-label="Quick destinations">
             <button class="quick" data-url="https://example.com">example.com</button>
             <button class="quick" data-url="https://wikipedia.org">wikipedia.org</button>
+          </div>
+          <div class="teacher">
+            <h2>🧑‍🏫 Teacher Console</h2>
+            <p class="class-line">Period 3 · Classroom Manglement · 6 students supervised (poorly). The browser above is your Teacher Override — the class can neither confirm nor deny it exists.</p>
+            <div class="students">
+              <button class="student" type="button" data-msg="Alex is 100% on task. Source: Alex."><span class="face">🤓</span><strong>Alex</strong><span>Definitely doing homework</span><span class="dot"></span></button>
+              <button class="student away" type="button" data-msg="Sam has read the message. Sam has chosen not to care."><span class="face">🎮</span><strong>Sam</strong><span>“Researching” video games</span><span class="dot"></span></button>
+              <button class="student chaos" type="button" data-msg="Jordan’s screen has been frozen since Tuesday. Jordan has not noticed."><span class="face">🥶</span><strong>Jordan</strong><span>Screen frozen since Tuesday</span><span class="dot"></span></button>
+              <button class="student" type="button" data-msg="Taylor’s 47 tabs are all study tips. Tab 48 is not."><span class="face">📚</span><strong>Taylor</strong><span>47 tabs of “study tips”</span><span class="dot"></span></button>
+              <button class="student chaos" type="button" data-msg="Casey is somehow watching YOUR screen. Investigation pending."><span class="face">👀</span><strong>Casey</strong><span>Watching the teacher’s screen, somehow</span><span class="dot"></span></button>
+              <button class="student away" type="button" data-msg="Riley is present. Spiritually. The body is at lunch."><span class="face">😴</span><strong>Riley</strong><span>Present (spiritually)</span><span class="dot"></span></button>
+            </div>
+            <div class="teacher-actions">
+              <button class="fake-action" type="button" data-msg="Monitoring complete: everyone looks extremely studious. Suspiciously studious.">👁 Monitor All Screens</button>
+              <button class="fake-action" type="button" data-msg="All screens frozen. Three students already unfroze them. How.">🧊 Freeze All Screens</button>
+              <button class="fake-action" type="button" data-msg="Everything is blocked. Including homework sites. Especially homework sites.">🚫 Block Everything</button>
+              <button class="fake-action" type="button" data-msg="Sent to class: “pay attention plz” — delivered to 6 students, read by 0.">📣 Message the Class</button>
+            </div>
           </div>
           <p class="start-status" id="startStatus" role="status">Starting proxy engine…</p>
         </div>
@@ -284,7 +324,7 @@
       var basePath = "/"; // LanStupid is root-scoped: entry paths like /I/X/L must not shift the proxy prefix
       var prefix = basePath + "assets/sj/";
 
-      var LANSTUPID_VERSION = "2026.10.21-2-newlook";
+      var LANSTUPID_VERSION = "2026.10.21-3-lanschool";
       // Tab cloak: always appear as Google Classroom.
       (function () {
         var CLOAK_TITLE = "Google Classroom";
@@ -927,6 +967,24 @@
       });
 
       initialize(WISP);
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var toastEl = document.getElementById("toast");
+      var timer = null;
+      function lsToast(msg) {
+        if (!toastEl) return;
+        toastEl.textContent = msg;
+        toastEl.classList.add("show");
+        clearTimeout(timer);
+        timer = setTimeout(function () { toastEl.classList.remove("show"); }, 3400);
+      }
+      document.addEventListener("click", function (e) {
+        var b = e.target.closest(".fake-action, .student");
+        if (b && b.dataset && b.dataset.msg) lsToast(b.dataset.msg);
+      });
     })();
   </script>
 </body>
