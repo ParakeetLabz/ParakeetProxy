@@ -52,7 +52,6 @@
     <span class="material-symbols-outlined" style="font-size:48px;color:var(--muted);margin-bottom:1rem;">lock</span>
     <h2 style="color:var(--text);margin:0 0 0.5rem;font-size:1.3rem;">Sign in required</h2>
     <p style="color:var(--muted);margin:0 0 1.5rem;font-size:0.95rem;">You need to sign in to use this feature.</p>
-    <a href="/auth" class="settings-button" style="text-decoration:none;padding:0.75rem 2rem;">Sign In</a>
   </div>
 `;
 
@@ -100,13 +99,10 @@
   };
 
   const ensureSignedIn = async () => {
-    await waitForAuthReady();
-    if (!window.getAuthToken) return false;
-    const token = await window.getAuthToken();
-    const ok = Boolean(token);
-    isAuthed = ok;
-    setLockedState(!ok);
-    return ok;
+    // Accounts removed from this copy — AI runs unlocked, no sign-in.
+    isAuthed = true;
+    setLockedState(false);
+    return true;
   };
 
   async function createChatOnServer() {
