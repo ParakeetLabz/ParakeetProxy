@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#05080f" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@2.0.0-alpha/dist/scramjet.all.js" as="script" />
+  <link rel="icon" data-cloak-icon href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%2325a667%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23ffffff%22%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2222%22%20r%3D%227%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M20%2046%20c0-8%205-13%2012-13%20s12%205%2012%2013%20v3%20H20%20v-3%20z%22%2F%3E%0A%20%20%20%20%3Crect%20x%3D%2214%22%20y%3D%2212%22%20width%3D%2236%22%20height%3D%224%22%20rx%3D%222%22%20opacity%3D%220.9%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E" />
+  <title>Google Classroom</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap');
+    :root {
+      color-scheme: light;
+      --bg: #FFF3D6;
+      --surface: #FFFFFF;
+      --surface-2: #FFE45C;
+      --ink: #141414;
+      --muted: #5C5546;
+      --line: #141414;
+      --accent: #FFD02F;
+      --accent-ink: #141414;
+      --lime: #8CE84A;
+      --coral: #FF6B57;
+      --sky: #6EC1FF;
+      --danger: #E23A2E;
+      --shadow: 6px 6px 0 #141414;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    body {
+      margin: 0; overflow: hidden; color: var(--ink);
+      font-family: "Space Grotesk", ui-sans-serif, sans-serif;
+      background:
+        radial-gradient(2.2px 2.2px at 8px 8px, rgba(20,20,20,.14) 50%, transparent 51%) 0 0 / 26px 26px,
+        var(--bg);
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    .app { height: 100dvh; min-height: 320px; display: grid; grid-template-rows: auto minmax(0,1fr); padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); gap: 12px; }
+    .toolbar { position: relative; z-index: 5; display: grid; grid-template-columns: auto minmax(150px,1fr) auto; gap: 9px; align-items: center; padding: 8px; background: var(--surface); border: 3px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+    .nav, .tools { display: flex; gap: 4px; align-items: center; }
+    .brand { display: inline-grid; place-items: center; width: 34px; height: 38px; flex: 0 0 auto; }
+    .icon-btn { width: 38px; height: 38px; display: inline-grid; place-items: center; border: 2px solid transparent; background: transparent; border-radius: 10px; cursor: pointer; }
+    .icon-btn:hover { background: var(--surface-2); border-color: var(--line); }
+    .icon-btn:focus-visible, .url:focus-within, .go:focus-visible, .settings-close:focus-visible, .apply:focus-visible, .secondary-action:focus-visible, .quick:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+    .icon-btn svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+    .address { min-width: 0; display: flex; gap: 7px; align-items: center; }
+    .url { flex: 1; min-width: 0; height: 42px; display: flex; align-items: center; gap: 9px; padding: 0 11px; border: 2px solid var(--line); border-radius: 11px; background: #FFFDF4; box-shadow: inset 2px 2px 0 rgba(20,20,20,.08); }
+    .status-dot { width: 10px; height: 10px; flex: 0 0 auto; border-radius: 50%; background: #E8A13A; border: 2px solid var(--line); }
+    .status-dot.ready { background: var(--lime); }
+    .status-dot.error { background: var(--danger); }
+    #urlInput { width: 100%; min-width: 0; border: 0; outline: 0; padding: 0; color: var(--ink); background: transparent; font-family: "DM Mono", ui-monospace, monospace; font-size: 13px; }
+    #urlInput::placeholder { color: var(--muted); opacity: 1; }
+    .go { height: 42px; padding: 0 18px; border: 2px solid var(--line); border-radius: 11px; background: var(--accent); color: var(--accent-ink); font-weight: 700; cursor: pointer; box-shadow: 3px 3px 0 #141414; }
+    .go:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #141414; }
+    .go:disabled { opacity: .55; cursor: wait; }
+    .viewport { min-height: 0; position: relative; overflow: hidden; border: 3px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: var(--shadow); }
+    #browserFrame { width: 100%; height: 100%; border: 0; background: var(--surface); }
+    #loadingVeil { position: absolute; inset: 0; display: none; place-items: center; background: var(--bg); z-index: 5; pointer-events: none; }
+    #loadingVeil.show { display: grid; }
+    #loadingVeil .lanstupid-spin { width: 52px; height: 52px; border-radius: 12px; background: var(--accent); border: 4px solid var(--line); animation: lsflip 1s cubic-bezier(.6,.05,.3,.95) infinite; }
+    #loadingVeil p { color: var(--ink); font-weight: 600; font-size: 14px; margin-top: 18px; text-align: center; }
+    @keyframes lsflip { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .start { position: absolute; inset: 0; z-index: 2; overflow-y: auto; overflow-x: hidden; display: grid; place-items: center; padding: 32px 20px; background: radial-gradient(2.2px 2.2px at 8px 8px, rgba(20,20,20,.14) 50%, transparent 51%) 0 0 / 26px 26px, linear-gradient(180deg, #FFF3D6 0%, #FFE9B8 100%); }
+    .start[hidden] { display: none; }
+    .deco { position: absolute; pointer-events: none; z-index: 0; }
+    .deco-a { top: 34px; left: 5%; width: 74px; height: 74px; border-radius: 50%; background: var(--sky); border: 3px solid var(--line); }
+    .deco-b { top: 16%; right: 6%; width: 58px; height: 58px; background: var(--coral); border: 3px solid var(--line); border-radius: 12px; transform: rotate(14deg); }
+    .deco-c { left: 0; right: 0; bottom: 0; height: 22px; background: repeating-linear-gradient(45deg, var(--ink) 0 18px, var(--accent) 18px 36px); border-top: 3px solid var(--line); }
+    .deco-d { bottom: 12%; left: 8%; width: 44px; height: 44px; background: var(--lime); border: 3px solid var(--line); transform: rotate(-10deg); }
+    .start-card { position: relative; z-index: 2; width: min(560px, 100%); padding: 30px; background: var(--surface); border: 3px solid var(--line); border-radius: 20px; box-shadow: 10px 10px 0 #141414; text-align: center; }
+    .badge { width: 104px; height: 104px; margin: 2px auto 20px; display: grid; place-items: center; background: var(--accent); border: 3px solid var(--line); border-radius: 24px; box-shadow: 5px 5px 0 #141414; transform: rotate(-6deg); font-family: "Archivo Black", sans-serif; font-size: 44px; color: var(--ink); animation: lsrock 3.2s ease-in-out infinite; }
+    @keyframes lsrock { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(3deg); } }
+    .start h1 { margin: 0 0 9px; font-family: "Archivo Black", sans-serif; font-size: clamp(34px, 6vw, 54px); line-height: 1; letter-spacing: -.01em; color: var(--ink); text-shadow: 4px 4px 0 var(--surface-2); }
+    .start p { margin: 0 auto; max-width: 46ch; color: var(--muted); line-height: 1.55; }
+    .quick-row { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 24px; justify-content: center; }
+    .quick { border: 2px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 9px 14px; font-family: "DM Mono", ui-monospace, monospace; font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 3px 3px 0 #141414; }
+    .quick:hover { background: var(--lime); }
+    .quick:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #141414; }
+    .start-status { margin-top: 20px !important; font-family: "DM Mono", ui-monospace, monospace; font-size: 12px; font-weight: 700; }
+    .start-status.error { color: var(--danger); }
+    .start-sub { margin-top: -4px; font-size: 15px; font-weight: 700; color: var(--ink) !important; }
+    .settings { position: fixed; inset: 0; z-index: 20; display: grid; grid-template-columns: 1fr min(420px, 92vw); visibility: hidden; pointer-events: none; }
+    .settings.open { visibility: visible; pointer-events: auto; }
+    .backdrop { background: rgba(20,20,20,.45); opacity: 0; transition: opacity .2s ease; }
+    .settings.open .backdrop { opacity: 1; }
+    .panel { height: 100%; overflow-y: auto; padding: max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom)); background: var(--surface); border-left: 3px solid var(--line); transform: translateX(100%); transition: transform .22s ease; }
+    .settings.open .panel { transform: translateX(0); }
+    .panel-head { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 30px; }
+    .panel h2 { margin: 0; font-size: 23px; letter-spacing: -.02em; font-weight: 700; }
+    .settings-close { border: 2px solid var(--line); background: var(--surface-2); border-radius: 9px; width: 36px; height: 36px; cursor: pointer; font-size: 20px; font-weight: 700; }
+    .field label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 700; }
+    .field input { width: 100%; padding: 12px; border: 2px solid var(--line); border-radius: 10px; color: var(--ink); background: #FFFDF4; outline: 0; font-family: "DM Mono", ui-monospace, monospace; font-size: 12px; }
+    .field small { display: block; color: var(--muted); line-height: 1.45; margin-top: 8px; }
+    .relay-section { margin-bottom: 22px; }
+    .relay-section h3 { margin: 0 0 6px; font-size: 14px; }
+    .relay-note { margin: 0 0 12px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .relay-options { display: grid; gap: 8px; }
+    .relay-option { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 10px; align-items: center; padding: 11px 12px; border: 2px solid var(--line); border-radius: 11px; background: #FFFDF4; cursor: pointer; }
+    .relay-option:has(input:checked) { background: var(--surface-2); box-shadow: 3px 3px 0 #141414; }
+    .relay-option.fastest::after { content: "Fastest"; color: var(--ink); background: var(--lime); border: 2px solid var(--line); border-radius: 999px; padding: 1px 7px; font-size: 11px; font-weight: 700; }
+    .relay-option input { accent-color: var(--ink); }
+    .relay-name { min-width: 0; }
+    .relay-name strong { display: block; font-size: 13px; }
+    .relay-name span { display: block; overflow: hidden; text-overflow: ellipsis; color: var(--muted); font: 11px "DM Mono", ui-monospace, monospace; white-space: nowrap; }
+    .relay-speed { color: var(--muted); font: 11px "DM Mono", ui-monospace, monospace; white-space: nowrap; }
+    .speed-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .secondary-action, .apply { border-radius: 10px; padding: 11px 12px; font-weight: 700; cursor: pointer; }
+    .secondary-action { border: 2px solid var(--line); background: var(--surface); color: var(--ink); box-shadow: 3px 3px 0 #141414; }
+    .secondary-action:disabled { opacity: .5; cursor: not-allowed; }
+    .apply { margin-top: 15px; width: 100%; border: 2px solid var(--line); background: var(--accent); color: var(--accent-ink); box-shadow: 3px 3px 0 #141414; }
+    .fast-mode { width: 100%; display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 14px; align-items: center; margin: 22px 0 0; padding: 13px 14px; border: 2px solid var(--line); border-radius: 11px; background: #FFFDF4; color: var(--ink); text-align: left; cursor: pointer; }
+    .fast-mode strong { display: block; font-size: 13px; }
+    .fast-mode small { display: block; margin-top: 3px; color: var(--muted); line-height: 1.4; }
+    .fast-mode-state { color: var(--ink); background: var(--lime); border: 2px solid var(--line); border-radius: 999px; padding: 2px 8px; font: 700 11px "DM Mono", ui-monospace, monospace; }
+    .fast-mode[aria-pressed="false"] .fast-mode-state { background: var(--surface); color: var(--muted); }
+    .technical { margin-top: 30px; padding-top: 22px; border-top: 2px dashed var(--line); }
+    .technical h3 { margin: 0 0 8px; font-size: 14px; }
+    .technical p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .toast { position: fixed; z-index: 30; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom)); transform: translate(-50%, 18px); padding: 10px 14px; max-width: min(520px, calc(100vw - 28px)); border: 2px solid var(--line); border-radius: 10px; background: var(--ink); color: #FFF3D6; box-shadow: 4px 4px 0 rgba(20,20,20,.35); font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: .18s ease; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 700px) {
+      .app { gap: 9px; padding-left: 7px; padding-right: 7px; }
+      .toolbar { grid-template-columns: 1fr auto; gap: 7px; padding: 6px; }
+      .address { grid-column: 1 / -1; grid-row: 2; }
+      .nav { grid-column: 1; grid-row: 1; }
+      .tools { grid-column: 2; grid-row: 1; }
+      .nav .icon-btn, .tools .icon-btn { width: 34px; height: 34px; }
+      .go { padding: 0 14px; }
+      .viewport { border-radius: 12px; }
+      .start { padding: 18px 12px; }
+      .start-card { padding: 24px 20px; }
+      .settings { grid-template-columns: 1fr min(360px, 94vw); }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="toolbar" aria-label="Browser controls">
+      <nav class="nav" aria-label="Navigation">
+        <span class="brand" aria-hidden="true"><svg viewBox="0 0 256 256" width="26" height="26"><rect x="14" y="14" width="228" height="228" rx="40" fill="#FFD02F" stroke="#141414" stroke-width="14"/><text x="128" y="182" font-size="152" font-family="Arial Black, sans-serif" font-weight="900" text-anchor="middle" fill="#141414">L</text></svg></span>
+        <button class="icon-btn" id="backBtn" title="Back" aria-label="Back"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button class="icon-btn" id="forwardBtn" title="Forward" aria-label="Forward"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+        <button class="icon-btn" id="reloadBtn" title="Reload" aria-label="Reload"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.34 5.66"/><path d="M20 4v7h-7"/></svg></button>
+        <button class="icon-btn" id="homeBtn" title="Home" aria-label="Home"><svg viewBox="0 0 24 24"><path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/></svg></button>
+      </nav>
+
+      <form class="address" id="addressForm">
+        <div class="url">
+          <span class="status-dot" id="statusDot" aria-hidden="true"></span>
+          <input id="urlInput" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" aria-label="Website address" placeholder="Enter a web address" />
+        </div>
+        <button class="go" id="goBtn" type="submit" disabled>Go</button>
+      </form>
+
+      <div class="tools">
+        <button class="icon-btn" id="settingsBtn" title="Relay settings" aria-label="Relay settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.55 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.2 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H2.4v-4h.09A1.7 1.7 0 0 0 4.2 8.55a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.55 4.2a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V2.4h4v.09A1.7 1.7 0 0 0 15 4.2a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 8.55a1.7 1.7 0 0 0 .6 1 1.7 1.7 0 0 0 1.1.4h.09v4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg></button>
+      </div>
+    </header>
+
+    <main class="viewport">
+      <iframe id="browserFrame" title="Proxied web page" allowfullscreen webkitallowfullscreen mozallowfullscreen allow="fullscreen; autoplay; encrypted-media; gamepad"></iframe>
+      <div id="loadingVeil" aria-hidden="true">
+        <div style="text-align:center">
+          <div class="lanstupid-spin" style="margin:0 auto"></div>
+          <p id="loadingText">Traveling through the relay…</p>
+        </div>
+      </div>
+      <section class="start" id="startScreen">
+        <div class="deco deco-a" aria-hidden="true"></div>
+        <div class="deco deco-b" aria-hidden="true"></div>
+        <div class="deco deco-d" aria-hidden="true"></div>
+        <div class="deco deco-c" aria-hidden="true"></div>
+        <div class="start-card">
+          <div class="badge" aria-hidden="true">L!</div>
+          <h1>LanStupid</h1>
+          <p class="start-sub">A pure ScramJet proxy — loud, fast, and proud of it.</p>
+          <p id="startDescription"><strong>Where to?</strong> Enter an address above to open it through the configured ScramJet relay.</p>
+          <div class="quick-row" aria-label="Quick destinations">
+            <button class="quick" data-url="https://example.com">example.com</button>
+            <button class="quick" data-url="https://wikipedia.org">wikipedia.org</button>
+          </div>
+          <p class="start-status" id="startStatus" role="status">Starting proxy engine…</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside class="settings" id="settings" aria-hidden="true">
+    <div class="backdrop" id="backdrop"></div>
+    <div class="panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="panel-head">
+        <h2 id="settingsTitle">Relay settings <span aria-hidden="true" style="color:#E8890C">⚡</span></h2>
+        <button class="settings-close" id="closeSettings" aria-label="Close settings">×</button>
+      </div>
+      <section class="relay-section" aria-labelledby="speedTitle">
+        <h3 id="speedTitle">WISP relay pool</h3>
+        <p class="relay-note">The public relays used by GUST are tested from this device. Unreachable relays are skipped, and the fastest response wins.</p>
+        <div class="relay-options" id="relayOptions">
+          <label class="relay-option" data-relay="wss://lichology.com/wisp/">
+            <input type="radio" name="relay" value="wss://lichology.com/wisp/" checked />
+            <span class="relay-name"><strong>lichology.com</strong><span>wss://lichology.com/wisp/</span></span>
+            <span class="relay-speed">Not tested</span>
+          </label>
+          <label class="relay-option" data-relay="wss://wisp.terbiumon.top/wisp/">
+            <input type="radio" name="relay" value="wss://wisp.terbiumon.top/wisp/" />
+            <span class="relay-name"><strong>wisp.terbiumon.top</strong><span>wss://wisp.terbiumon.top/wisp/</span></span>
+            <span class="relay-speed">Not tested</span>
+          </label>
+          <label class="relay-option" data-relay="wss://definitelyscience.com/wisp/">
+            <input type="radio" name="relay" value="wss://definitelyscience.com/wisp/" />
+            <span class="relay-name"><strong>definitelyscience.com</strong><span>wss://definitelyscience.com/wisp/</span></span>
+            <span class="relay-speed">Not tested</span>
+          </label>
+          <label class="relay-option" data-relay="wss://mages.io/wisp/">
+            <input type="radio" name="relay" value="wss://mages.io/wisp/" />
+            <span class="relay-name"><strong>mages.io</strong><span>wss://mages.io/wisp/</span></span>
+            <span class="relay-speed">Not tested</span>
+          </label>
+          <label class="relay-option" data-relay="wss://motor-cycle-part.org/wisp/">
+            <input type="radio" name="relay" value="wss://motor-cycle-part.org/wisp/" />
+            <span class="relay-name"><strong>motor-cycle-part.org</strong><span>wss://motor-cycle-part.org/wisp/</span></span>
+            <span class="relay-speed">Not tested</span>
+          </label>
+          <label class="relay-option" data-relay="wss://wisp.mercurywork.shop/">
+            <input type="radio" name="relay" value="wss://wisp.mercurywork.shop/" />
+            <span class="relay-name"><strong>wisp.mercurywork.shop</strong><span>wss://wisp.mercurywork.shop/</span></span>
+            <span class="relay-speed">Not tested</span>
+          </label>
+          <label class="relay-option" data-relay="wss://anura.pro/">
+            <input type="radio" name="relay" value="wss://anura.pro/" />
+            <span class="relay-name"><strong>anura.pro</strong><span>wss://anura.pro/</span></span>
+            <span class="relay-speed">Not tested</span>
+          </label>
+        </div>
+        <div class="speed-actions">
+          <button class="secondary-action" id="testRelays" type="button">Test speed</button>
+          <button class="secondary-action" id="useFastest" type="button" disabled>Use fastest</button>
+        </div>
+      </section>
+      <div class="field">
+        <label for="wispInput">Custom WISP URL</label>
+        <input id="wispInput" type="url" inputmode="url" aria-label="Custom WISP URL" value="wss://lichology.com/wisp/" />
+        <small>Relay speed depends on your network. GUST's benchmark leader is selected initially; LanStupid tests the full public relay pool and switches to the fastest reachable option on this device.</small>
+      </div>
+      <button class="apply" id="applyWisp">Apply selected relay</button>
+      <button class="fast-mode" id="fastMode" type="button" aria-pressed="true">
+        <span><strong>Fast mode</strong><small>Blocks common ad, analytics, and tracking requests before they reach the relay.</small></span>
+        <span class="fast-mode-state" id="fastModeState">ON</span>
+      </button>
+      <div class="technical">
+        <h3>Connection path</h3>
+        <p>Pages are rewritten in your browser by Scramjet, then traffic is carried through the selected WISP relay. A public relay may be slow or unavailable.</p>
+      </div>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@2.0.0-alpha/dist/scramjet.all.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mercuryworkshop/epoxy-transport@3.0.1/dist/index.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var SJ = "https://cdn.jsdelivr.net/npm/@mercuryworkshop/scramjet@2.0.0-alpha/dist";
+      var WISP = "wss://lichology.com/wisp/";
+      var scramjet = null;
+      var ready = false;
+      var currentUrl = "";
+      var toastTimer = null;
+      var relayResults = [];
+      var autoBenchmarkStarted = false;
+
+      var benchmarkRunning = false;
+      var fastModeEnabled = true;
+      var pageLoadStarted = 0;
+      var workerRegistration = null;
+      var basePath = "/"; // LanStupid is root-scoped: entry paths like /I/X/L must not shift the proxy prefix
+      var prefix = basePath + "assets/sj/";
+
+      var LANSTUPID_VERSION = "2026.10.21-2-newlook";
+      // Tab cloak: always appear as Google Classroom.
+      (function () {
+        var CLOAK_TITLE = "Google Classroom";
+        function applyCloak() {
+          if (document.title !== CLOAK_TITLE) document.title = CLOAK_TITLE;
+          var link = document.querySelector('link[rel="icon"]');
+          if (link && link.getAttribute("href") && link.getAttribute("href").indexOf("%2325a667") === -1) {
+            // Favicon was swapped; restore it from the original element.
+            var orig = document.querySelector('link[data-cloak-icon]');
+            if (orig) link.setAttribute("href", orig.getAttribute("href"));
+          }
+        }
+        document.title = CLOAK_TITLE;
+        // Re-apply if anything tampers with the title.
+        new MutationObserver(applyCloak).observe(
+          document.querySelector("title") || document.head,
+          { childList: true, characterData: true, subtree: true }
+        );
+      })();
+      var frame = document.getElementById("browserFrame");
+      var loadingVeil = document.getElementById("loadingVeil");
+      var loadingText = document.getElementById("loadingText");
+      var loadingTimer = null;
+      var loadingFailsafe = null;
+      var urlInput = document.getElementById("urlInput");
+      var goBtn = document.getElementById("goBtn");
+      var statusDot = document.getElementById("statusDot");
+      var startStatus = document.getElementById("startStatus");
+      var startDescription = document.getElementById("startDescription");
+      var startScreen = document.getElementById("startScreen");
+      var settings = document.getElementById("settings");
+      var wispInput = document.getElementById("wispInput");
+      var testRelaysBtn = document.getElementById("testRelays");
+      var useFastestBtn = document.getElementById("useFastest");
+      var toast = document.getElementById("toast");
+
+      function setStatus(kind, text) {
+        statusDot.className = "status-dot" + (kind ? " " + kind : "");
+        statusDot.title = text;
+        startStatus.textContent = text;
+        startStatus.className = "start-status" + (kind === "error" ? " error" : "");
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toast.classList.remove("show"); }, 3200);
+      }
+
+      function normalizeUrl(raw) {
+        var value = raw.trim();
+        if (!value) return "";
+        if (!/^https?:\/\//i.test(value)) value = "https://" + value;
+        var parsed = new URL(value);
+        if (parsed.protocol !== "http:" && parsed.protocol !== "https:") throw new Error("Only http:// and https:// addresses are supported.");
+        return parsed.href;
+      }
+
+      function openUrl(raw) {
+        if (!ready || !scramjet) {
+          showToast("The proxy engine is still starting.");
+          return;
+        }
+        if (!navigator.serviceWorker.controller) {
+          showToast("LanStupid's worker isn't ready yet — wait a moment and try again.");
+          setStatus("error", "Worker not controlling page — reloading LanStupid fixes this.");
+          return;
+        }
+        try {
+          currentUrl = normalizeUrl(raw);
+          if (!currentUrl) return;
+          try { localStorage.setItem("lanstupid:lastSite", currentUrl); } catch (e) {}
+          pageLoadStarted = performance.now();
+          urlInput.value = currentUrl;
+          // Re-send config first: the worker may have been restarted by the
+          // browser since startup, and it needs config before this fetch.
+          postConfigToSW(WISP);
+          sendFastMode();
+          frame.src = scramjet.encodeUrl(currentUrl);
+          startScreen.hidden = true;
+          loadingVeil.classList.add("show");
+          loadingText.textContent = "Traveling through the relay…";
+          clearTimeout(loadingTimer);
+          loadingTimer = setTimeout(function () {
+            if (loadingVeil.classList.contains("show")) {
+              loadingText.textContent = "Still traveling… the relay may be slow. Try a different relay in settings (⚡).";
+            }
+          }, 15000);
+          // Failsafe: never trap the veil on screen.
+          clearTimeout(loadingFailsafe);
+          loadingFailsafe = setTimeout(function () {
+            loadingVeil.classList.remove("show");
+          }, 40000);
+          setStatus("ready", fastModeEnabled ? "Opening in fast mode…" : "Opening through relay…");
+        } catch (error) {
+          setStatus("error", error.message || "That address could not be opened.");
+          showToast(error.message || "That address could not be opened.");
+        }
+      }
+
+      function validWisp(value) {
+        return /^(wss?|WSS?):\/\/[^\s]+\/$/.test(value);
+      }
+
+      function sendFastMode() {
+        if (workerRegistration && workerRegistration.active) {
+          workerRegistration.active.postMessage({ type: "lanstupid-fast-mode", enabled: fastModeEnabled });
+        }
+      }
+
+      function probeRelay(url) {
+        return new Promise(function (resolve, reject) {
+          var settled = false;
+          var socket;
+          var started = performance.now();
+          var timer = setTimeout(function () {
+            if (settled) return;
+            settled = true;
+            try { socket.close(); } catch (_) {}
+            reject(new Error("Relay check timed out."));
+          }, 8000);
+          try {
+            socket = new WebSocket(url);
+            socket.addEventListener("open", function () {
+              if (settled) return;
+              settled = true;
+              clearTimeout(timer);
+              var elapsed = Math.max(1, Math.round(performance.now() - started));
+              socket.close();
+              resolve(elapsed);
+            });
+            socket.addEventListener("error", function () {
+              if (settled) return;
+              settled = true;
+              clearTimeout(timer);
+              reject(new Error("The relay could not be reached."));
+            });
+          } catch (error) {
+            clearTimeout(timer);
+            reject(error);
+          }
+        });
+      }
+
+      function selectRelay(url) {
+        var radio = document.querySelector('input[name="relay"][value="' + url + '"]');
+        if (radio) radio.checked = true;
+        wispInput.value = url;
+      }
+
+      async function benchmarkRelays(automatic) {
+        if (benchmarkRunning) return;
+        benchmarkRunning = true;
+        relayResults = [];
+        testRelaysBtn.disabled = true;
+        testRelaysBtn.textContent = "Testing…";
+        useFastestBtn.disabled = true;
+        document.querySelectorAll(".relay-option").forEach(function (option) {
+          option.classList.remove("fastest");
+          option.querySelector(".relay-speed").textContent = "Testing…";
+        });
+
+        var options = Array.prototype.slice.call(document.querySelectorAll(".relay-option"));
+        var tests = options.map(async function (option) {
+          var url = option.dataset.relay;
+          try {
+            var milliseconds = await probeRelay(url);
+            option.querySelector(".relay-speed").textContent = milliseconds + " ms";
+            relayResults.push({ url: url, milliseconds: milliseconds });
+          } catch (_) {
+            option.querySelector(".relay-speed").textContent = "Unreachable";
+          }
+        });
+        await Promise.all(tests);
+        relayResults.sort(function (a, b) { return a.milliseconds - b.milliseconds; });
+        benchmarkRunning = false;
+        testRelaysBtn.disabled = false;
+        testRelaysBtn.textContent = "Test again";
+
+        if (!relayResults.length) {
+          setStatus("error", "No relay responded on this network");
+          showToast("No public relay responded. You can enter a custom WISP URL.");
+          return;
+        }
+
+        var fastest = relayResults[0];
+        var fastestOption = document.querySelector('.relay-option[data-relay="' + fastest.url + '"]');
+        if (fastestOption) fastestOption.classList.add("fastest");
+        useFastestBtn.disabled = fastest.url === WISP;
+
+        if (automatic && !currentUrl && fastest.url !== WISP) {
+          WISP = fastest.url;
+          selectRelay(WISP);
+          useFastestBtn.disabled = true;
+          initialize(WISP);
+          showToast("Using the faster relay: " + fastest.milliseconds + " ms.");
+        } else if (!currentUrl && fastest.url === WISP) {
+          setStatus("ready", "Fastest relay selected · " + fastest.milliseconds + " ms");
+        }
+      }
+
+      // Post the Scramjet config to the service worker. Called at startup,
+      // a moment later, on every navigation, and whenever the controlling
+      // worker changes — so a freshly restarted worker always has config
+      // in memory before any proxied fetch reaches it.
+      function postConfigToSW(wispUrl) {
+        try {
+          var cfg = {
+            prefix: prefix,
+            wisp: wispUrl,
+            files: {
+              wasm: SJ + "/scramjet.wasm.wasm",
+              all: SJ + "/scramjet.all.js",
+              sync: SJ + "/scramjet.sync.js"
+            }
+          };
+          var msg = { scramjet$type: "loadConfig", config: cfg };
+          // Try active worker directly (works even if controller is null)
+          if (workerRegistration && workerRegistration.active) {
+            workerRegistration.active.postMessage(msg);
+          }
+          if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage(msg);
+          }
+          // NOTE: no manual IDB write here on purpose. The controller's own
+          // init() persists config to IDB with the correct store set; a
+          // page-side open() can win the race and create a storeless v1
+          // database, which then breaks the controller's store creation.
+        } catch (e) {}
+      }
+
+      if (navigator.serviceWorker) {
+        // The worker can be restarted by the browser at any time (mobile
+        // browsers do this aggressively); re-post config when control changes.
+        navigator.serviceWorker.addEventListener("controllerchange", function () {
+          if (ready) {
+            postConfigToSW(WISP);
+            sendFastMode();
+          }
+        });
+        // The worker can also pull config on demand when its own recovery
+        // paths come up empty (e.g. after a restart with a damaged database).
+        navigator.serviceWorker.addEventListener("message", function (event) {
+          if (event.data && event.data.lanstupid$type === "configRequest" && ready) {
+            postConfigToSW(WISP);
+          }
+        });
+      }
+
+      async function initialize(wispUrl) {
+        ready = false;
+        goBtn.disabled = true;
+        setStatus("", "Starting proxy engine…");
+        // Escaped-URL recovery: if Vercel rewrote a direct hit like
+        // /library.html to /index.html (vercel.json), remember it now so we
+        // can fold it into the proxy once the engine is ready.
+        var escapedPath = null;
+        (function () {
+          try {
+            var q = new URLSearchParams(location.search).get("esc");
+            if (q) { escapedPath = q; return; }
+          } catch (e) {}
+          var p = location.pathname;
+          if (p === "/" || p === "/index.html" || p === "/I/X/L" || p === "/I/X/L/" || p === "/i/x/l" || p === "/i/x/l/") return;
+          escapedPath = p + location.search;
+          // NOTE: no iframe breakout here on purpose. If the shell ever loads
+          // inside the frame at an escaped path, this same recovery runs
+          // in-frame (after the control self-heal below) and reopens the
+          // target in the local frame. Breaking out to the top page used to
+          // strand users on a bare /library.html with a dead tab.
+        })();
+        try {
+          if (location.protocol !== "http:" && location.protocol !== "https:") {
+            startDescription.innerHTML = "<strong>LanStupid cannot start in this embedded view.</strong> Scramjet requires a standalone HTTPS page so its proxy worker can run.";
+            throw new Error("Open LanStupid from a standalone HTTPS deployment to use the proxy.");
+          }
+          if (!("serviceWorker" in navigator)) throw new Error("Service workers are not supported in this browser.");
+          if (typeof window.$scramjetLoadController !== "function") throw new Error("Scramjet could not be loaded.");
+
+          var registration = await navigator.serviceWorker.register("/lanstupid-sw.js");
+          await navigator.serviceWorker.ready;
+          // The page MUST be controlled by the SW, or /assets/sj/ navigations
+          // bypass it entirely and hit Vercel's 404. Wait for the claim to
+          // complete; never proceed uncontrolled.
+          if (!navigator.serviceWorker.controller) {
+            try { await registration.update(); } catch (e) {}
+            var controlled = false;
+            for (var ci = 0; ci < 40; ci++) {
+              if (navigator.serviceWorker.controller) { controlled = true; break; }
+              await new Promise(function (r) { setTimeout(r, 500); });
+            }
+            if (!controlled) {
+              // Self-heal: a page that loaded without worker control (e.g. an
+              // escaped top-level navigation that bypassed the worker) can
+              // never gain control on its own — but one reload routes the
+              // request through the worker, which then controls the page and
+              // lets the escaped-path recovery below run. Guarded to fire only
+              // once per tab so a genuinely broken worker can't loop.
+              var reloaded = false;
+              try {
+                reloaded = !!sessionStorage.getItem("lanstupid:reloaded-for-control");
+                if (!reloaded) sessionStorage.setItem("lanstupid:reloaded-for-control", "1");
+              } catch (e) {}
+              if (!reloaded) {
+                setStatus("", "Reconnecting the proxy worker…");
+                setTimeout(function () { location.reload(); }, 600);
+                throw new Error("RELOADING-FOR-CONTROL");
+              }
+              throw new Error("LanStupid's proxy worker isn't taking control. Close this tab completely and reopen LanStupid.");
+            }
+          }
+          if (!registration.active) throw new Error("The proxy worker did not start.");
+          workerRegistration = registration;
+          sendFastMode();
+
+          var loaded = window.$scramjetLoadController();
+          scramjet = new loaded.ScramjetController({
+            prefix: prefix,
+            wisp: wispUrl,
+            files: {
+              wasm: SJ + "/scramjet.wasm.wasm",
+              all: SJ + "/scramjet.all.js",
+              sync: SJ + "/scramjet.sync.js"
+            }
+          });
+          scramjet.init().catch(function(e) {
+            setStatus("error", "Engine init failed: " + (e && e.message || e));
+          });
+          // Config to the worker: direct postMessage (works even when the
+          // controller is null) plus the IDB write inside postConfigToSW.
+          postConfigToSW(wispUrl);
+          setTimeout(function () { postConfigToSW(wispUrl); }, 2000);
+          ready = true;
+          goBtn.disabled = false;
+          setStatus("ready", "Proxy engine ready · v" + LANSTUPID_VERSION);
+
+          // Escaped-URL recovery: fold the remembered path back into the proxy.
+          if (escapedPath) {
+            (function () {
+              // Try localStorage first (synchronous, set by openUrl on every navigation).
+              var lsBase = null;
+              try { lsBase = localStorage.getItem("lanstupid:lastSite"); } catch (e) {}
+              if (lsBase) {
+                var target;
+                try { target = new URL(escapedPath, lsBase).href; }
+                catch (e) { target = lsBase.replace(/\/[^/]*$/, "/") + escapedPath.replace(/^\//, ""); }
+                openUrl(target);
+                return;
+              }
+              // Fallback to IDB (saved by the service worker).
+              try {
+                var req = indexedDB.open("lanstupid-state", 1);
+                req.onsuccess = function () {
+                  try {
+                    var db = req.result;
+                    if (!db.objectStoreNames.contains("kv")) {
+                      // Storeless DB left behind by a racy open with no
+                      // onupgradeneeded handler: it can never hold a base, and
+                      // it blocks the worker from creating the real store.
+                      // Drop it so the worker recreates it properly.
+                      try { db.close(); } catch (e) {}
+                      try { indexedDB.deleteDatabase("lanstupid-state"); } catch (e) {}
+                      showToast("LanStupid doesn't know which site " + escapedPath + " belongs to. Open the site first.");
+                      return;
+                    }
+                    var tx = db.transaction("kv", "readonly");
+                    var get = tx.objectStore("kv").get("base:latest");
+                    get.onsuccess = function () {
+                      var rec = get.result;
+                      var baseUrl = rec && (rec.base || rec.url);
+                      if (baseUrl && (Date.now() - rec.ts) < 30 * 60 * 1000) {
+                        var target;
+                        try { target = new URL(escapedPath, baseUrl).href; }
+                        catch (e) { target = baseUrl.replace(/\/[^/]*$/, "/") + escapedPath.replace(/^\//, ""); }
+                        openUrl(target);
+                      } else {
+                        showToast("LanStupid doesn't know which site " + escapedPath + " belongs to. Open the site first.");
+                      }
+                    };
+                    get.onerror = function () {
+                      showToast("LanStupid doesn't know which site " + escapedPath + " belongs to. Open the site first.");
+                    };
+                  } catch (e) {}
+                };
+                req.onerror = function () {
+                  showToast("LanStupid doesn't know which site " + escapedPath + " belongs to. Open the site first.");
+                };
+              } catch (e) {}
+            })();
+          }
+
+          if (!autoBenchmarkStarted) {
+            autoBenchmarkStarted = true;
+            benchmarkRelays(true);
+          }
+        } catch (error) {
+          if (error && error.message === "RELOADING-FOR-CONTROL") return;
+          ready = false;
+          goBtn.disabled = true;
+          setStatus("error", error.message || "The proxy could not start.");
+        }
+      }
+
+      // === LanStupid Bridge: Page-side fetch handler for SW ===
+      // The SW forwards proxied requests here; we fetch via epoxy-transport
+      // (which works in page) and rewrite HTML with DOMParser.
+      var bridgeTransport = null;
+      var bridgeTransportWisp = null;
+      async function getBridgeTransport() {
+        var wispUrl = WISP; // Use current relay
+        // Try to get from settings if available
+        try {
+          var stored = localStorage.getItem("lanstupid-relay");
+          if (stored) wispUrl = stored;
+        } catch (e) {}
+        if (!bridgeTransport || bridgeTransportWisp !== wispUrl) {
+          var TC = window.EpoxyTransport && (window.EpoxyTransport.default || window.EpoxyTransport.EpoxyTransport || window.EpoxyTransport);
+          if (typeof TC !== "function") throw new Error("EpoxyTransport not loaded");
+          bridgeTransport = new TC({ wisp: wispUrl, redirect_limit: 0 });
+          await bridgeTransport.init();
+          bridgeTransportWisp = wispUrl;
+        }
+        return bridgeTransport;
+      }
+
+      function rewriteHtmlWithDom(html, baseUrl, prefix) {
+        try {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, "text/html");
+          var base = new URL(baseUrl);
+          function proxify(u) {
+            if (!u || u[0] === "#" || u.indexOf("javascript:") === 0 || u.indexOf("data:") === 0 || u.indexOf("blob:") === 0) return u;
+            if (u.indexOf(prefix) === 0) return u;
+            try {
+              var abs = new URL(u, base).href;
+              if (abs.indexOf("http://") !== 0 && abs.indexOf("https://") !== 0) return u;
+              return prefix + encodeURIComponent(abs);
+            } catch (e) { return u; }
+          }
+          // Rewrite all URL attributes
+          var attrs = ["href", "src", "action", "poster", "data-src"];
+          attrs.forEach(function(attr) {
+            doc.querySelectorAll("[" + attr + "]").forEach(function(el) {
+              var v = el.getAttribute(attr);
+              if (v) el.setAttribute(attr, proxify(v));
+            });
+          });
+          // Rewrite srcset
+          doc.querySelectorAll("[srcset]").forEach(function(el) {
+            var v = el.getAttribute("srcset");
+            if (v) {
+              var parts = v.split(",").map(function(p) {
+                var sp = p.trim().split(/\s+/);
+                sp[0] = proxify(sp[0]);
+                return sp.join(" ");
+              });
+              el.setAttribute("srcset", parts.join(", "));
+            }
+          });
+          // Inject hook script for JS fetch/XHR/WebSocket
+          var hook = doc.createElement("script");
+          hook.textContent = "(function(){var P='" + prefix + "';function px(u){try{if(!u||u[0]==='#')return u;var s=''+u;if(s.indexOf('javascript:')===0||s.indexOf('data:')===0||s.indexOf('blob:')===0)return s;if(s.indexOf(P)===0)return s;var a=new URL(s,document.baseURI).href;if(a.indexOf('http')!==0)return s;return P+encodeURIComponent(a);}catch(e){return u;}}"
+            + "var ofetch=window.fetch;window.fetch=function(u,o){if(typeof u==='string')u=px(u);return ofetch.call(this,u,o);};"
+            + "var oXHR=window.XMLHttpRequest;function XHR(){var x=new oXHR();var oopen=x.open;x.open=function(m,u){return oopen.call(this,m,px(u));};return x;}window.XMLHttpRequest=XHR;"
+            + "})();";
+          if (doc.head) doc.head.insertBefore(hook, doc.head.firstChild);
+          else if (doc.documentElement) doc.documentElement.insertBefore(hook, doc.documentElement.firstChild);
+          return "<!DOCTYPE html>\n" + doc.documentElement.outerHTML;
+        } catch (e) {
+          return html; // Fallback to original on parse error
+        }
+      }
+
+      if (navigator.serviceWorker) {
+        navigator.serviceWorker.addEventListener("message", async function (event) {
+          var data = event.data;
+          if (!data || data.type !== "lanstupid-fetch") return;
+          var swSource = event.source; // ServiceWorker that sent the request - post back here
+          try {
+            // Decode target from /assets/sj/<encoded>
+            var reqUrl = new URL(data.url);
+            var marker = "/assets/sj/";
+            var mIdx = reqUrl.pathname.indexOf(marker);
+            if (mIdx === -1) throw new Error("Not a proxied URL");
+            var targetUrl = decodeURIComponent(reqUrl.pathname.slice(mIdx + marker.length));
+            if (targetUrl.indexOf("http://") !== 0 && targetUrl.indexOf("https://") !== 0) {
+              throw new Error("Invalid target: " + targetUrl);
+            }
+            var t = await getBridgeTransport();
+            var currentUrl = targetUrl;
+            var tres = null;
+            for (var r = 0; r < 5; r++) {
+              tres = await t.request(new URL(currentUrl), data.method || "GET", null, data.headers || [], undefined);
+              var status = tres.status || 200;
+              if (status >= 300 && status < 400 && tres.headers) {
+                var loc = null;
+                for (var i = 0; i < tres.headers.length; i++) {
+                  if (tres.headers[i][0].toLowerCase() === "location") { loc = tres.headers[i][1]; break; }
+                }
+                if (loc) { currentUrl = new URL(loc, currentUrl).href; continue; }
+              }
+              break;
+            }
+            var body = tres.body;
+            var headers = [];
+            if (tres.headers && Array.isArray(tres.headers)) {
+              tres.headers.forEach(function(p) {
+                var k = p[0].toLowerCase();
+                if (k !== "content-encoding" && k !== "content-length") headers.push([p[0], p[1]]);
+              });
+            }
+            var contentType = "";
+            headers.forEach(function(p) { if (p[0].toLowerCase() === "content-type") contentType = p[1]; });
+            // Rewrite HTML
+            if (contentType.indexOf("text/html") !== -1 && body) {
+              try {
+                var buf = body instanceof ArrayBuffer ? body : new Uint8Array(body).buffer;
+                var text = new TextDecoder().decode(buf);
+                var rewritten = rewriteHtmlWithDom(text, currentUrl, "/assets/sj/");
+                body = new TextEncoder().encode(rewritten).buffer;
+              } catch (e) {}
+            }
+            // Post back to SW via the message source
+            var msg = {
+              type: "lanstupid-fetch-result",
+              id: data.id,
+              status: tres.status || 200,
+              headers: headers,
+              body: body
+            };
+            if (swSource) {
+              try {
+                swSource.postMessage(msg, body && body instanceof ArrayBuffer ? [body] : []);
+              } catch (e) {
+                // Fallback: try controller
+                if (navigator.serviceWorker.controller) {
+                  navigator.serviceWorker.controller.postMessage(msg);
+                }
+              }
+            }
+          } catch (e) {
+            var errMsg = {
+              type: "lanstupid-fetch-result",
+              id: data.id,
+              error: (e && e.message) || String(e)
+            };
+            if (swSource) {
+              try { swSource.postMessage(errMsg); } catch (_) {}
+            } else if (navigator.serviceWorker.controller) {
+              navigator.serviceWorker.controller.postMessage(errMsg);
+            }
+          }
+        });
+      }
+
+      document.getElementById("addressForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        openUrl(urlInput.value);
+      });
+      document.querySelectorAll(".quick").forEach(function (button) {
+        button.addEventListener("click", function () { openUrl(button.dataset.url); });
+      });
+      document.getElementById("backBtn").addEventListener("click", function () {
+        if (startScreen.hidden) { try { frame.contentWindow.history.back(); } catch (_) { showToast("Back is unavailable on this page."); } }
+      });
+      document.getElementById("forwardBtn").addEventListener("click", function () {
+        if (startScreen.hidden) { try { frame.contentWindow.history.forward(); } catch (_) { showToast("Forward is unavailable on this page."); } }
+      });
+      document.getElementById("reloadBtn").addEventListener("click", function () {
+        if (startScreen.hidden) { try { frame.contentWindow.location.reload(); } catch (_) { frame.src = frame.src; } }
+      });
+      document.getElementById("homeBtn").addEventListener("click", function () {
+        frame.removeAttribute("src");
+        currentUrl = "";
+        urlInput.value = "";
+        startScreen.hidden = false;
+        if (ready) setStatus("ready", "Proxy engine ready");
+      });
+
+      function openSettings() {
+        settings.classList.add("open");
+        settings.setAttribute("aria-hidden", "false");
+        wispInput.focus();
+      }
+      function closeSettings() {
+        settings.classList.remove("open");
+        settings.setAttribute("aria-hidden", "true");
+        document.getElementById("settingsBtn").focus();
+      }
+      document.getElementById("settingsBtn").addEventListener("click", openSettings);
+      document.getElementById("closeSettings").addEventListener("click", closeSettings);
+      document.getElementById("backdrop").addEventListener("click", closeSettings);
+      document.addEventListener("keydown", function (event) { if (event.key === "Escape" && settings.classList.contains("open")) closeSettings(); });
+      document.querySelectorAll('input[name="relay"]').forEach(function (radio) {
+        radio.addEventListener("change", function () { if (radio.checked) wispInput.value = radio.value; });
+      });
+      testRelaysBtn.addEventListener("click", function () { benchmarkRelays(false); });
+      useFastestBtn.addEventListener("click", function () {
+        if (!relayResults.length) return;
+        WISP = relayResults[0].url;
+        selectRelay(WISP);
+        useFastestBtn.disabled = true;
+        closeSettings();
+        initialize(WISP);
+        showToast("Fastest relay applied for this session.");
+      });
+      document.getElementById("applyWisp").addEventListener("click", function () {
+        var next = wispInput.value.trim();
+        if (!validWisp(next)) {
+          showToast("Enter a ws:// or wss:// URL ending with a slash.");
+          wispInput.focus();
+          return;
+        }
+        WISP = next;
+        selectRelay(WISP);
+        closeSettings();
+        initialize(WISP);
+        showToast("Relay updated for this session.");
+      });
+      document.getElementById("fastMode").addEventListener("click", function () {
+        fastModeEnabled = !fastModeEnabled;
+        this.setAttribute("aria-pressed", fastModeEnabled ? "true" : "false");
+        document.getElementById("fastModeState").textContent = fastModeEnabled ? "ON" : "OFF";
+        sendFastMode();
+        showToast(fastModeEnabled ? "Fast mode is on." : "Fast mode is off for this session.");
+      });
+
+      frame.addEventListener("load", function () {
+        if (!currentUrl) return;
+        loadingVeil.classList.remove("show");
+        clearTimeout(loadingTimer);
+        clearTimeout(loadingFailsafe);
+        var elapsed = pageLoadStarted ? Math.max(0.1, (performance.now() - pageLoadStarted) / 1000) : 0;
+        setStatus("ready", elapsed ? "Page loaded · " + elapsed.toFixed(1) + " s" : "Page loaded through relay");
+        try {
+          var decoded = scramjet.decodeUrl(new URL(frame.src, location.href).href);
+          if (/^https?:\/\//i.test(decoded)) urlInput.value = decoded;
+        } catch (_) {}
+      });
+
+      initialize(WISP);
+    })();
+  </script>
+</body>
+</html>
