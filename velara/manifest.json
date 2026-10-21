@@ -1,0 +1,21 @@
+{
+  "name": "LanStupid",
+  "short_name": "LanStupid",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/assets/images/lanstupid-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/lanstupid-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

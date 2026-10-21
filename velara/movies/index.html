@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    
+    
+    
+    
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="preload" href="/assets/images/lanstupid-logo.jpg" as="image" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://image.tmdb.org" crossorigin />
+    <title>Movies — LanStupid</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#0d1117" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/material-symbols.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&display=swap" rel="stylesheet" />
+    <script src="/js/theme.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
+    <script src="/js/auth.js" defer></script>
+  <script src="/js/escape-html.js"></script>
+</head>
+  <body class="browse-page movies-body">
+    <nav class="browse-navbar is-collapsed" aria-label="Primary">
+      <div class="browse-nav-header">
+        <a class="browse-nav-brand" href="/">
+          <img class="browse-nav-brand-icon" src="/assets/images/lanstupid-logo.jpg" alt="LanStupid" />
+        </a>
+      </div>
+      <div class="browse-nav-divider"></div>
+      <div class="browse-nav-menu">
+        <a class="browse-nav-item" href="/">
+          <span class="material-symbols-outlined">home</span>
+          <span class="browse-nav-item-text">Home</span>
+        </a>
+        <a class="browse-nav-item" href="/g">
+          <span class="material-symbols-outlined">sports_esports</span>
+          <span class="browse-nav-item-text">Games</span>
+        </a>
+        <a class="browse-nav-item" href="/a">
+          <span class="material-symbols-outlined">apps</span>
+          <span class="browse-nav-item-text">Apps</span>
+        </a>
+        <a class="browse-nav-item" href="/messages">
+          <span class="material-symbols-outlined">chat</span>
+          <span class="browse-nav-item-text">Messages</span>
+        </a>
+        <a class="browse-nav-item" href="/ai">
+          <span class="material-symbols-outlined">smart_toy</span>
+          <span class="browse-nav-item-text">AI</span>
+        </a>
+        <a class="browse-nav-item" href="/music">
+          <span class="material-symbols-outlined">music_note</span>
+          <span class="browse-nav-item-text">Music</span>
+        </a>
+        <a class="browse-nav-item active" href="/movies" aria-current="page">
+          <span class="material-symbols-outlined">movie</span>
+          <span class="browse-nav-item-text">Movies</span>
+        </a>
+      </div>
+      <div class="browse-nav-divider"></div>
+      <div class="browse-nav-footer">
+        <a class="browse-nav-item" href="/auth" id="profile-link">
+          <span class="material-symbols-outlined">account_circle</span>
+          <span class="browse-nav-item-text">Profile</span>
+        </a>
+        <a class="browse-nav-item" href="/friends">
+          <span class="material-symbols-outlined">people</span>
+          <span class="browse-nav-item-text">Friends</span>
+        </a>
+        <a class="browse-nav-item" href="/settings">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="browse-nav-item-text">Settings</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="movies-shell">
+      <header class="movies-floatbar" role="banner">
+        <div class="movies-floatbar-inner">
+          <a href="/" class="movies-floatbar-logo" aria-label="Home">
+            <span class="material-symbols-outlined">movie_filter</span>
+          </a>
+          <nav class="movies-floatbar-tabs" role="tablist">
+            <button type="button" class="movies-floatbar-tab is-active" data-movies-tab="home" role="tab" aria-selected="true">
+              <span class="material-symbols-outlined">home</span>
+              <span>Home</span>
+            </button>
+            <button type="button" class="movies-floatbar-tab" data-movies-tab="movies" role="tab" aria-selected="false">
+              <span class="material-symbols-outlined">theaters</span>
+              <span>Movies</span>
+            </button>
+            <button type="button" class="movies-floatbar-tab" data-movies-tab="shows" role="tab" aria-selected="false">
+              <span class="material-symbols-outlined">live_tv</span>
+              <span>TV Shows</span>
+            </button>
+            <button type="button" class="movies-floatbar-tab" data-movies-tab="mylist" role="tab" aria-selected="false">
+              <span class="material-symbols-outlined">bookmark</span>
+              <span>My List</span>
+            </button>
+          </nav>
+          <div class="movies-floatbar-actions">
+            <button type="button" class="movies-floatbar-icon" id="movies-search-toggle" aria-label="Search">
+              <span class="material-symbols-outlined">search</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Search overlay -->
+      <div class="movies-search-overlay" id="movies-search-overlay" hidden>
+        <div class="movies-search-backdrop" data-search-close></div>
+        <div class="movies-search-modal" role="dialog" aria-label="Search">
+          <div class="movies-search-field">
+            <span class="material-symbols-outlined">search</span>
+            <input type="search" id="movies-search-input" placeholder="Search movies & TV shows..." autocomplete="off" spellcheck="false" />
+            <button type="button" class="movies-search-clear" id="movies-search-clear" aria-label="Clear">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <div class="movies-search-scopes" role="tablist">
+            <button type="button" class="movies-search-scope is-active" data-search-scope="all">
+              <span class="material-symbols-outlined">auto_awesome</span>
+              Movies & TV
+            </button>
+            <button type="button" class="movies-search-scope" data-search-scope="movie">
+              <span class="material-symbols-outlined">theaters</span>
+              Movie
+            </button>
+            <button type="button" class="movies-search-scope" data-search-scope="tv">
+              <span class="material-symbols-outlined">live_tv</span>
+              TV
+            </button>
+            <button type="button" class="movies-search-scope" data-search-scope="recent">
+              <span class="material-symbols-outlined">history</span>
+              Recent
+            </button>
+          </div>
+          <p class="movies-search-hint">
+            Press <kbd>Enter</kbd> to save to recent searches
+          </p>
+          <div class="movies-search-results" id="movies-search-results"></div>
+        </div>
+      </div>
+
+      <main class="movies-main" id="movies-main">
+        <!-- HOME PANEL -->
+        <section class="movies-panel is-active" id="movies-panel-home">
+          <!-- Hero carousel -->
+          <section class="movies-hero-carousel" id="movies-hero-carousel" aria-roledescription="carousel">
+            <div class="movies-hero-slides" id="movies-hero-slides"></div>
+            <button type="button" class="movies-hero-nav movies-hero-prev" id="movies-hero-prev" aria-label="Previous">
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button type="button" class="movies-hero-nav movies-hero-next" id="movies-hero-next" aria-label="Next">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+            <div class="movies-hero-dots" id="movies-hero-dots"></div>
+          </section>
+
+          <!-- Trending Movies (Top 10) -->
+          <section class="movies-row" data-row="trending-movies">
+            <div class="movies-row-header">
+              <div class="movies-row-title-wrap">
+                <span class="material-symbols-outlined movies-row-title-icon">trending_up</span>
+                <div>
+                  <h2 class="movies-row-title">Trending Movies</h2>
+                  <p class="movies-row-sub">Top 10 this week</p>
+                </div>
+              </div>
+              <button type="button" class="movies-row-more" data-see-all="movies">
+                See all
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </button>
+            </div>
+            <div class="movies-rail movies-rail--top10" data-rail>
+              <button type="button" class="movies-rail-arrow movies-rail-arrow--prev" data-rail-prev aria-label="Scroll left">
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <div class="movies-rail-track" id="rail-trending-movies"></div>
+              <button type="button" class="movies-rail-arrow movies-rail-arrow--next" data-rail-next aria-label="Scroll right">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Trending Shows (Top 10) -->
+          <section class="movies-row" data-row="trending-shows">
+            <div class="movies-row-header">
+              <div class="movies-row-title-wrap">
+                <span class="material-symbols-outlined movies-row-title-icon">monitor</span>
+                <div>
+                  <h2 class="movies-row-title">Trending Shows</h2>
+                  <p class="movies-row-sub">Top 10 this week</p>
+                </div>
+              </div>
+              <button type="button" class="movies-row-more" data-see-all="shows">
+                See all
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </button>
+            </div>
+            <div class="movies-rail movies-rail--top10" data-rail>
+              <button type="button" class="movies-rail-arrow movies-rail-arrow--prev" data-rail-prev aria-label="Scroll left">
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <div class="movies-rail-track" id="rail-trending-shows"></div>
+              <button type="button" class="movies-rail-arrow movies-rail-arrow--next" data-rail-next aria-label="Scroll right">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Browse by Genre -->
+          <section class="movies-browse">
+            <div class="movies-row-header">
+              <div class="movies-row-title-wrap">
+                <span class="material-symbols-outlined movies-row-title-icon">category</span>
+                <div>
+                  <h2 class="movies-row-title">Browse by Genre</h2>
+                  <p class="movies-row-sub">Discover titles by category</p>
+                </div>
+              </div>
+              <div class="movies-browse-toggle" role="tablist">
+                <button type="button" class="movies-browse-toggle-btn is-active" data-browse-type="movie" role="tab" aria-selected="true">Movies</button>
+                <button type="button" class="movies-browse-toggle-btn" data-browse-type="tv" role="tab" aria-selected="false">TV Shows</button>
+              </div>
+            </div>
+            <div class="movies-genre-chips" id="movies-genre-chips"></div>
+            <div class="movies-browse-header">
+              <h3 class="movies-browse-title" id="movies-browse-title">Action</h3>
+              <span class="movies-browse-badge" id="movies-browse-badge">Movies</span>
+            </div>
+            <div class="movies-rail" data-rail>
+              <button type="button" class="movies-rail-arrow movies-rail-arrow--prev" data-rail-prev aria-label="Scroll left">
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <div class="movies-rail-track" id="rail-browse"></div>
+              <button type="button" class="movies-rail-arrow movies-rail-arrow--next" data-rail-next aria-label="Scroll right">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+          </section>
+
+        </section>
+
+        <!-- MOVIES PANEL -->
+        <section class="movies-panel" id="movies-panel-movies" hidden>
+          <div class="movies-section-head">
+            <div>
+              <h1 class="movies-section-title">Movies</h1>
+              <p class="movies-section-sub">Discover new movies to watch</p>
+            </div>
+            <button type="button" class="movies-shuffle-btn" id="movies-shuffle" aria-label="Random page">
+              <span class="material-symbols-outlined">shuffle</span>
+              <span>Shuffle</span>
+            </button>
+          </div>
+          <div class="movies-filters">
+            <div class="movies-filter-dropdown">
+              <select id="movies-genre-filter">
+                <option value="">All Genres</option>
+                <option value="28">Action</option>
+                <option value="12">Adventure</option>
+                <option value="16">Animation</option>
+                <option value="35">Comedy</option>
+                <option value="80">Crime</option>
+                <option value="99">Documentary</option>
+                <option value="18">Drama</option>
+                <option value="10751">Family</option>
+                <option value="14">Fantasy</option>
+                <option value="36">History</option>
+                <option value="27">Horror</option>
+                <option value="10402">Music</option>
+                <option value="9648">Mystery</option>
+                <option value="10749">Romance</option>
+                <option value="878">Sci-Fi</option>
+                <option value="53">Thriller</option>
+                <option value="10752">War</option>
+                <option value="37">Western</option>
+              </select>
+              <span class="material-symbols-outlined movies-filter-chevron">expand_more</span>
+            </div>
+            <div class="movies-filter-dropdown">
+              <select id="movies-year-filter">
+                <option value="">All Years</option>
+              </select>
+              <span class="material-symbols-outlined movies-filter-chevron">expand_more</span>
+            </div>
+            <div class="movies-filter-dropdown">
+              <select id="movies-sort-filter">
+                <option value="popularity.desc">Popular</option>
+                <option value="vote_average.desc">Top Rated</option>
+                <option value="release_date.desc">Newest</option>
+                <option value="revenue.desc">Box Office</option>
+              </select>
+              <span class="material-symbols-outlined movies-filter-chevron">expand_more</span>
+            </div>
+          </div>
+          <div class="movies-grid" id="movies-grid"></div>
+          <div class="movies-loader" id="movies-loader" hidden>
+            <div class="movies-spinner"></div>
+          </div>
+          <div class="movies-empty" id="movies-empty" hidden>
+            <span class="material-symbols-outlined">movie</span>
+            <p>No movies found</p>
+          </div>
+        </section>
+
+        <!-- SHOWS PANEL -->
+        <section class="movies-panel" id="movies-panel-shows" hidden>
+          <div class="movies-section-head">
+            <div>
+              <h1 class="movies-section-title">TV Shows</h1>
+              <p class="movies-section-sub">Binge-worthy series</p>
+            </div>
+            <button type="button" class="movies-shuffle-btn" id="shows-shuffle" aria-label="Random page">
+              <span class="material-symbols-outlined">shuffle</span>
+              <span>Shuffle</span>
+            </button>
+          </div>
+          <div class="movies-filters">
+            <div class="movies-filter-dropdown">
+              <select id="shows-genre-filter">
+                <option value="">All Genres</option>
+                <option value="10759">Action & Adventure</option>
+                <option value="16">Animation</option>
+                <option value="35">Comedy</option>
+                <option value="80">Crime</option>
+                <option value="99">Documentary</option>
+                <option value="18">Drama</option>
+                <option value="10751">Family</option>
+                <option value="10762">Kids</option>
+                <option value="9648">Mystery</option>
+                <option value="10764">Reality</option>
+                <option value="10765">Sci-Fi & Fantasy</option>
+                <option value="10768">War & Politics</option>
+                <option value="37">Western</option>
+              </select>
+              <span class="material-symbols-outlined movies-filter-chevron">expand_more</span>
+            </div>
+            <div class="movies-filter-dropdown">
+              <select id="shows-year-filter">
+                <option value="">All Years</option>
+              </select>
+              <span class="material-symbols-outlined movies-filter-chevron">expand_more</span>
+            </div>
+            <div class="movies-filter-dropdown">
+              <select id="shows-sort-filter">
+                <option value="popularity.desc">Popular</option>
+                <option value="vote_average.desc">Top Rated</option>
+                <option value="first_air_date.desc">Newest</option>
+              </select>
+              <span class="material-symbols-outlined movies-filter-chevron">expand_more</span>
+            </div>
+          </div>
+          <div class="movies-grid" id="shows-grid"></div>
+          <div class="movies-loader" id="shows-loader" hidden>
+            <div class="movies-spinner"></div>
+          </div>
+          <div class="movies-empty" id="shows-empty" hidden>
+            <span class="material-symbols-outlined">tv</span>
+            <p>No shows found</p>
+          </div>
+        </section>
+
+        <!-- MY LIST PANEL -->
+        <section class="movies-panel" id="movies-panel-mylist" hidden>
+          <div class="movies-section-head">
+            <div>
+              <h1 class="movies-section-title">My List</h1>
+              <p class="movies-section-sub">Your saved titles</p>
+            </div>
+          </div>
+          <div class="movies-grid" id="mylist-grid"></div>
+          <div class="movies-empty" id="mylist-empty">
+            <span class="material-symbols-outlined">bookmark_border</span>
+            <p>Your list is empty. Browse and save titles here.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="notch">
+      <div class="battery">
+        <div class="battery-shell">
+          <div class="battery-fill" data-battery-fill data-charging="false"></div>
+        </div>
+        <div class="battery-text" data-battery-text>Battery --%</div>
+      </div>
+    </div>
+
+    <script src="/scripts/battery.js"></script>
+    <script src="/js/movies-page.js" defer></script>
+    <script src="/scripts/splash.js"></script>
+  </body>
+</html>

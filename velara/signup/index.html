@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    
+    
+    
+    
+
+    <!-- Google tag (gtag.js) -->
+    
+    
+    
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preload" href="/assets/images/lanstupid-logo.jpg" as="image" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <title>
+      IXL | Math, Language Arts, Science, Social Studies, and Spanish
+    </title>
+    <meta
+      name="description"
+      content="IXL is the world's most popular subscription-based learning site for K–12. Used by over 18 million students, IXL provides personalized learning in more than 17,000 topics, covering math, language arts, science, social studies, and Spanish. Interactive questions, awards, and certificates keep kids motivated as they master skills."
+    />
+    <meta name="application-name" content="IXL Math" />
+    <meta
+      name="apple-itunes-app"
+      content="app-id=693689912, app-argument=https://www.ixl.com/"
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href="https://lanstupid-zteam4.vercel.app/signup" />
+    <meta
+      property="og:title"
+      content="IXL | Math, Language Arts, Science, Social Studies, and Spanish"
+    />
+    <meta
+      property="og:description"
+      content="IXL is the world's most popular subscription-based learning site for K–12. Used by over 18 million students, IXL provides personalized learning in more than 17,000 topics, covering math, language arts, science, social studies, and Spanish. Interactive questions, awards, and certificates keep kids motivated as they master skills."
+    />
+    <meta property="og:url" content="https://www.ixl.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="IXL Learning" />
+    <meta
+      property="og:image"
+      content="https://www.ixl.com/dv3/powZqMuTE7du4asFrVyNGxxoqkw/yui3/opengraph/assets/square_og_ixl.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="IXL | Math, Language Arts, Science, Social Studies, and Spanish"
+    />
+    <meta
+      name="twitter:description"
+      content="IXL is the world's most popular subscription-based learning site for K–12. Used by over 18 million students, IXL provides personalized learning in more than 17,000 topics."
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.ixl.com/dv3/powZqMuTE7du4asFrVyNGxxoqkw/yui3/opengraph/assets/square_og_ixl.png"
+    />
+
+    <meta name="theme-color" content="#0d1117" />
+
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/material-symbols.css" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"
+      defer
+    ></script>
+  <script src="/js/escape-html.js"></script>
+</head>
+  <body class="browse-page">
+    <div class="notch">
+      <div class="battery">
+        <div class="battery-shell">
+          <div
+            class="battery-fill"
+            data-battery-fill
+            data-charging="false"
+          ></div>
+        </div>
+        <div class="battery-text" data-battery-text>Battery --%</div>
+      </div>
+    </div>
+    <nav class="browse-navbar is-collapsed" aria-label="Primary">
+      <div class="browse-nav-header">
+        <a class="browse-nav-brand" href="/">
+          <img
+            class="browse-nav-brand-icon"
+            src="/assets/images/lanstupid-logo.jpg"
+            alt="LanStupid"
+          />
+        </a>
+      </div>
+      <div class="browse-nav-divider"></div>
+      <div class="browse-nav-menu">
+        <a class="browse-nav-item" href="/">
+          <span class="material-symbols-outlined">home</span>
+          <span class="browse-nav-item-text">Home</span>
+        </a>
+        <a class="browse-nav-item" href="/g">
+          <span class="material-symbols-outlined">sports_esports</span>
+          <span class="browse-nav-item-text">Games</span>
+        </a>
+        <a class="browse-nav-item" href="/a">
+          <span class="material-symbols-outlined">apps</span>
+          <span class="browse-nav-item-text">Apps</span>
+        </a>
+        <a class="browse-nav-item" href="/messages">
+          <span class="material-symbols-outlined">chat</span>
+          <span class="browse-nav-item-text">Messages</span>
+        </a>
+        <a class="browse-nav-item" href="/ai">
+          <span class="material-symbols-outlined">smart_toy</span>
+          <span class="browse-nav-item-text">AI</span>
+        </a>
+        <a class="browse-nav-item" href="/music">
+          <span class="material-symbols-outlined">music_note</span>
+          <span class="browse-nav-item-text">Music</span>
+        </a>
+        <a class="browse-nav-item" href="/movies">
+          <span class="material-symbols-outlined">movie</span>
+          <span class="browse-nav-item-text">Movies</span>
+        </a>
+      </div>
+      <div class="browse-nav-divider"></div>
+      <div class="browse-nav-footer">
+        <a class="browse-nav-item" href="/auth" id="profile-link">
+          <span class="material-symbols-outlined">account_circle</span>
+          <span class="browse-nav-item-text">Profile</span>
+        </a>
+        <a class="browse-nav-item" href="/friends">
+          <span class="material-symbols-outlined">people</span>
+          <span class="browse-nav-item-text">Friends</span>
+        </a>
+        <a class="browse-nav-item" href="/settings">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="browse-nav-item-text">Settings</span>
+        </a>
+      </div>
+    </nav>
+    <main class="auth-container">
+      <div class="auth-wrapper">
+        <h2 class="auth-title">sign up</h2>
+        <div id="clerk-auth-container" class="clerk-container">
+          <div class="auth-loading">
+            <div class="auth-loading-spinner"></div>
+            <p class="auth-loading-text">Loading sign up form...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="js/theme.js" defer></script>
+    <script src="js/tab-cloak.js" defer></script>
+    <script src="js/debug.js" defer></script>
+    <script src="js/auth.js" defer></script>
+    <script src="scripts/splash.js"></script>
+    <script src="scripts/battery.js"></script>
+    <script src="/js/music-engine.js"></script>
+  </body>
+</html>

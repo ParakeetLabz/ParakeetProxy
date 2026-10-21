@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /g
+Allow: /a
+Allow: /credits
+Disallow: /browse
+Disallow: /settings
+Disallow: /iframe
+Disallow: /embed
+
+Sitemap: https://lanstupid-zteam4.vercel.app/sitemap.xml
