@@ -259,6 +259,7 @@ self.addEventListener("fetch", function (event) {
           && reqUrl.pathname !== "/" && reqUrl.pathname !== "/index.html"
           && reqUrl.pathname !== "/lanstupid-sw.js" && reqUrl.pathname !== "/favicon.ico"
           && reqUrl.pathname !== "/I/X/L" && reqUrl.pathname !== "/I/X/L/"
+          && reqUrl.pathname !== "/i/x/l" && reqUrl.pathname !== "/i/x/l/"
           && reqUrl.pathname.indexOf("/vendor/") !== 0) {
         var escTarget = reqUrl.pathname.replace(/^\/+/, "") + reqUrl.search + reqUrl.hash;
         diag.push("escaped: " + reqUrl.pathname);

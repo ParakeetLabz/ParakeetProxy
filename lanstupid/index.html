@@ -549,7 +549,7 @@
             if (q) { escapedPath = q; return; }
           } catch (e) {}
           var p = location.pathname;
-          if (p === "/" || p === "/index.html" || p === "/I/X/L" || p === "/I/X/L/") return;
+          if (p === "/" || p === "/index.html" || p === "/I/X/L" || p === "/I/X/L/" || p === "/i/x/l" || p === "/i/x/l/") return;
           escapedPath = p + location.search;
           // NOTE: no iframe breakout here on purpose. If the shell ever loads
           // inside the frame at an escaped path, this same recovery runs
