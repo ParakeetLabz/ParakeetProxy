@@ -24,7 +24,6 @@
     <meta name="keywords" content="angry birds, free angry birds, online game, play online, angry birds app, chrome, google chrome, web browser, HD, arcade game, online, play angry birds online, web, application, game, iphone, android, ipad, slingshot, catapult, explosions, golden egg, levels, pigs, birds, stars, high scores, chrome os, chrome web store, angry birds rovio, play angry birds on computer, apps for chrome, play angry birds free">
     <link href='http://fonts.googleapis.com/css?family=Terminal+Dosis:800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/angry_birds_chrome.css" type="text/css">
-    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/aknpkdffaafgjchaibgeefbgmgeghloj">
     
 
     <script type="text/javascript">
@@ -156,23 +155,8 @@
                 <div id='version-buttons'></div>
 
                 
-                <script type="text/javascript">
-                  installSuccess = function() {
-                    document.getElementById("installButton").id = "offlineInstalled";
-                    _gaq.push(['_trackEvent', 'InstalledApp', 'New install']);
-                  }
-                  installFail = function(message) {
-                    console.log("Failed inline install: " + message);
-                  }
-                  attemptInstall = function() {
-                    if (typeof chrome != 'undefined') {
-                      chrome.webstore.install('https://chrome.google.com/webstore/detail/aknpkdffaafgjchaibgeefbgmgeghloj', installSuccess, installFail);
-                    } else {
-                      window.location.replace("https://chrome.google.com/webstore/detail/aknpkdffaafgjchaibgeefbgmgeghloj?utm_medium=et&amp;utm_source=partner-angrybirds-bottom-link-1");
-                    }
-                  }
-                </script>
-                <a id='installButton' href='https://chrome.google.com/webstore/detail/aknpkdffaafgjchaibgeefbgmgeghloj' onclick="attemptInstall(); return false;" onmouseover="tooltip.innerHTML = 'Installing the game allows offline play. Crush pigs wherever you are!'" onmouseout="resetTooltip();"></a>
+                
+                
 
                 
                 <a href="#" class="loginButton" id="login"></a>
