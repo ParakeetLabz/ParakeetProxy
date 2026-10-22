@@ -64,11 +64,10 @@ const initViewer = async (options = {}) => {
     }
 
     connection = new BareMux.BareMuxConnection(P.messagingBase + "worker.js");
-    const wispUrl =
-      (location.protocol === "https:" ? "wss" : "ws") +
-      "://" +
-      location.host +
-      P.wispPath;
+    // LanStupid copy: the original pointed at Velara's own server-side
+    // channel (which only exists on their backend). Use a public WISP
+    // relay instead so proxied browsing works from this static copy.
+    const wispUrl = "wss://lichology.com/wisp/";
     const transportScriptUrl = `${P.transportBase}index.mjs?v=20260512d`;
     try {
       await connection.setTransport(transportScriptUrl, [

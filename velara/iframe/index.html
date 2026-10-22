@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    
+    
+    
+    
+
+    <!-- Google tag (gtag.js) -->
+    
+    
+    
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preload" href="/assets/images/lanstupid-logo.jpg" as="image" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <title>
+      IXL | Math, Language Arts, Science, Social Studies, and Spanish
+    </title>
+    <meta
+      name="description"
+      content="IXL is the world's most popular subscription-based learning site for K–12. Used by over 18 million students, IXL provides personalized learning in more than 17,000 topics, covering math, language arts, science, social studies, and Spanish. Interactive questions, awards, and certificates keep kids motivated as they master skills."
+    />
+    <meta name="application-name" content="IXL Math" />
+    <meta
+      name="apple-itunes-app"
+      content="app-id=693689912, app-argument=https://www.ixl.com/"
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href="https://lanstupid-zteam4.vercel.app/iframe" />
+
+    <meta
+      property="og:title"
+      content="IXL | Math, Language Arts, Science, Social Studies, and Spanish"
+    />
+    <meta
+      property="og:description"
+      content="IXL is the world's most popular subscription-based learning site for K–12. Used by over 18 million students, IXL provides personalized learning in more than 17,000 topics, covering math, language arts, science, social studies, and Spanish. Interactive questions, awards, and certificates keep kids motivated as they master skills."
+    />
+    <meta property="og:url" content="https://www.ixl.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="IXL Learning" />
+    <meta
+      property="og:image"
+      content="https://www.ixl.com/dv3/powZqMuTE7du4asFrVyNGxxoqkw/yui3/opengraph/assets/square_og_ixl.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="IXL | Math, Language Arts, Science, Social Studies, and Spanish"
+    />
+    <meta
+      name="twitter:description"
+      content="IXL is the world's most popular subscription-based learning site for K–12. Used by over 18 million students, IXL provides personalized learning in more than 17,000 topics."
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.ixl.com/dv3/powZqMuTE7du4asFrVyNGxxoqkw/yui3/opengraph/assets/square_og_ixl.png"
+    />
+
+    <meta name="theme-color" content="#0d1117" />
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/material-symbols.css" />
+    <script src="/js/education-proxy-paths.js?v=20260512f" defer></script>
+    <script src="/education/runtime/all.js" defer></script>
+    <script src="/education/messaging/index.js" defer></script>
+    <script src="js/search.js" defer></script>
+    <script src="js/index.js" defer></script>
+    <style>
+      main.center {
+        min-height: 100vh;
+        justify-content: center;
+        padding-top: 24px;
+        flex-direction: column;
+        align-items: center;
+      }
+      .iframe-container {
+        position: relative;
+        width: calc(85vw - var(--dock-collapsed-width) - 6px);
+        max-width: calc(1600px - var(--dock-collapsed-width) - 6px);
+        margin-left: calc(var(--dock-collapsed-width) + 6px);
+        margin-right: 0;
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          max-width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          margin-left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      body:not(.dock-collapsed) .iframe-container {
+        width: calc(85vw - var(--dock-width) - 6px);
+        max-width: calc(1600px - var(--dock-width) - 6px);
+        margin-left: calc(var(--dock-width) + 6px);
+      }
+      .iframe-wrapper {
+        width: 100%;
+        height: 80vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: none;
+        background: var(--bg);
+        border: none;
+      }
+      .iframe-wrapper:focus,
+      .iframe-wrapper:focus-visible,
+      .iframe-wrapper:focus-within {
+        outline: none !important;
+      }
+      .iframe-container:fullscreen,
+      .iframe-container:-webkit-full-screen,
+      .iframe-container:-moz-full-screen,
+      .iframe-container:-ms-fullscreen {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+      .iframe-container:fullscreen .notch,
+      .iframe-container:-webkit-full-screen .notch,
+      .iframe-container:-moz-full-screen .notch,
+      .iframe-container:-ms-fullscreen .notch {
+        display: none;
+      }
+      .iframe-container:fullscreen .iframe-wrapper,
+      .iframe-container:-webkit-full-screen .iframe-wrapper,
+      .iframe-container:-moz-full-screen .iframe-wrapper,
+      .iframe-container:-ms-fullscreen .iframe-wrapper {
+        border-radius: 0;
+        border: none;
+        height: 100%;
+      }
+      .iframe-wrapper.fullscreen {
+        width: 100%;
+        height: 100%;
+      }
+      .player-content {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .game-iframe {
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+        display: block;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 1;
+        border: none;
+        background: var(--bg);
+      }
+      #iframe-container,
+      #iframe-wrapper,
+      .player-content,
+      #game-iframe {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .game-iframe:focus,
+      .game-iframe:focus-visible,
+      .game-iframe:focus-within {
+        outline: none !important;
+        box-shadow: none !important;
+      }
+      .iframe-controls {
+        flex-shrink: 0;
+        height: 56px;
+        background: var(--dock);
+        backdrop-filter: blur(12px);
+        border-top: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        z-index: 99;
+        gap: 12px;
+      }
+      .control-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+      .control-icon {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: var(--dock-border);
+      }
+      .control-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .control-title {
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .control-by {
+        font-size: 12px;
+        opacity: 0.7;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .iframeiconshere {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      .control-btn {
+        font-size: 22px;
+        color: var(--text);
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        background: transparent;
+        padding: 10px 12px;
+        border-radius: 10px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        border: 1px solid transparent;
+        position: relative;
+        overflow: hidden;
+      }
+      .control-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 10px;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.12),
+          rgba(255, 255, 255, 0.04)
+        );
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+      .control-btn::after {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: 11px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+      .control-btn:hover {
+        color: #fff;
+        transform: translateY(-3px) scale(1.08);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+      .control-btn:hover::before {
+        opacity: 1;
+      }
+      .control-btn:hover::after {
+        opacity: 1;
+      }
+      .control-btn:hover .material-symbols-outlined {
+        transform: scale(1.1);
+      }
+      .control-btn .material-symbols-outlined {
+        font-size: 20px;
+        line-height: 1;
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .control-btn#refresh-btn .material-symbols-outlined {
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .control-btn#refresh-btn.spinning .material-symbols-outlined {
+        animation: control-spin 0.6s ease-in-out forwards;
+      }
+      @keyframes control-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .control-btn:active {
+        transform: translateY(-1px) scale(1.02);
+      }
+      .control-btn:active::after {
+        opacity: 0.5;
+      }
+      .control-btn.success .material-symbols-outlined {
+        color: #7ee2a8;
+      }
+      .control-icon {
+        transition:
+          transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.25s ease;
+      }
+      .control-left:hover .control-icon {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      .loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--muted);
+        font-size: 16px;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(56, 139, 253, 0.2);
+        border-top-color: rgba(56, 139, 253, 0.8);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .error-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #ff6b6b;
+        font-size: 16px;
+        z-index: 10;
+        text-align: center;
+        padding: 20px;
+        background: rgba(255, 107, 107, 0.1);
+        border-radius: 8px;
+        border: 1px solid rgba(255, 107, 107, 0.3);
+        display: none;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 400px;
+      }
+      .error-message.show {
+        display: flex;
+      }
+      .retry-btn {
+        background: rgba(255, 107, 107, 0.2);
+        border: 1px solid rgba(255, 107, 107, 0.4);
+        color: #ff6b6b;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s ease;
+      }
+      .retry-btn:hover {
+        background: rgba(255, 107, 107, 0.3);
+        transform: scale(1.05);
+      }
+      @media (max-width: 768px) {
+        .iframe-container {
+          width: calc(100vw - var(--dock-collapsed-width) - 6px);
+          height: 100vh;
+          padding: 0;
+          margin: 0;
+          margin-left: calc(var(--dock-collapsed-width) + 6px);
+        }
+        body:not(.dock-collapsed) .iframe-container {
+          width: calc(100vw - var(--dock-width) - 6px);
+          margin-left: calc(var(--dock-width) + 6px);
+        }
+        .iframe-wrapper {
+          height: 100%;
+          border-radius: 0;
+          border: none;
+        }
+        .iframe-controls {
+          padding: 0 16px;
+          height: 52px;
+          gap: 8px;
+        }
+        .iframeiconshere {
+          gap: 8px;
+        }
+        .control-btn {
+          min-width: 40px;
+          min-height: 40px;
+          padding: 8px 10px;
+        }
+        .control-btn .material-symbols-outlined {
+          font-size: 18px;
+        }
+        .loading {
+          font-size: 14px;
+          gap: 12px;
+        }
+        .loading-spinner {
+          width: 32px;
+          height: 32px;
+        }
+        .error-message {
+          font-size: 14px;
+          padding: 16px;
+          max-width: 90%;
+        }
+      }
+      .iframe-container {
+        position: relative;
+      }
+      .ad-slot {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--dock);
+        border: 1px solid var(--dock-border);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 16px;
+        width: 100%;
+        max-width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        min-height: 90px;
+      }
+      @media (max-width: 768px) {
+        .ad-slot {
+          max-width: 320px;
+          min-height: 50px;
+          margin-top: 12px;
+        }
+      }
+      .notch {
+        position: fixed;
+        bottom: 14px;
+        transform: translateX(-50%) translateY(30px) scale(0.8);
+        animation: notchSlideUpIframe 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)
+          0.5s forwards;
+      }
+      @keyframes notchSlideUpIframe {
+        to {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0) scale(1);
+        }
+      }
+    </style>
+  <script src="/js/escape-html.js"></script>
+</head>
+  <body class="browse-page">
+    <main class="center">
+      <div class="iframe-container" id="iframe-container">
+        <div class="iframe-wrapper" id="iframe-wrapper">
+          <div class="player-content">
+            <div class="loading" id="loading">
+              <div class="loading-spinner"></div>
+              <span>Loading game...</span>
+            </div>
+            <div class="error-message" id="error-message">
+              <span>Failed to load game</span>
+              <button class="retry-btn" id="retry-btn">Retry</button>
+            </div>
+            <iframe
+              class="game-iframe"
+              id="game-iframe"
+              allow="
+                fullscreen;
+                gamepad;
+                accelerometer;
+                autoplay;
+                clipboard-read;
+                clipboard-write;
+              "
+            ></iframe>
+          </div>
+          <div class="iframe-controls">
+            <div class="control-left">
+              <div
+                class="control-icon"
+                id="control-icon"
+                aria-hidden="true"
+              ></div>
+              <div class="control-info">
+                <span class="control-title" id="control-title"></span>
+                <span class="control-by" id="control-by"></span>
+              </div>
+            </div>
+            <div class="iframeiconshere">
+              <button
+                class="control-btn"
+                id="fullscreen-btn"
+                title="Fullscreen (F)"
+                aria-label="Toggle fullscreen"
+              >
+                <span class="material-symbols-outlined">fullscreen</span>
+              </button>
+              <button
+                class="control-btn"
+                id="refresh-btn"
+                title="Refresh (R)"
+                aria-label="Refresh game"
+              >
+                <span class="material-symbols-outlined">refresh</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="notch">
+          <div class="battery">
+            <div class="battery-shell">
+              <div
+                class="battery-fill"
+                data-battery-fill
+                data-charging="false"
+              ></div>
+            </div>
+            <div class="battery-text" data-battery-text>Battery --%</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <nav class="browse-navbar is-collapsed" aria-label="Primary">
+      <div class="browse-nav-header">
+        <a class="browse-nav-brand" href="/">
+          <img
+            class="browse-nav-brand-icon"
+            src="/assets/images/lanstupid-logo.jpg"
+            alt="LanStupid"
+          />
+        </a>
+      </div>
+      <div class="browse-nav-divider"></div>
+      <div class="browse-nav-menu">
+        <a class="browse-nav-item" href="/">
+          <span class="material-symbols-outlined">home</span>
+          <span class="browse-nav-item-text">Home</span>
+        </a>
+        <a class="browse-nav-item" href="/g">
+          <span class="material-symbols-outlined">sports_esports</span>
+          <span class="browse-nav-item-text">Games</span>
+        </a>
+        <a class="browse-nav-item" href="/a">
+          <span class="material-symbols-outlined">apps</span>
+          <span class="browse-nav-item-text">Apps</span>
+        </a>
+        
+        <a class="browse-nav-item" href="/ai">
+          <span class="material-symbols-outlined">smart_toy</span>
+          <span class="browse-nav-item-text">AI</span>
+        </a>
+        <a class="browse-nav-item" href="/music">
+          <span class="material-symbols-outlined">music_note</span>
+          <span class="browse-nav-item-text">Music</span>
+        </a>
+        <a class="browse-nav-item" href="/movies">
+          <span class="material-symbols-outlined">movie</span>
+          <span class="browse-nav-item-text">Movies</span>
+        </a>
+      </div>
+      <div class="browse-nav-divider"></div>
+      <div class="browse-nav-footer">
+        
+        
+        <a class="browse-nav-item" href="/settings">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="browse-nav-item-text">Settings</span>
+        </a>
+      </div>
+    </nav>
+    <script>
+      let gamesData = [];
+      let currentGame = null;
+
+      async function loadGamesData() {
+        try {
+          const response = await fetch("/data/games.json");
+          const data = await response.json();
+          if (Array.isArray(data)) {
+            gamesData = data;
+          } else {
+            const bottomGames = (data.bottom || []).slice().sort((a, b) => {
+              const nameA = (a.title || a.name || "").toLowerCase();
+              const nameB = (b.title || b.name || "").toLowerCase();
+              return nameA.localeCompare(nameB);
+            });
+            gamesData = [
+              ...(data.top || []),
+              ...(data.games || []),
+              ...bottomGames,
+            ];
+          }
+        } catch (error) {
+          console.error("Failed to load games data:", error);
+        }
+      }
+
+      function getOrCreateMetaTag(selector, attribute, value) {
+        let meta = document.querySelector(selector);
+        if (!meta) {
+          meta = document.createElement("meta");
+          if (attribute === "name") {
+            meta.setAttribute("name", value);
+          } else {
+            meta.setAttribute("property", value);
+          }
+          document.head.appendChild(meta);
+        }
+        return meta;
+      }
+
+      function updateControlBar(game) {
+        const titleEl = document.getElementById("control-title");
+        const byEl = document.getElementById("control-by");
+        const iconEl = document.getElementById("control-icon");
+        if (titleEl) titleEl.textContent = game?.title || game?.name || "";
+        if (byEl) byEl.textContent = game?.author ? `By ${game.author}` : "";
+        const img = game?.image || game?.icon;
+        if (iconEl && img) {
+          const serverUrl = img.startsWith("/")
+            ? window.location.origin + img
+            : img;
+          const cdnUrl = buildCdnImageUrl(img);
+          setBackgroundImageWithFallback(
+            iconEl,
+            cdnUrl || serverUrl,
+            serverUrl,
+          );
+        }
+      }
+
+      function updateSEO(game) {
+        if (!game) return;
+
+        const seo = game.seo || {};
+        const baseUrl = window.location.origin;
+        const gameName = game.title || game.name || "Game";
+        const gameImage = game.image || game.icon || "";
+
+        document.title = seo.title || `${gameName} - LanStupid`;
+
+        const metaDescription = getOrCreateMetaTag(
+          'meta[name="description"]',
+          "name",
+          "description",
+        );
+        metaDescription.content = seo.description || game.description || "";
+
+        const metaKeywords = getOrCreateMetaTag(
+          'meta[name="keywords"]',
+          "name",
+          "keywords",
+        );
+        metaKeywords.content = seo.keywords || "";
+
+        const ogTitle = getOrCreateMetaTag(
+          'meta[property="og:title"]',
+          "property",
+          "og:title",
+        );
+        ogTitle.content = seo.ogTitle || seo.title || gameName;
+
+        const ogDescription = getOrCreateMetaTag(
+          'meta[property="og:description"]',
+          "property",
+          "og:description",
+        );
+        ogDescription.content =
+          seo.ogDescription || seo.description || game.description || "";
+
+        const ogImage = getOrCreateMetaTag(
+          'meta[property="og:image"]',
+          "property",
+          "og:image",
+        );
+        const imageUrl = seo.ogImage || gameImage || "";
+        ogImage.content = imageUrl.startsWith("http")
+          ? imageUrl
+          : imageUrl
+            ? buildCdnImageUrl(imageUrl) ||
+              baseUrl + (imageUrl.startsWith("/") ? imageUrl : "/" + imageUrl)
+            : "";
+
+        const twitterTitle = getOrCreateMetaTag(
+          'meta[name="twitter:title"]',
+          "name",
+          "twitter:title",
+        );
+        twitterTitle.content = seo.ogTitle || seo.title || gameName;
+
+        const twitterDescription = getOrCreateMetaTag(
+          'meta[name="twitter:description"]',
+          "name",
+          "twitter:description",
+        );
+        twitterDescription.content =
+          seo.ogDescription || seo.description || game.description || "";
+
+        const twitterImage = getOrCreateMetaTag(
+          'meta[name="twitter:image"]',
+          "name",
+          "twitter:image",
+        );
+        twitterImage.content = imageUrl.startsWith("http")
+          ? imageUrl
+          : imageUrl
+            ? buildCdnImageUrl(imageUrl) ||
+              baseUrl + (imageUrl.startsWith("/") ? imageUrl : "/" + imageUrl)
+            : "";
+      }
+
+      const CDN_BASE =
+        "https://cdn.jsdelivr.net/gh/dragonx-astra/velara-assets@main/img/";
+
+      function buildCdnImageUrl(imagePath) {
+        if (!imagePath || imagePath.startsWith("http")) return "";
+        const fileName = imagePath.split("/").pop();
+        if (!fileName) return "";
+        return `${CDN_BASE}${encodeURIComponent(fileName)}`;
+      }
+
+      function setBackgroundImageWithFallback(el, primaryUrl, fallbackUrl) {
+        if (!el || !primaryUrl) return;
+        const token = `${Date.now()}-${Math.random()}`;
+        el.dataset.bgToken = token;
+
+        const img = new Image();
+        img.onload = () => {
+          if (el.dataset.bgToken !== token) return;
+          el.style.backgroundImage = `url(${primaryUrl})`;
+          el.style.backgroundSize = "cover";
+        };
+        img.onerror = () => {
+          if (el.dataset.bgToken !== token) return;
+          if (fallbackUrl && fallbackUrl !== primaryUrl) {
+            el.style.backgroundImage = `url(${fallbackUrl})`;
+            el.style.backgroundSize = "cover";
+          }
+        };
+        img.src = primaryUrl;
+      }
+
+      function normalizeUrl(url) {
+        if (!url) return "";
+        try {
+          url = decodeURIComponent(url);
+        } catch (e) {}
+        if (!url.startsWith("/")) {
+          url = "/" + url;
+        }
+        return url.replace(/\/+/g, "/").toLowerCase();
+      }
+
+      function findGameByUrl(url) {
+        if (!url || !gamesData.length) return null;
+
+        const normalizedUrl = normalizeUrl(url);
+
+        return gamesData.find((game) => {
+          if (!game) return false;
+
+          const gameLink = normalizeUrl(game.location || game.link || "");
+
+          return gameLink === normalizedUrl;
+        });
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const gameUrl = urlParams.get("to");
+      const iframe = document.getElementById("game-iframe");
+      const loading = document.getElementById("loading");
+      const errorMessage = document.getElementById("error-message");
+      const retryBtn = document.getElementById("retry-btn");
+      const fullscreenBtn = document.getElementById("fullscreen-btn");
+      const refreshBtn = document.getElementById("refresh-btn");
+      const iframeContainer = document.getElementById("iframe-container");
+      const iframeWrapper = document.getElementById("iframe-wrapper");
+
+      let isFullscreen = false;
+      let currentUrl = "";
+
+      function absoluteGameUrl(path) {
+        if (!path || path.startsWith("http://") || path.startsWith("https://"))
+          return path;
+        const origin = window.location.origin;
+        const normalized = path.startsWith("/") ? path : "/" + path;
+        return origin + normalized;
+      }
+
+      function loadGame(url) {
+        if (!url) {
+          loading.style.display = "none";
+          errorMessage.classList.add("show");
+          errorMessage.querySelector("span").textContent =
+            "No game URL provided";
+          return;
+        }
+
+        loading.style.display = "flex";
+        errorMessage.classList.remove("show");
+
+        let decodedUrl = url;
+        if (typeof decodeUrlFromProxy === "function") {
+          const d = decodeUrlFromProxy(url);
+          if (d) decodedUrl = d;
+        } else {
+          try {
+            decodedUrl = decodeURIComponent(url);
+          } catch (e) {}
+        }
+        if (!decodedUrl.startsWith("/") && !decodedUrl.startsWith("http")) {
+          decodedUrl = "/" + decodedUrl;
+        }
+        currentUrl = decodedUrl;
+
+        iframe.src = absoluteGameUrl(decodedUrl);
+      }
+
+      function resolveGameUrl(param) {
+        if (typeof decodeUrlFromProxy === "function") {
+          const decoded = decodeUrlFromProxy(param);
+          if (decoded) return decoded;
+        }
+        try {
+          return decodeURIComponent(param);
+        } catch (e) {
+          return param;
+        }
+      }
+
+      (async () => {
+        await loadGamesData();
+        if (gameUrl) {
+          const resolved = resolveGameUrl(gameUrl);
+          currentGame = findGameByUrl(resolved);
+          if (currentGame) {
+            updateSEO(currentGame);
+            updateControlBar(currentGame);
+          }
+          loadGame(resolved);
+        } else {
+          loading.style.display = "none";
+          errorMessage.classList.add("show");
+          errorMessage.querySelector("span").textContent =
+            "No game URL provided";
+        }
+      })();
+
+      const UNITY_LOADING_MIN_MS = 2500;
+      iframe.onload = () => {
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow?.document;
+          if (doc) {
+            const styleId = "velara-no-focus-outline";
+            let styleEl = doc.getElementById(styleId);
+            if (!styleEl) {
+              styleEl = doc.createElement("style");
+              styleEl.id = styleId;
+              styleEl.textContent = `
+                html, body, canvas, iframe { outline: none !important; border: none !important; box-shadow: none !important; }
+                *:focus, *:focus-visible, *:focus-within { outline: none !important; box-shadow: none !important; }
+                * { -webkit-tap-highlight-color: transparent !important; }
+              `;
+              (doc.head || doc.documentElement).appendChild(styleEl);
+            }
+          }
+        } catch (_) {}
+        const isUnityGame =
+          /\/assets\/games\/(ships-battlefield-3d|prison-escape|basketball-superstars|horrortale3)\//i.test(
+            currentUrl || "",
+          );
+        if (isUnityGame) {
+          setTimeout(() => {
+            loading.style.display = "none";
+            errorMessage.classList.remove("show");
+          }, UNITY_LOADING_MIN_MS);
+        } else {
+          loading.style.display = "none";
+          errorMessage.classList.remove("show");
+        }
+      };
+
+      iframe.onerror = () => {
+        loading.style.display = "none";
+        errorMessage.classList.add("show");
+      };
+
+      retryBtn.addEventListener("click", () => {
+        if (currentUrl) {
+          loadGame(currentUrl);
+        }
+      });
+
+      function toggleFullscreen() {
+        if (!isFullscreen) {
+          if (iframeContainer.requestFullscreen) {
+            iframeContainer.requestFullscreen();
+          } else if (iframeContainer.webkitRequestFullscreen) {
+            iframeContainer.webkitRequestFullscreen();
+          } else if (iframeContainer.mozRequestFullScreen) {
+            iframeContainer.mozRequestFullScreen();
+          } else if (iframeContainer.msRequestFullscreen) {
+            iframeContainer.msRequestFullscreen();
+          }
+          iframeWrapper.classList.add("fullscreen");
+          isFullscreen = true;
+          fullscreenBtn.querySelector(
+            ".material-symbols-outlined",
+          ).textContent = "fullscreen_exit";
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+          iframeWrapper.classList.remove("fullscreen");
+          isFullscreen = false;
+          fullscreenBtn.querySelector(
+            ".material-symbols-outlined",
+          ).textContent = "fullscreen";
+        }
+      }
+
+      fullscreenBtn.addEventListener("click", toggleFullscreen);
+
+      document.addEventListener("fullscreenchange", () => {
+        if (
+          !document.fullscreenElement &&
+          !document.webkitFullscreenElement &&
+          !document.mozFullScreenElement &&
+          !document.msFullscreenElement
+        ) {
+          iframeWrapper.classList.remove("fullscreen");
+          isFullscreen = false;
+          fullscreenBtn.querySelector(
+            ".material-symbols-outlined",
+          ).textContent = "fullscreen";
+        }
+      });
+
+      document.addEventListener("webkitfullscreenchange", () => {
+        if (!document.webkitFullscreenElement) {
+          iframeWrapper.classList.remove("fullscreen");
+          isFullscreen = false;
+          fullscreenBtn.querySelector(
+            ".material-symbols-outlined",
+          ).textContent = "fullscreen";
+        }
+      });
+
+      document.addEventListener("mozfullscreenchange", () => {
+        if (!document.mozFullScreenElement) {
+          iframeWrapper.classList.remove("fullscreen");
+          isFullscreen = false;
+          fullscreenBtn.querySelector(
+            ".material-symbols-outlined",
+          ).textContent = "fullscreen";
+        }
+      });
+
+      document.addEventListener("MSFullscreenChange", () => {
+        if (!document.msFullscreenElement) {
+          iframeWrapper.classList.remove("fullscreen");
+          isFullscreen = false;
+          fullscreenBtn.querySelector(
+            ".material-symbols-outlined",
+          ).textContent = "fullscreen";
+        }
+      });
+
+      refreshBtn.addEventListener("click", () => {
+        refreshBtn.classList.add("spinning");
+        setTimeout(() => refreshBtn.classList.remove("spinning"), 600);
+        if (currentUrl) {
+          iframe.src = "";
+          setTimeout(() => {
+            iframe.src = currentUrl;
+            loading.style.display = "flex";
+          }, 100);
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")
+          return;
+
+        if (e.key === "f" || e.key === "F") {
+          e.preventDefault();
+          toggleFullscreen();
+        } else if (e.key === "r" || e.key === "R") {
+          if (e.ctrlKey || e.metaKey) return;
+          e.preventDefault();
+          refreshBtn.click();
+        } else if (e.key === "Escape") {
+          if (isFullscreen) {
+            toggleFullscreen();
+          }
+        }
+      });
+
+
+      const centerNotchOnIframe = () => {
+        const notch = document.querySelector(".notch");
+        const iframeContainer = document.getElementById("iframe-container");
+
+        if (notch && iframeContainer) {
+          const containerRect = iframeContainer.getBoundingClientRect();
+          const centerX = containerRect.left + containerRect.width / 2;
+          notch.style.left = `${centerX}px`;
+        }
+      };
+
+      const initNotchPosition = () => {
+        centerNotchOnIframe();
+        setTimeout(centerNotchOnIframe, 100);
+        setTimeout(centerNotchOnIframe, 500);
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initNotchPosition);
+      } else {
+        initNotchPosition();
+      }
+
+      window.addEventListener("load", initNotchPosition);
+      window.addEventListener("resize", centerNotchOnIframe);
+
+    </script>
+    <script src="js/theme.js" defer></script>
+    <script src="js/tab-cloak.js" defer></script>
+    <script src="js/debug.js" defer></script>
+    <script src="scripts/battery.js"></script>
+    <script src="/js/music-engine.js"></script>
+    <script src="scripts/splash.js"></script>
+  </body>
+</html>

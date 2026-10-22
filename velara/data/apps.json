@@ -1,0 +1,67 @@
+[
+  {
+    "title": "YouTube",
+    "location": "https://www.youtube.com",
+    "image": "/assets/images/apps/youtube.png"
+  },
+  {
+    "title": "Discord",
+    "location": "https://discord.com",
+    "image": "/assets/images/apps/discord.png"
+  },
+  {
+    "title": "TikTok",
+    "location": "https://www.tiktok.com",
+    "image": "/assets/images/apps/tiktok.png"
+  },
+  {
+    "title": "Movies",
+    "location": "https://watch.spencerdevs.xyz/",
+    "image": "/assets/images/apps/movies.jpg"
+  },
+  {
+    "title": "Snapchat",
+    "location": "https://www.snapchat.com",
+    "image": "/assets/images/apps/snapchat.jpg"
+  },
+  {
+    "title": "CornHub",
+    "location": "https://cornhub.website",
+    "image": "/assets/images/apps/cornhub.png"
+  },
+  {
+    "title": "ChatGPT",
+    "location": "https://chat.openai.com",
+    "image": "/assets/images/apps/chatgpt.png"
+  },
+  {
+    "title": "VS Code",
+    "location": "https://vscode.dev",
+    "image": "/assets/images/apps/vscode.png"
+  },
+  {
+    "title": "SoundCloud",
+    "location": "https://soundcloud.com",
+    "image": "/assets/images/apps/soundcloud.png"
+  },
+  {
+    "title": "Newgrounds",
+    "location": "https://www.newgrounds.com",
+    "image": "/assets/images/apps/newgrounds.png"
+  },
+  {
+    "title": "GeForce Now",
+    "location": "https://play.geforcenow.com/mall/",
+    "image": "/assets/images/apps/geforce-now.png"
+  },
+  {
+    "title": "Aptoide",
+    "location": "https://www.aptoide.com",
+    "image": "/assets/images/apps/aptoide.png"
+  },
+  {
+    "title": "Twitch",
+    "location": "https://www.twitch.tv",
+    "image": "/assets/images/apps/twitch.png"
+  }
+]
