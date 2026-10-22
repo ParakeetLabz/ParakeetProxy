@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    
+    
+    
+
+    <base href="https://cdn.jsdelivr.net/gh/gn-math/assets@main/260/">
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | RERUN</title>
+    <script src="Build/UnityLoader.js"></script>
+    <script>
+      UnityLoader.instantiate("unityContainer", "Build/rerundone.json");
+    </script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      #unityContainer {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  <!-- Google tag (gtag.js) -->
+
+
+
+<script>
+(() => {
+  const loadScript = (src) =>
+    new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.async = false;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error("Failed to load " + src));
+      (document.head || document.documentElement).appendChild(s);
+    });
+  const origin = window.location.origin;
+  loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js")
+    .then(() => loadScript(origin + "/js/auth.js"))
+    .then(() => loadScript(origin + "/js/cloud-save-unity.js"))
+    .catch((err) => console.warn("Cloud save bootstrap failed:", err));
+})();
+</script>
+</head>
+  <body>
+    <div id="unityContainer"></div>
+  </body>
+</html>
