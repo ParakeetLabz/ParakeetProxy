@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    
+    
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/gh/WhoIsEv/relivedassets@main/backrooms/js/main.js"></script>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Backrooms</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/WhoIsEv/relivedassets@main/backrooms/img/icon.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/WhoIsEv/relivedassets@main/backrooms/TemplateData/style.css" />
+    <script src="https://cdn.jsdelivr.net/gh/WhoIsEv/relivedassets@main/backrooms/TemplateData/UnityProgress.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/WhoIsEv/relivedassets@main/backrooms/Build/UnityLoader.js"></script>
+    <script>
+      var gameInstance = UnityLoader.instantiate("gameContainer", "https://cdn.jsdelivr.net/gh/WhoIsEv/relivedassets@main/backrooms/Build/WebGL.json", { onProgress: UnityProgress });
+    </script>
+  <!-- Google tag (gtag.js) -->
+
+
+
+<script>
+(() => {
+  const loadScript = (src) =>
+    new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.async = false;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error("Failed to load " + src));
+      (document.head || document.documentElement).appendChild(s);
+    });
+  const origin = window.location.origin;
+  loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js")
+    .then(() => loadScript(origin + "/js/auth.js"))
+    .then(() => loadScript(origin + "/js/cloud-save-unity.js"))
+    .catch((err) => console.warn("Cloud save bootstrap failed:", err));
+})();
+</script>
+</head>
+  <body>
+    <div class="webgl-content">
+      <div id="gameContainer" style="width: 960px; height: 600px;"></div>
+      <div class="footer">
+        <div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
+        <div class="title">Backrooms</div>
+      </div>
+    </div>
+  </body>
+</html>

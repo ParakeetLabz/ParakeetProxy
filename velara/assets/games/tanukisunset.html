@@ -1,0 +1,27 @@
+
+<script>
+(() => {
+  const loadScript = (src) =>
+    new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.async = false;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error("Failed to load " + src));
+      (document.head || document.documentElement).appendChild(s);
+    });
+  const origin = window.location.origin;
+  loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js")
+    .then(() => loadScript(origin + "/js/auth.js"))
+    .then(() => loadScript(origin + "/js/cloud-save-unity.js"))
+    .catch((err) => console.warn("Cloud save bootstrap failed:", err));
+})();
+</script>
+
+
+<!-- Ultimate Game Stash file--> 
+<!-- For the regularly updating doc go to https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/ -->
+
+
+
+<link rel="stylesheet" href="https://rawcdn.githack.com/Jokarcana/Tanuki-Sunset/a5b13b1279016c9bd123f06a4886b5987fa06dc5/TemplateData/style.css"> <script src="https://rawcdn.githack.com/Jokarcana/Tanuki-Sunset/a5b13b1279016c9bd123f06a4886b5987fa06dc5/TemplateData/UnityProgress.js"></script> <script src="https://rawcdn.githack.com/Jokarcana/Tanuki-Sunset/a5b13b1279016c9bd123f06a4886b5987fa06dc5/Build/UnityLoader.js"></script> <script> var gameInstance = UnityLoader.instantiate("gameContainer", "https://rawcdn.githack.com/Jokarcana/Tanuki-Sunset/a5b13b1279016c9bd123f06a4886b5987fa06dc5/Build/WebGL.json", {onProgress: UnityProgress,Module:{onRuntimeInitialized: function() {UnityProgress(gameInstance, "complete")}}}); </script> <script src=""></script> <div class="webgl-content"> <div id="gameContainer" style="width: 100vw; height: 100vh"></div> </div>
